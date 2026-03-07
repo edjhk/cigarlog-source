@@ -354,13 +354,27 @@ body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--c
       <!-- Where smoked -->
       <div class="form-group">
         <label class="form-label">Where Smoked</label>
-        <input type="text" class="form-input" id="logLocation" placeholder="e.g. Back porch, Cigar lounge..." />
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="text" class="form-input" id="logLocation" placeholder="e.g. Back porch, Cigar lounge..." style="flex:1;" />
+          <button type="button" onclick="useMyLocation()" title="Use current location" style="background:var(--cream);border:1.5px solid var(--light-ash);border-radius:12px;padding:10px 12px;cursor:pointer;font-size:1.1rem;line-height:1;">📍</button>
+        </div>
       </div>
 
       <!-- Notes -->
       <div class="form-group">
         <label class="form-label">Tasting Notes / Comments</label>
         <textarea class="form-textarea" id="logNotes" rows="4" placeholder="Flavors, draw, burn, overall impression..."></textarea>
+      </div>
+
+      <!-- Photo -->
+      <div class="form-group">
+        <label class="form-label">Photo</label>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <label for="logPhoto" style="cursor:pointer;background:var(--cream);border:1.5px solid var(--light-ash);border-radius:12px;padding:10px 16px;font-size:0.88rem;color:var(--tobacco);font-weight:700;">📷 Add Photo</label>
+          <input type="file" id="logPhoto" accept="image/*" capture="environment" style="display:none;" onchange="previewLogPhoto(this)"/>
+          <span id="logPhotoName" style="font-size:0.8rem;color:var(--ash);"></span>
+        </div>
+        <img id="logPhotoPreview" src="" style="display:none;margin-top:8px;max-width:100%;border-radius:10px;max-height:200px;object-fit:cover;" />
       </div>
 
       <!-- Date -->
@@ -486,22 +500,33 @@ function doLogout() {
 function renderFeed() {
   var div = document.getElementById('feedPosts');
   if (!div) return;
-  var feed = DB.getFeed().slice().reverse();
+  var feed = DB.getFeed();
   if (feed.length === 0) {
     div.innerHTML = '<div style="color:var(--ash);text-align:center;padding:30px;">No posts yet. Say something!</div>';
     return;
   }
-  var out = '';
+  div.innerHTML = '';
   feed.forEach(function(post) {
-    out += '<div style="padding:14px 0;border-bottom:1px solid var(--light-ash);">'
-      + '<div style="display:flex;justify-content:space-between;margin-bottom:4px;">'
-      + '<strong style="color:var(--dark-tobacco);">' + post.username + '</strong>'
-      + '<span style="font-size:0.75rem;color:var(--ash);">' + post.date + '</span>'
-      + '</div>'
-      + '<div style="color:var(--charcoal);font-size:0.92rem;">' + post.text + '</div>'
-      + '</div>';
+    var isMe = currentUser && post.username === (currentUser.displayName || currentUser.username);
+    var wrap = document.createElement('div');
+    wrap.style.cssText = 'display:flex;flex-direction:column;max-width:75%;' + (isMe ? 'align-self:flex-end;align-items:flex-end;' : 'align-self:flex-start;align-items:flex-start;');
+    var bubble = document.createElement('div');
+    bubble.style.cssText = 'padding:9px 14px;border-radius:' + (isMe ? '18px 18px 4px 18px' : '18px 18px 18px 4px') + ';background:' + (isMe ? 'var(--tobacco)' : 'white') + ';color:' + (isMe ? '#fff' : 'var(--charcoal)') + ';font-size:0.92rem;word-break:break-word;box-shadow:0 1px 4px rgba(0,0,0,0.08);';
+    if (post.photo) {
+      var img = document.createElement('img');
+      img.src = post.photo;
+      img.style.cssText = 'max-width:200px;border-radius:10px;margin-bottom:4px;display:block;';
+      bubble.appendChild(img);
+    }
+    if (post.text) bubble.appendChild(document.createTextNode(post.text));
+    var meta = document.createElement('div');
+    meta.style.cssText = 'font-size:0.7rem;color:var(--ash);margin-top:3px;';
+    meta.textContent = (isMe ? '' : post.username + ' · ') + post.date;
+    wrap.appendChild(bubble);
+    wrap.appendChild(meta);
+    div.appendChild(wrap);
   });
-  div.innerHTML = out;
+  div.scrollTop = div.scrollHeight;
 }
 
 function postToFeed() {
@@ -582,9 +607,11 @@ function renderDashboard() {
 }
 
 // PAGE SWITCHER
-function showPage(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
+function showPage(page, skipHistory) {
+  if (!skipHistory) history.pushState({page: page}, '', '#' + page);
+  document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); p.style.display='none'; });
+  var target = document.getElementById('page-' + page);
+  if (target) { target.classList.add('active'); target.style.display = (page === 'messages') ? 'flex' : 'block'; }
   if (page === 'dashboard') renderDashboard();
   if (page === 'messages') renderFeed();
   if (page === 'settings' && currentUser?.isAdmin) renderAdminPanel();
@@ -779,6 +806,36 @@ function openCigarDetailFromCA(cigar, brandName, familyName, family) {
 // ── LOG A SMOKE ──────────────────────────────────────────────────────────────
 var logSelectedCigar = null;
 
+
+function previewLogPhoto(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var img = document.getElementById('logPhotoPreview');
+      img.src = e.target.result; img.style.display = 'block';
+      document.getElementById('logPhotoName').textContent = input.files[0].name;
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function useMyLocation() {
+  if (!navigator.geolocation) { showToast('Geolocation not supported'); return; }
+  showToast('Getting location...');
+  navigator.geolocation.getCurrentPosition(function(pos) {
+    var lat = pos.coords.latitude.toFixed(4);
+    var lon = pos.coords.longitude.toFixed(4);
+    fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lon+'&format=json')
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        var a = d.address || {};
+        var city = a.city || a.town || a.village || a.county || '';
+        var state = a.state || '';
+        document.getElementById('logLocation').value = city + (state ? ', '+state : '') || lat+','+lon;
+      }).catch(function(){ document.getElementById('logLocation').value = lat+','+lon; });
+  }, function(){ showToast('Location access denied'); });
+}
+
 function openLogSmoke() {
   if (!currentUser) { showPage('auth'); return; }
   // Reset form
@@ -884,6 +941,7 @@ function submitLog() {
     rating: parseInt(rating),
     price: price ? parseFloat(price) : null,
     location: location, notes: notes, user: currentUser.username,
+    photo: (document.getElementById('logPhotoPreview') && document.getElementById('logPhotoPreview').src && document.getElementById('logPhotoPreview').src !== window.location.href) ? document.getElementById('logPhotoPreview').src : null,
   };
 
   // Save to localStorage
@@ -912,6 +970,20 @@ function submitLog() {
 }
 
 
+
+
+function postMediaToFeed(input) {
+  if (!input.files || !input.files[0] || !currentUser) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var post = { id: Date.now(), username: currentUser.displayName || currentUser.username,
+      text: '', photo: e.target.result, date: new Date().toLocaleDateString() };
+    var feed = DB.getFeed(); feed.push(post); DB.saveFeed(feed);
+    renderFeed();
+  };
+  reader.readAsDataURL(input.files[0]);
+  input.value = '';
+}
 
 function showToast(msg) {
   var existing = document.getElementById('toast-popup');
@@ -955,26 +1027,29 @@ function showToast(msg) {
     });
   }
 
-  // Browser back button trap
-  history.pushState(null, null, location.href);
-  window.addEventListener('popstate', function() {
-    history.pushState(null, null, location.href);
-    document.getElementById('searchResults').innerHTML = '';
-    document.getElementById('mainSearch').value = '';
+  // Browser back button
+  window.addEventListener('popstate', function(e) {
+    var page = (e.state && e.state.page) ? e.state.page : 'dashboard';
+    showPage(page, true);
   });
 </script>
 
 <!-- COMMUNITY FEED -->
-<div id="page-messages" class="page">
-  <div style="max-width:700px;margin:0 auto;padding:40px 20px;">
-    <button class="btn btn-secondary" onclick="showPage('dashboard')" style="margin-bottom:24px;">← Back</button>
-    <div style="background:white;border-radius:20px;padding:28px;box-shadow:0 4px 30px var(--shadow);">
-      <h2 style="font-family:'Playfair Display',serif;color:var(--dark-tobacco);margin-bottom:20px;">💬 Community Feed</h2>
-      <div style="display:flex;gap:10px;margin-bottom:20px;">
-        <input type="text" id="feedInput" class="form-input" placeholder="Share a smoke, a thought..." style="flex:1;" />
-        <button class="btn btn-primary" onclick="postToFeed()">Post</button>
-      </div>
-      <div id="feedPosts"></div>
+<div id="page-messages" class="page" style="display:none;flex-direction:column;height:calc(100vh - 64px);max-width:700px;margin:0 auto;">
+  <div style="padding:16px 16px 8px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--light-ash);">
+    <button class="btn btn-secondary" onclick="showPage('dashboard')" style="padding:8px 16px;">← Back</button>
+    <h2 style="font-family:'Playfair Display',serif;color:var(--dark-tobacco);font-size:1.2rem;">💬 Community Feed</h2>
+  </div>
+  <div id="feedPosts" style="flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:10px;"></div>
+  <div style="padding:8px 12px;border-top:1px solid var(--light-ash);background:white;display:flex;align-items:center;gap:8px;">
+    <button onclick="showToast('Emoji picker coming soon! 😄')" style="background:none;border:none;font-size:1.4rem;cursor:pointer;padding:4px;" title="Emoji">🙂</button>
+    <div style="flex:1;display:flex;align-items:center;background:var(--cream);border:1.5px solid var(--light-ash);border-radius:24px;padding:8px 14px;gap:8px;">
+      <input id="feedInput" type="text" placeholder="Message..." style="flex:1;background:none;border:none;outline:none;color:var(--charcoal);font-size:0.95rem;font-family:'Lato',sans-serif;"
+        onkeydown="if(event.key==='Enter'){event.preventDefault();postToFeed();}" />
+      <label for="feedFileInput" style="cursor:pointer;font-size:1.2rem;line-height:1;" title="Attach file">📎</label>
+      <input id="feedFileInput" type="file" accept="image/*,video/*" style="display:none;" onchange="postMediaToFeed(this)" />
+      <label for="feedCameraInput" style="cursor:pointer;font-size:1.2rem;line-height:1;" title="Camera / Gallery">📷</label>
+      <input id="feedCameraInput" type="file" accept="image/*" capture="environment" style="display:none;" onchange="postMediaToFeed(this)" />
     </div>
   </div>
 </div>
