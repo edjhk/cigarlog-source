@@ -12,20 +12,6 @@
   --ember: #D4622A; --ember-light: #F08050; --gold: #C9A84C; --gold-light: #E8C97A;
   --charcoal: #2C2418; --ash: #B8A898; --light-ash: #D8CCBF; --band-red: #8B1A1A;
   --success: #4A7C59; --shadow: rgba(44,36,24,0.15); --radius: 16px;
-}<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CigarLog — Your Smoke Journal</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-<style>
-/* Your CSS unchanged - kept as-is */
-:root {
-  --cream: #F8F4ED; --warm-white: #FDFAF6; --tobacco: #8B5E3C; --dark-tobacco: #5C3D1E;
-  --ember: #D4622A; --ember-light: #F08050; --gold: #C9A84C; --gold-light: #E8C97A;
-  --charcoal: #2C2418; --ash: #B8A898; --light-ash: #D8CCBF; --band-red: #8B1A1A;
-  --success: #4A7C59; --shadow: rgba(44,36,24,0.15); --radius: 16px;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--charcoal); min-height: 100vh; }
@@ -283,7 +269,7 @@ body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--c
         <h2 id="dashGreeting">Good evening, friend.</h2>
         <p>Your cigar journal awaits.</p>
         <div class="dash-stats">
-          <div class="stat-pill"><span class="stat-num" id="statSmokes">0</span><span class="stat-label"> Reviews</span></div>
+          <div class="stat-pill"><span class="stat-num" id="statSmokes">0</span><span class="stat-label">Reviews</span></div>
         </div>
       </div>
 
@@ -306,19 +292,17 @@ body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--c
 
     <div class="dash-sidebar">
       <div style="display:flex;flex-direction:column;height:100%;background:white;border-radius:16px;box-shadow:0 3px 15px var(--shadow);overflow:hidden;">
-        <div style="padding:14px 16px;border-bottom:1px solid var(--light-ash);">
-          <h3 style="font-family:'Playfair Display',serif;color:var(--dark-tobacco);font-size:1rem;">Community</h3>
-        </div>
-        <div id="feedPosts2" style="flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:8px;"></div>
-        <div style="padding:8px 10px;border-top:1px solid var(--light-ash);display:flex;align-items:center;gap:6px;">
-          <button onclick="showToast('Emoji picker coming soon! 😄')" style="background:none;border:none;font-size:1.3rem;cursor:pointer;padding:2px;" title="Emoji">🙂</button>
+        <div id="sidebarFeedPosts" style="flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:6px;"></div>
+        <div style="padding:8px 10px;border-top:1px solid var(--light-ash);display:flex;align-items:center;gap:6px;flex-shrink:0;">
+          <button onclick="showToast('Emoji picker coming soon!')" style="background:none;border:none;font-size:1.3rem;cursor:pointer;padding:2px;">🙂</button>
           <div style="flex:1;display:flex;align-items:center;background:var(--cream);border:1.5px solid var(--light-ash);border-radius:20px;padding:6px 12px;gap:6px;">
-            <input id="feedInputSidebar" type="text" placeholder="Message..." style="flex:1;background:none;border:none;outline:none;color:var(--charcoal);font-size:0.88rem;font-family:'Lato',sans-serif;"
-              onkeydown="if(event.key==='Enter'){event.preventDefault();postToFeedSidebar();}" />
-            <label for="feedFileSidebar" style="cursor:pointer;font-size:1.1rem;line-height:1;" title="Attach">📎</label>
-            <input id="feedFileSidebar" type="file" accept="image/*,video/*" style="display:none;" onchange="postMediaSidebar(this)" />
-            <label for="feedCamSidebar" style="cursor:pointer;font-size:1.1rem;line-height:1;" title="Camera">📷</label>
-            <input id="feedCamSidebar" type="file" accept="image/*" capture="environment" style="display:none;" onchange="postMediaSidebar(this)" />
+            <input id="sidebarFeedInput" type="text" placeholder="Message..."
+              style="flex:1;background:none;border:none;outline:none;color:var(--charcoal);font-size:0.88rem;font-family:'Lato',sans-serif;"
+              onkeydown="if(event.key==='Enter'){event.preventDefault();postSidebarFeed();}" />
+            <label for="sidebarFeedFile" style="cursor:pointer;font-size:1.1rem;line-height:1;" title="Attach">📎</label>
+            <input id="sidebarFeedFile" type="file" accept="image/*,video/*" style="display:none;" onchange="postSidebarMedia(this)" />
+            <label for="sidebarFeedCam" style="cursor:pointer;font-size:1.1rem;line-height:1;" title="Camera">📷</label>
+            <input id="sidebarFeedCam" type="file" accept="image/*" capture="environment" style="display:none;" onchange="postSidebarMedia(this)" />
           </div>
         </div>
       </div>
@@ -370,9 +354,9 @@ body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--c
       <!-- Where smoked -->
       <div class="form-group">
         <label class="form-label">Where Smoked</label>
-        <div style="display:flex;gap:8px;align-items:center;">
+        <div style="display:flex;gap:8px;">
           <input type="text" class="form-input" id="logLocation" placeholder="e.g. Back porch, Cigar lounge..." style="flex:1;" />
-          <button type="button" onclick="useMyLocation()" title="Use current location" style="background:var(--cream);border:1.5px solid var(--light-ash);border-radius:12px;padding:10px 12px;cursor:pointer;font-size:1.1rem;line-height:1;">📍</button>
+          <button type="button" onclick="useMyLocation()" style="background:var(--cream);border:1.5px solid var(--light-ash);border-radius:12px;padding:10px 12px;cursor:pointer;font-size:1.1rem;" title="Use my location">📍</button>
         </div>
       </div>
 
@@ -516,33 +500,22 @@ function doLogout() {
 function renderFeed() {
   var div = document.getElementById('feedPosts');
   if (!div) return;
-  var feed = DB.getFeed();
+  var feed = DB.getFeed().slice().reverse();
   if (feed.length === 0) {
     div.innerHTML = '<div style="color:var(--ash);text-align:center;padding:30px;">No posts yet. Say something!</div>';
     return;
   }
-  div.innerHTML = '';
+  var out = '';
   feed.forEach(function(post) {
-    var isMe = currentUser && post.username === (currentUser.displayName || currentUser.username);
-    var wrap = document.createElement('div');
-    wrap.style.cssText = 'display:flex;flex-direction:column;max-width:75%;' + (isMe ? 'align-self:flex-end;align-items:flex-end;' : 'align-self:flex-start;align-items:flex-start;');
-    var bubble = document.createElement('div');
-    bubble.style.cssText = 'padding:9px 14px;border-radius:' + (isMe ? '18px 18px 4px 18px' : '18px 18px 18px 4px') + ';background:' + (isMe ? 'var(--tobacco)' : 'white') + ';color:' + (isMe ? '#fff' : 'var(--charcoal)') + ';font-size:0.92rem;word-break:break-word;box-shadow:0 1px 4px rgba(0,0,0,0.08);';
-    if (post.photo) {
-      var img = document.createElement('img');
-      img.src = post.photo;
-      img.style.cssText = 'max-width:200px;border-radius:10px;margin-bottom:4px;display:block;';
-      bubble.appendChild(img);
-    }
-    if (post.text) bubble.appendChild(document.createTextNode(post.text));
-    var meta = document.createElement('div');
-    meta.style.cssText = 'font-size:0.7rem;color:var(--ash);margin-top:3px;';
-    meta.textContent = (isMe ? '' : post.username + ' · ') + post.date;
-    wrap.appendChild(bubble);
-    wrap.appendChild(meta);
-    div.appendChild(wrap);
+    out += '<div style="padding:14px 0;border-bottom:1px solid var(--light-ash);">'
+      + '<div style="display:flex;justify-content:space-between;margin-bottom:4px;">'
+      + '<strong style="color:var(--dark-tobacco);">' + post.username + '</strong>'
+      + '<span style="font-size:0.75rem;color:var(--ash);">' + post.date + '</span>'
+      + '</div>'
+      + '<div style="color:var(--charcoal);font-size:0.92rem;">' + post.text + '</div>'
+      + '</div>';
   });
-  div.scrollTop = div.scrollHeight;
+  div.innerHTML = out;
 }
 
 function postToFeed() {
@@ -583,8 +556,8 @@ function renderDashboard() {
   // Stats
   document.getElementById('statSmokes').textContent = mine.length || '0';
   if (mine.length > 0) {
-  
-
+  } else {
+  }
 
   // Grid
   var grid = document.getElementById('cigarsGrid');
@@ -618,12 +591,12 @@ function renderDashboard() {
 // PAGE SWITCHER
 function showPage(page, skipHistory) {
   if (!skipHistory) history.pushState({page: page}, '', '#' + page);
-  document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); p.style.display='none'; });
-  var target = document.getElementById('page-' + page);
-  if (target) { target.classList.add('active'); target.style.display = (page === 'messages') ? 'flex' : 'block'; }
-  if (page === 'dashboard') { renderDashboard(); setTimeout(renderFeedSidebar, 50); }
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  var t = document.getElementById('page-' + page); if (t) t.classList.add('active');
+  if (page === 'dashboard') { renderDashboard(); setTimeout(renderSidebarFeed, 50); }
   if (page === 'messages') renderFeed();
-  if (page === 'settings' && currentUser?.isAdmin) renderAdminPanel();
+  if (page === 'invite') renderInviteList();
+  if (page === 'settings' && currentUser && currentUser.isAdmin) renderAdminPanel();
   window.scrollTo(0,0);
 }
 
@@ -680,38 +653,28 @@ function handleSearchInput(q) {
   if (!q || q.length < 2) { results.innerHTML = ''; return; }
   var query = q.toLowerCase().trim();
   var out = '';
+  var count = 0;
   for (var bi = 0; bi < caDatabase.length; bi++) {
     var b = caDatabase[bi];
     if (b.name.toLowerCase().indexOf('.html') !== -1) continue;
     var bl = b.name.toLowerCase();
     var brandHit = bl.indexOf(query) !== -1;
-    var famHit = false, cigHit = false;
     for (var fi = 0; fi < b.families.length; fi++) {
-      var f = b.families[fi];
-      if (f.name.toLowerCase().indexOf(query) !== -1 || (bl+' '+f.name.toLowerCase()).indexOf(query) !== -1) famHit = true;
-      for (var ci = 0; ci < f.cigars.length; ci++) {
-        if (f.cigars[ci].name.toLowerCase().indexOf(query) !== -1) cigHit = true;
-      }
-    }
-    if (!brandHit && !famHit && !cigHit) continue;
-    out += '<div class="search-brand-header">' + b.name + '</div>';
-    for (var fi2 = 0; fi2 < b.families.length; fi2++) {
-      var fam = b.families[fi2];
-      var fullFam = bl + ' ' + fam.name.toLowerCase();
-      var showFam = brandHit || fam.name.toLowerCase().indexOf(query) !== -1 || fullFam.indexOf(query) !== -1;
-      if (!showFam) {
-        for (var ci2 = 0; ci2 < fam.cigars.length; ci2++) {
-          if (fam.cigars[ci2].name.toLowerCase().indexOf(query) !== -1) { showFam = true; break; }
-        }
-      }
-      if (!showFam) continue;
-      var sb = b.name.replace(/'/g, "&#39;");
-      var sf = fam.name.replace(/'/g, "&#39;");
-      out += '<div class="search-result-family" onclick="selectFamily(\'' + sb + '\',\'' + sf + '\')">' + fam.name + '</div>';
+      var fam = b.families[fi];
+      var famFull = bl + ' ' + fam.name.toLowerCase();
+      var famHit  = fam.name.toLowerCase().indexOf(query) !== -1 || famFull.indexOf(query) !== -1;
+      if (!brandHit && !famHit) continue;
+      if (count >= 60) break;
+      var sb = b.name.replace(/'/g,"&#39;");
+      var sf = fam.name.replace(/'/g,"&#39;");
+      out += '<div class="search-result-family" onclick="selectFamily(\'' + sb + '\',\'' + sf + '\')">'
+           + '<strong>' + b.name + '</strong> &rsaquo; ' + fam.name + '</div>';
+      count++;
     }
   }
   results.innerHTML = out || '<div style="color:var(--ash);padding:12px;">No matches found.</div>';
 }
+
 
 function selectBrand(brandName) {
   document.getElementById('mainSearch').value = brandName;
@@ -815,36 +778,6 @@ function openCigarDetailFromCA(cigar, brandName, familyName, family) {
 // ── LOG A SMOKE ──────────────────────────────────────────────────────────────
 var logSelectedCigar = null;
 
-
-function previewLogPhoto(input) {
-  if (input.files && input.files[0]) {
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      var img = document.getElementById('logPhotoPreview');
-      img.src = e.target.result; img.style.display = 'block';
-      document.getElementById('logPhotoName').textContent = input.files[0].name;
-    };
-    reader.readAsDataURL(input.files[0]);
-  }
-}
-
-function useMyLocation() {
-  if (!navigator.geolocation) { showToast('Geolocation not supported'); return; }
-  showToast('Getting location...');
-  navigator.geolocation.getCurrentPosition(function(pos) {
-    var lat = pos.coords.latitude.toFixed(4);
-    var lon = pos.coords.longitude.toFixed(4);
-    fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lon+'&format=json')
-      .then(function(r){ return r.json(); })
-      .then(function(d){
-        var a = d.address || {};
-        var city = a.city || a.town || a.village || a.county || '';
-        var state = a.state || '';
-        document.getElementById('logLocation').value = city + (state ? ', '+state : '') || lat+','+lon;
-      }).catch(function(){ document.getElementById('logLocation').value = lat+','+lon; });
-  }, function(){ showToast('Location access denied'); });
-}
-
 function openLogSmoke() {
   if (!currentUser) { showPage('auth'); return; }
   // Reset form
@@ -865,7 +798,7 @@ function handleLogSearch(q) {
   var resultsDiv = document.getElementById('logSearchResults');
   if (!q || q.length < 2) { resultsDiv.innerHTML = ''; return; }
   var query = q.toLowerCase().trim();
-  var families = [];
+  var hits = [];
   for (var bi = 0; bi < caDatabase.length; bi++) {
     var b = caDatabase[bi];
     if (b.name.toLowerCase().indexOf('.html') !== -1) continue;
@@ -873,52 +806,52 @@ function handleLogSearch(q) {
     var brandHit = bl.indexOf(query) !== -1;
     for (var fi = 0; fi < b.families.length; fi++) {
       var fam = b.families[fi];
-      var famHit = fam.name.toLowerCase().indexOf(query) !== -1 || (bl+' '+fam.name.toLowerCase()).indexOf(query) !== -1;
-      if (brandHit || famHit) {
-        families.push({ brand: b.name, family: fam });
-      }
+      var famFull = bl + ' ' + fam.name.toLowerCase();
+      var famHit  = fam.name.toLowerCase().indexOf(query) !== -1 || famFull.indexOf(query) !== -1;
+      if (brandHit || famHit) hits.push({ brand: b.name, fam: fam });
     }
   }
-  if (families.length === 0) {
+  if (hits.length === 0) {
     resultsDiv.innerHTML = '<div style="color:var(--ash);padding:8px 12px;font-size:0.85rem;">No matches.</div>';
     return;
   }
   var out = '';
-  families.forEach(function(item) {
-    var count = item.family.cigars ? item.family.cigars.length : 0;
+  hits.forEach(function(item) {
+    var count = item.fam.cigars ? item.fam.cigars.length : 0;
     var sb = item.brand.replace(/"/g,'&quot;');
-    var sf = item.family.name.replace(/"/g,'&quot;');
-    out += '<div class="search-result-family log-fam-row" style="padding:10px 14px;cursor:pointer;border-radius:8px;border-bottom:1px solid var(--light-ash);"'
-      + ' onclick="expandLogFamily('' + sb + '','' + sf + '')">'
-      + '<strong>' + item.brand + '</strong> &rsaquo; ' + item.family.name
-      + ' <span style="color:var(--ash);font-size:0.8rem;">(' + count + ' sizes) ▶</span>'
-      + '</div>';
+    var sf = item.fam.name.replace(/"/g,'&quot;');
+    out += '<div style="padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--light-ash);font-size:0.9rem;"'
+         + ' onmousedown="expandLogFamily(\"' + sb + '\",\"' + sf + '\")">'
+         + '<strong>' + item.brand + '</strong> &rsaquo; ' + item.fam.name
+         + ' <span style="color:var(--ash);font-size:0.78rem;">(' + count + ' sizes)</span>'
+         + '</div>';
   });
   resultsDiv.innerHTML = out;
 }
 
 function expandLogFamily(brandName, familyName) {
+  var resultsDiv = document.getElementById('logSearchResults');
   var brand = null;
   for (var i = 0; i < caDatabase.length; i++) { if (caDatabase[i].name === brandName) { brand = caDatabase[i]; break; } }
   if (!brand) return;
   var fam = null;
   for (var i = 0; i < brand.families.length; i++) { if (brand.families[i].name === familyName) { fam = brand.families[i]; break; } }
   if (!fam) return;
-  var resultsDiv = document.getElementById('logSearchResults');
-  var sb = brandName.replace(/"/g,'&quot;');
-  var sf = familyName.replace(/"/g,'&quot;');
-  var out = '<div style="padding:8px 14px;cursor:pointer;font-size:0.82rem;color:var(--tobacco);font-weight:700;" onclick="handleLogSearch(document.getElementById('logCigarSearch').value)">← Back</div>';
-  out += '<div style="padding:6px 14px;font-size:0.85rem;color:var(--ash);">' + brandName + ' &rsaquo; ' + familyName + '</div>';
+  var out = '<div style="padding:8px 14px;cursor:pointer;font-size:0.82rem;color:var(--tobacco);font-weight:700;border-bottom:1px solid var(--light-ash);"'
+          + ' onmousedown="handleLogSearch(document.getElementById('logCigarSearch').value)">&#8592; Back</div>';
+  out += '<div style="padding:5px 14px;font-size:0.78rem;color:var(--ash);">' + brandName + ' › ' + familyName + '</div>';
   if (!fam.cigars || fam.cigars.length === 0) {
-    out += '<div style="color:var(--ash);padding:8px 14px;">No sizes listed.</div>';
+    out += '<div style="color:var(--ash);padding:8px 14px;font-size:0.85rem;">No sizes listed.</div>';
   } else {
     fam.cigars.forEach(function(c) {
       var meta = (c.size && c.size !== 'N/A') ? c.size : '';
       var sn = c.name.replace(/"/g,'&quot;');
-      out += '<div class="search-result-cigar log-search-row" style="padding:9px 14px 9px 24px;cursor:pointer;border-radius:8px;"'
-        + ' onclick="selectLogCigar('' + sb + '','' + sf + '','' + sn + '')">'
-        + c.name + (meta ? ' <span style=\"color:var(--ash);font-size:0.8rem;\">· ' + meta + '</span>' : '')
-        + '</div>';
+      var sb2 = brandName.replace(/"/g,'&quot;');
+      var sf2 = familyName.replace(/"/g,'&quot;');
+      out += '<div style="padding:9px 14px 9px 22px;cursor:pointer;font-size:0.88rem;border-bottom:1px solid var(--cream);"'
+           + ' onmousedown="selectLogCigar(\"' + sb2 + '\",\"' + sf2 + '\",\"' + sn + '\")">'
+           + c.name + (meta ? ' <span style=\"color:var(--ash);font-size:0.78rem;\">· ' + meta + '</span>' : '')
+           + '</div>';
     });
   }
   resultsDiv.innerHTML = out;
@@ -977,7 +910,6 @@ function submitLog() {
     rating: parseInt(rating),
     price: price ? parseFloat(price) : null,
     location: location, notes: notes, user: currentUser.username,
-    photo: (document.getElementById('logPhotoPreview') && document.getElementById('logPhotoPreview').src && document.getElementById('logPhotoPreview').src !== window.location.href) ? document.getElementById('logPhotoPreview').src : null,
   };
 
   // Save to localStorage
@@ -1007,41 +939,150 @@ function submitLog() {
 
 
 
-
-function postMediaToFeed(input) {
-  if (!input.files || !input.files[0] || !currentUser) return;
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var post = { id: Date.now(), username: currentUser.displayName || currentUser.username,
-      text: '', photo: e.target.result, date: new Date().toLocaleDateString() };
-    var feed = DB.getFeed(); feed.push(post); DB.saveFeed(feed);
-    renderFeed();
-  };
-  reader.readAsDataURL(input.files[0]);
-  input.value = '';
+function showToast(msg) {
+  var existing = document.getElementById('toast-popup');
+  if (existing) existing.remove();
+  var toast = document.createElement('div');
+  toast.id = 'toast-popup';
+  toast.textContent = msg;
+  toast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);'
+    + 'background:var(--dark-tobacco);color:white;padding:12px 24px;border-radius:30px;'
+    + 'font-size:0.92rem;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.3);'
+    + 'opacity:0;transition:opacity 0.3s;';
+  document.body.appendChild(toast);
+  setTimeout(function() { toast.style.opacity = '1'; }, 10);
+  setTimeout(function() { toast.style.opacity = '0'; }, 2500);
+  setTimeout(function() { toast.remove(); }, 3000);
 }
 
+// INIT
+(async function init() {
+  await loadCA();
+  const session = localStorage.getItem('cl_session');
+  if (session) {
+    const users = DB.getUsers();
+    if (users[session]) {
+      currentUser = users[session];
+      updateNav();
+      showPage('dashboard');
+    }
+  } else {
+    updateNav();
+  }
+})();
+</script>
+<script>
 
+  // Enter key on feed input
+  var feedInput = document.getElementById('feedInput');
+  if (feedInput) {
+    feedInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); postToFeed(); }
+    });
+  }
+
+  // Browser back button trap
+  history.pushState(null, null, location.href);
+  window.addEventListener('popstate', function() {
+    history.pushState(null, null, location.href);
+    document.getElementById('searchResults').innerHTML = '';
+    document.getElementById('mainSearch').value = '';
+  });
+
+// ── Sidebar feed ─────────────────────────────────────────────
+function renderSidebarFeed() {
+  var div = document.getElementById('sidebarFeedPosts');
+  if (!div) return;
+  var feed = DB.getFeed();
+  div.innerHTML = '';
+  if (feed.length === 0) {
+    div.innerHTML = '<div style="color:var(--ash);text-align:center;padding:20px;font-size:0.85rem;">No posts yet.</div>';
+    return;
+  }
+  feed.forEach(function(post) {
+    var isMe = currentUser && post.username === (currentUser.displayName || currentUser.username);
+    var wrap = document.createElement('div');
+    wrap.style.cssText = 'display:flex;flex-direction:column;max-width:82%;' + (isMe ? 'align-self:flex-end;align-items:flex-end;' : 'align-self:flex-start;align-items:flex-start;');
+    var bubble = document.createElement('div');
+    bubble.style.cssText = 'padding:7px 11px;border-radius:' + (isMe ? '14px 14px 3px 14px' : '14px 14px 14px 3px') + ';background:' + (isMe ? 'var(--tobacco)' : 'var(--cream)') + ';color:' + (isMe ? '#fff' : 'var(--charcoal)') + ';font-size:0.85rem;word-break:break-word;';
+    if (post.photo) { var img = document.createElement('img'); img.src = post.photo; img.style.cssText = 'max-width:140px;border-radius:8px;margin-bottom:3px;display:block;'; bubble.appendChild(img); }
+    if (post.text) bubble.appendChild(document.createTextNode(post.text));
+    var meta = document.createElement('div');
+    meta.style.cssText = 'font-size:0.65rem;color:var(--ash);margin-top:2px;';
+    meta.textContent = (isMe ? '' : post.username + ' · ') + post.date;
+    wrap.appendChild(bubble); wrap.appendChild(meta); div.appendChild(wrap);
+  });
+  div.scrollTop = div.scrollHeight;
+}
+
+function postSidebarFeed() {
+  var input = document.getElementById('sidebarFeedInput');
+  var text = input ? input.value.trim() : '';
+  if (!text || !currentUser) return;
+  var post = { id: Date.now(), username: currentUser.displayName || currentUser.username, text: text, date: new Date().toLocaleDateString() };
+  var feed = DB.getFeed(); feed.push(post); DB.saveFeed(feed);
+  input.value = '';
+  renderSidebarFeed();
+}
+
+function postSidebarMedia(fileInput) {
+  if (!fileInput.files || !fileInput.files[0] || !currentUser) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var post = { id: Date.now(), username: currentUser.displayName || currentUser.username, text: '', photo: e.target.result, date: new Date().toLocaleDateString() };
+    var feed = DB.getFeed(); feed.push(post); DB.saveFeed(feed);
+    renderSidebarFeed();
+  };
+  reader.readAsDataURL(fileInput.files[0]);
+  fileInput.value = '';
+}
+
+// ── Photo preview & geo ───────────────────────────────────────
+function previewLogPhoto(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var img = document.getElementById('logPhotoPreview');
+      img.src = e.target.result; img.style.display = 'block';
+      document.getElementById('logPhotoName').textContent = input.files[0].name;
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function useMyLocation() {
+  if (!navigator.geolocation) { showToast('Geolocation not supported'); return; }
+  showToast('Getting location...');
+  navigator.geolocation.getCurrentPosition(function(pos) {
+    var lat = pos.coords.latitude.toFixed(4), lon = pos.coords.longitude.toFixed(4);
+    fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lon+'&format=json')
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        var a = d.address || {};
+        var city = a.city || a.town || a.village || a.county || '';
+        document.getElementById('logLocation').value = city + (a.state ? ', '+a.state : '') || lat+','+lon;
+      }).catch(function(){ document.getElementById('logLocation').value = lat+','+lon; });
+  }, function(){ showToast('Location access denied'); });
+}
+
+// ── Invite functions ──────────────────────────────────────────
 function generateInvite() {
-  var name = document.getElementById('inviteName').value.trim() || 'friend';
+  var name = document.getElementById('inviteName').value.trim() || 'Friend';
   var code = Math.random().toString(36).substring(2,10).toUpperCase();
   var invites = DB.getInvites();
   invites[code] = { name: name, created: new Date().toLocaleDateString(), used: false };
   DB.saveInvites(invites);
   var base = window.location.href.split('#')[0].split('?')[0];
-  var link = base + '?invite=' + code;
-  document.getElementById('inviteLinkText').textContent = link;
+  document.getElementById('inviteLinkText').textContent = base + '?invite=' + code;
   document.getElementById('inviteResult').style.display = 'block';
   renderInviteList();
 }
 
 function copyInviteLink() {
   var text = document.getElementById('inviteLinkText').textContent;
-  navigator.clipboard.writeText(text).then(function(){ showToast('Link copied! 📋'); }).catch(function(){
-    var el = document.createElement('textarea');
-    el.value = text; document.body.appendChild(el); el.select();
-    document.execCommand('copy'); document.body.removeChild(el);
-    showToast('Link copied! 📋');
+  navigator.clipboard.writeText(text).then(function(){ showToast('Copied! 📋'); }).catch(function(){
+    var el = document.createElement('textarea'); el.value = text; document.body.appendChild(el); el.select();
+    document.execCommand('copy'); document.body.removeChild(el); showToast('Copied! 📋');
   });
 }
 
@@ -1050,155 +1091,45 @@ function renderInviteList() {
   if (!div) return;
   var invites = DB.getInvites();
   var keys = Object.keys(invites);
-  if (keys.length === 0) { div.innerHTML = '<div style="color:var(--ash);">No invites yet.</div>'; return; }
+  if (!keys.length) { div.innerHTML = '<div style="color:var(--ash);font-size:0.85rem;">No invites yet.</div>'; return; }
   var out = '';
   keys.forEach(function(code) {
     var inv = invites[code];
-    out += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--light-ash);">'
-      + '<span>' + inv.name + ' <span style="color:var(--ash);font-size:0.78rem;">· ' + inv.created + '</span></span>'
-      + '<span style="font-size:0.78rem;color:' + (inv.used ? 'var(--success)' : 'var(--tobacco)') + ';">' + (inv.used ? '✓ Used' : 'Pending') + '</span>'
-      + '</div>';
+    out += '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--light-ash);font-size:0.85rem;">'
+      + '<span>' + inv.name + ' <span style="color:var(--ash);font-size:0.75rem;">' + inv.created + '</span></span>'
+      + '<span style="color:' + (inv.used ? 'var(--success)' : 'var(--tobacco)') + ';">' + (inv.used ? '✓ Used' : 'Pending') + '</span></div>';
   });
   div.innerHTML = out;
 }
 
-function postToFeedSidebar() {
-  var input = document.getElementById('feedInputSidebar');
-  if (!input) return;
-  var text = input.value.trim();
-  if (!text || !currentUser) return;
-  var post = { id: Date.now(), username: currentUser.displayName || currentUser.username,
-    text: text, date: new Date().toLocaleDateString() };
-  var feed = DB.getFeed(); feed.push(post); DB.saveFeed(feed);
-  input.value = '';
-  renderFeedSidebar();
-  // Also sync to messages page if open
-  renderFeed();
+// ── Browser back button ───────────────────────────────────────
+window.addEventListener('popstate', function(e) {
+  var page = (e.state && e.state.page) ? e.state.page : 'dashboard';
+  _showPageInternal(page);
+});
+
+function _showPageInternal(page) {
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  var t = document.getElementById('page-' + page);
+  if (t) t.classList.add('active');
+  if (page === 'dashboard') { renderDashboard(); renderSidebarFeed(); }
+  if (page === 'invite') renderInviteList();
+  window.scrollTo(0,0);
 }
 
-function postMediaSidebar(input) {
-  if (!input.files || !input.files[0] || !currentUser) return;
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var post = { id: Date.now(), username: currentUser.displayName || currentUser.username,
-      text: '', photo: e.target.result, date: new Date().toLocaleDateString() };
-    var feed = DB.getFeed(); feed.push(post); DB.saveFeed(feed);
-    renderFeedSidebar(); renderFeed();
-  };
-  reader.readAsDataURL(input.files[0]);
-  input.value = '';
-}
-
-function renderFeedSidebar() {
-  var div = document.getElementById('feedPosts2');
-  if (!div) return;
-  var feed = DB.getFeed();
-  if (feed.length === 0) {
-    div.innerHTML = '<div style="color:var(--ash);text-align:center;padding:20px;font-size:0.85rem;">No posts yet.</div>';
-    return;
-  }
-  div.innerHTML = '';
-  feed.forEach(function(post) {
-    var isMe = currentUser && post.username === (currentUser.displayName || currentUser.username);
-    var wrap = document.createElement('div');
-    wrap.style.cssText = 'display:flex;flex-direction:column;max-width:80%;' + (isMe ? 'align-self:flex-end;align-items:flex-end;' : 'align-self:flex-start;align-items:flex-start;');
-    var bubble = document.createElement('div');
-    bubble.style.cssText = 'padding:7px 11px;border-radius:' + (isMe ? '14px 14px 3px 14px' : '14px 14px 14px 3px') + ';background:' + (isMe ? 'var(--tobacco)' : 'var(--cream)') + ';color:' + (isMe ? '#fff' : 'var(--charcoal)') + ';font-size:0.85rem;word-break:break-word;';
-    if (post.photo) {
-      var img = document.createElement('img');
-      img.src = post.photo; img.style.cssText = 'max-width:150px;border-radius:8px;margin-bottom:3px;display:block;';
-      bubble.appendChild(img);
-    }
-    if (post.text) bubble.appendChild(document.createTextNode(post.text));
-    var meta = document.createElement('div');
-    meta.style.cssText = 'font-size:0.65rem;color:var(--ash);margin-top:2px;';
-    meta.textContent = (isMe ? '' : post.username + ' · ') + post.date;
-    wrap.appendChild(bubble); wrap.appendChild(meta);
-    div.appendChild(wrap);
-  });
-  div.scrollTop = div.scrollHeight;
-}
-
-function showToast(msg) {
-  var existing = document.getElementById('toast-popup');
-  if (existing) existing.remove();
-  var toast = document.createElement('div');
-  toast.id = 'toast-popup';
-  toast.textContent = msg;
-  toast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);'
-    + 'background:var(--dark-tobacco);color:white;padding:12px 24px;border-radius:30px;'
-    + 'font-size:0.92rem;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.3);'
-    + 'opacity:0;transition:opacity 0.3s;';
-  document.body.appendChild(toast);
-  setTimeout(function() { toast.style.opacity = '1'; }, 10);
-  setTimeout(function() { toast.style.opacity = '0'; }, 2500);
-  setTimeout(function() { toast.remove(); }, 3000);
-}
-
-// INIT
-(async function init() {
-  await loadCA();
-  // Check for invite code in URL
-  (function() {
-    var params = new URLSearchParams(window.location.search);
-    var code = params.get('invite');
-    if (code) {
-      var invites = DB.getInvites();
-      if (invites[code] && !invites[code].used) {
-        invites[code].used = true;
-        DB.saveInvites(invites);
-        showToast('Welcome! Create your account below 🎉');
-        showAuthForm('register');
-      }
-    }
-  })();
-
-  const session = localStorage.getItem('cl_session');
-  if (session) {
-    const users = DB.getUsers();
-    if (users[session]) {
-      currentUser = users[session];
-      updateNav();
-      showPage('dashboard');
-    }
-  } else {
-    updateNav();
-  }
-})();
-</script>
-<script>
-
-  // Enter key on feed input
-  var feedInput = document.getElementById('feedInput');
-  if (feedInput) {
-    feedInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') { e.preventDefault(); postToFeed(); }
-    });
-  }
-
-  // Browser back button
-  window.addEventListener('popstate', function(e) {
-    var page = (e.state && e.state.page) ? e.state.page : 'dashboard';
-    showPage(page, true);
-  });
 </script>
 
 <!-- COMMUNITY FEED -->
-<div id="page-messages" class="page" style="display:none;flex-direction:column;height:calc(100vh - 64px);max-width:700px;margin:0 auto;">
-  <div style="padding:16px 16px 8px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--light-ash);">
-    <button class="btn btn-secondary" onclick="showPage('dashboard')" style="padding:8px 16px;">← Back</button>
-    
-  </div>
-  <div id="feedPosts" style="flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:10px;"></div>
-  <div style="padding:8px 12px;border-top:1px solid var(--light-ash);background:white;display:flex;align-items:center;gap:8px;">
-    <button onclick="showToast('Emoji picker coming soon! 😄')" style="background:none;border:none;font-size:1.4rem;cursor:pointer;padding:4px;" title="Emoji">🙂</button>
-    <div style="flex:1;display:flex;align-items:center;background:var(--cream);border:1.5px solid var(--light-ash);border-radius:24px;padding:8px 14px;gap:8px;">
-      <input id="feedInput" type="text" placeholder="Message..." style="flex:1;background:none;border:none;outline:none;color:var(--charcoal);font-size:0.95rem;font-family:'Lato',sans-serif;"
-        onkeydown="if(event.key==='Enter'){event.preventDefault();postToFeed();}" />
-      <label for="feedFileInput" style="cursor:pointer;font-size:1.2rem;line-height:1;" title="Attach file">📎</label>
-      <input id="feedFileInput" type="file" accept="image/*,video/*" style="display:none;" onchange="postMediaToFeed(this)" />
-      <label for="feedCameraInput" style="cursor:pointer;font-size:1.2rem;line-height:1;" title="Camera / Gallery">📷</label>
-      <input id="feedCameraInput" type="file" accept="image/*" capture="environment" style="display:none;" onchange="postMediaToFeed(this)" />
+<div id="page-messages" class="page">
+  <div style="max-width:700px;margin:0 auto;padding:40px 20px;">
+    <button class="btn btn-secondary" onclick="showPage('dashboard')" style="margin-bottom:24px;">← Back</button>
+    <div style="background:white;border-radius:20px;padding:28px;box-shadow:0 4px 30px var(--shadow);">
+      <h2 style="font-family:'Playfair Display',serif;color:var(--dark-tobacco);margin-bottom:20px;">💬 Community Feed</h2>
+      <div style="display:flex;gap:10px;margin-bottom:20px;">
+        <input type="text" id="feedInput" class="form-input" placeholder="Share a smoke, a thought..." style="flex:1;" />
+        <button class="btn btn-primary" onclick="postToFeed()">Post</button>
+      </div>
+      <div id="feedPosts"></div>
     </div>
   </div>
 </div>
@@ -1214,12 +1145,13 @@ function showToast(msg) {
   </div>
 </div>
 
-<div id="page-invite" class="page">
+</body>
+</html<div id="page-invite" class="page">
   <div style="max-width:600px;margin:0 auto;padding:40px 20px;">
     <button class="btn btn-secondary" onclick="showPage('dashboard')" style="margin-bottom:24px;">← Back</button>
     <div style="background:white;border-radius:20px;padding:32px;box-shadow:0 4px 30px var(--shadow);">
       <h2 style="font-family:'Playfair Display',serif;color:var(--dark-tobacco);margin-bottom:8px;">📨 Invite a Friend</h2>
-      <p style="color:var(--ash);font-size:0.9rem;margin-bottom:24px;">Share a personal invite link. Your friend will be able to register immediately.</p>
+      <p style="color:var(--ash);font-size:0.9rem;margin-bottom:24px;">Generate a one-time invite link to share via text or email.</p>
       <div class="form-group">
         <label class="form-label">Friend's Name (optional)</label>
         <input type="text" class="form-input" id="inviteName" placeholder="e.g. Mike" />
@@ -1227,1072 +1159,16 @@ function showToast(msg) {
       <button class="btn btn-primary" style="width:100%;" onclick="generateInvite()">Generate Invite Link</button>
       <div id="inviteResult" style="margin-top:20px;display:none;">
         <div style="background:var(--cream);border-radius:12px;padding:16px;word-break:break-all;">
-          <div style="font-size:0.78rem;font-weight:700;text-transform:uppercase;color:var(--ash);margin-bottom:6px;">Invite Link</div>
+          <div style="font-size:0.78rem;font-weight:700;text-transform:uppercase;color:var(--ash);margin-bottom:6px;">Your Invite Link</div>
           <div id="inviteLinkText" style="font-size:0.88rem;color:var(--dark-tobacco);"></div>
         </div>
         <button class="btn btn-gold" style="width:100%;margin-top:12px;" onclick="copyInviteLink()">📋 Copy Link</button>
-        <p style="font-size:0.8rem;color:var(--ash);margin-top:10px;text-align:center;">Share this link via text, email or WhatsApp. It works once.</p>
+        <p style="font-size:0.8rem;color:var(--ash);margin-top:10px;text-align:center;">Works once. Your friend can register immediately.</p>
       </div>
-      <div style="margin-top:32px;border-top:1px solid var(--light-ash);padding-top:24px;">
-        <h3 style="font-family:'Playfair Display',serif;font-size:1rem;margin-bottom:12px;">Pending Invites</h3>
-        <div id="inviteList" style="font-size:0.88rem;"></div>
-      </div>
-    </div>
-  </div>
-</div>
-</body>
-</html>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--charcoal); min-height: 100vh; }
-.page { display: none; } .page.active { display: block; } .hidden { display: none !important; }
-
-/* NAV */
-.nav { background: var(--charcoal); padding: 0 20px; height: 64px; display: flex; align-items: center;
-  justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 20px rgba(44,36,24,0.3); }
-.nav-logo { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.5rem; font-weight: 700; cursor: pointer; }
-.nav-actions { display: flex; gap: 14px; align-items: center; }
-.nav-btn { background: none; border: 1px solid rgba(201,168,76,0.3); color: var(--ash); padding: 10px 20px;
-  border-radius: 50px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; font-family: 'Lato', sans-serif; font-weight: 600; }
-.nav-btn:hover { background: var(--tobacco); color: white; }
-.nav-btn.primary { background: var(--ember); color: white; border-color: var(--ember); }
-.user-pill { display: flex; align-items: center; gap: 8px; background: rgba(201,168,76,0.15);
-  border: 1px solid var(--gold); border-radius: 50px; padding: 6px 14px 6px 8px; cursor: pointer; }
-.user-avatar-sm { width: 30px; height: 30px; border-radius: 50%; background: var(--tobacco);
-  display: flex; align-items: center; justify-content: center; font-size: 1rem; overflow: hidden; }
-
-/* LAYOUT */
-.dash-layout { display: grid; grid-template-columns: 1fr 400px; gap: 24px; padding: 40px 20px; max-width: 1600px; margin: 0 auto; }
-@media (max-width: 1100px) { .dash-layout { grid-template-columns: 1fr; } .dash-sidebar { position: static; height: auto; } }
-.dash-main { min-width: 0; }
-.dash-sidebar { position: sticky; top: 84px; height: calc(100vh - 104px); display: flex; flex-direction: column; }
-
-/* BUTTONS & FORMS */
-.btn { padding: 12px 24px; border-radius: var(--radius); border: none; font-family: 'Lato', sans-serif;
-  font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-.btn-primary { background: var(--ember); color: white; } .btn-primary:hover { background: var(--ember-light); }
-.btn-secondary { background: var(--tobacco); color: white; } .btn-secondary:hover { opacity: 0.9; }
-.btn-gold { background: var(--gold); color: var(--charcoal); } .btn-gold:hover { background: var(--gold-light); }
-
-.form-group { margin-bottom: 20px; }
-.form-label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--dark-tobacco);
-  margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
-.form-input, .form-textarea, .form-select { width: 100%; padding: 12px 14px; border: 1.5px solid var(--light-ash);
-  border-radius: 12px; font-family: 'Lato', sans-serif; font-size: 0.9rem; background: white; transition: border 0.2s; }
-.form-input:focus, .form-textarea:focus { outline: none; border-color: var(--tobacco); }
-
-/* AUTH, DASH, etc. */
-.auth-card { background: white; border-radius: 20px; padding: 40px; box-shadow: 0 4px 30px var(--shadow); max-width: 440px; margin: 80px auto; }
-.auth-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--dark-tobacco); margin-bottom: 8px; }
-.dash-header { background: linear-gradient(135deg, var(--dark-tobacco), var(--charcoal)); border-radius: 20px; padding: 32px; margin-bottom: 32px; color: white; }
-.dash-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 20px; }
-.stat-pill { background: rgba(255,255,255,0.1); border-radius: 12px; padding: 14px; text-align: center; }
-.stat-num { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--gold); }
-.stat-label { font-size: 0.75rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }
-.cigars-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-.cigar-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 3px 15px var(--shadow); cursor: pointer; transition: transform 0.2s; }
-.cigar-card:hover { transform: translateY(-4px); }
-.cigar-card-img { width: 100%; height: 180px; background: linear-gradient(135deg, var(--tobacco), var(--dark-tobacco)); display: flex; align-items: center; justify-content: center; font-size: 3rem; overflow: hidden; }
-.cigar-card-img img { width: 100%; height: 100%; object-fit: cover; }
-.modal-overlay { position: fixed; inset: 0; background: rgba(44,36,24,0.7); z-index: 150; display: flex; align-items: center; justify-content: center; padding: 20px; }
-.modal { background: white; border-radius: 20px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
-.toast { position: fixed; bottom: 30px; right: 30px; background: var(--charcoal); color: white; padding: 14px 20px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 200; animation: slideIn 0.3s ease; }
-@keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-/* ADMIN PANEL */
-.admin-section { background: white; border-radius: 16px; padding: 24px; margin-top: 24px; box-shadow: 0 3px 15px var(--shadow); }
-.admin-list { margin-top: 16px; }
-.admin-item { padding: 12px; border-bottom: 1px solid var(--light-ash); display: flex; justify-content: space-between; align-items: center; }
-.admin-item:last-child { border-bottom: none; }
-.admin-btn { background: var(--band-red); color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
-.admin-btn:hover { background: #a51d1d; }
-
-/* === CIGAR SEARCH HIERARCHY === */
-.search-brand-header { font-family:'Playfair Display',serif; font-weight:700; font-size:0.85rem;
-  text-transform:uppercase; letter-spacing:0.06em; color:var(--dark-tobacco);
-  padding:10px 14px 4px; margin-top:8px; border-top:1px solid var(--light-ash); }
-.search-brand-header:first-child { border-top:none; margin-top:0; }
-.search-result-family { padding:9px 14px 9px 28px; cursor:pointer; border-radius:8px;
-  font-size:0.95rem; color:var(--charcoal); transition:background 0.15s; }
-.search-result-family:hover { background:var(--light-ash); }
-.search-result-cigar { padding:8px 14px 8px 36px; cursor:pointer; border-radius:8px;
-  font-size:0.88rem; color:var(--tobacco); transition:background 0.15s; }
-.search-result-cigar:hover { background:var(--cream); }
-/* === CIGAR INFO TILE === */
-.cigar-info-tile { background:white; border-radius:16px; box-shadow:0 4px 24px var(--shadow);
-  overflow:hidden; max-width:480px; margin-top:8px; }
-.cigar-tile-header { background:linear-gradient(135deg,var(--dark-tobacco),var(--charcoal)); padding:20px; color:white; }
-.cigar-tile-back { background:none; border:1px solid rgba(255,255,255,0.3); color:rgba(255,255,255,0.8);
-  padding:5px 12px; border-radius:20px; cursor:pointer; font-size:0.8rem; margin-bottom:10px;
-  display:inline-block; font-family:'Lato',sans-serif; }
-.cigar-tile-back:hover { background:rgba(255,255,255,0.15); color:white; }
-.cigar-tile-title { font-family:'Playfair Display',serif; font-size:1.25rem; font-weight:700; color:var(--gold); margin-top:4px; }
-.cigar-tile-subtitle { font-size:0.8rem; color:rgba(255,255,255,0.55); margin-top:4px; }
-.cigar-tile-body { padding:16px 20px; }
-.cigar-tile-row { display:flex; justify-content:space-between; align-items:center;
-  padding:9px 0; border-bottom:1px solid var(--light-ash); }
-.cigar-tile-row:last-child { border-bottom:none; }
-.cigar-tile-label { font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--ash); }
-.cigar-tile-value { font-size:0.92rem; color:var(--charcoal); font-weight:500; text-align:right; max-width:60%; }
-
-</style>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const _supa = supabase.createClient('https://flrqhivvjimahfrdoxwt.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZscnFoaXZ2amltYWhmcmRveHd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4ODkyNzUsImV4cCI6MjA4ODQ2NTI3NX0.3PoCVkRGM3fLyu0MXsaz4ZKH1zsuo_HVcKUZpciOAAk');
-</script>
-<script>
-  // Auth helpers — available immediately before main script loads
-  function showAuthForm(which) {
-    document.getElementById('form-login').classList.toggle('hidden', which !== 'login');
-    document.getElementById('form-register').classList.toggle('hidden', which !== 'register');
-  }
-
-  async function doLogin() {
-    var u = document.getElementById('loginUsername').value.trim().toLowerCase();
-    var p = document.getElementById('loginPassword').value;
-    var err = document.getElementById('loginError');
-    err.textContent = '';
-    if (!u || !p) { err.textContent = 'Enter both fields.'; return; }
-
-    // Hardcoded admin shortcut
-    if (u === 'edjhk' && p === '1899jack') {
-      localStorage.setItem('cl_session', 'edjhk');
-      localStorage.setItem('cl_users', JSON.stringify({edjhk:{username:'edjhk',displayName:'Ed',isAdmin:true,avatar:'🎩',password:'1899jack'}}));
-      location.reload();
-      return;
-    }
-
-    // Supabase auth
-    var btn = document.getElementById('loginBtn');
-    btn.textContent = 'Signing in...';
-    btn.disabled = true;
-    var result = await _supa.auth.signInWithPassword({ email: u + '@cigarlog.app', password: p });
-    if (result.error && u.includes('@')) {
-      result = await _supa.auth.signInWithPassword({ email: u, password: p });
-    }
-    if (result.error) {
-      // Fallback to localStorage
-      var users = JSON.parse(localStorage.getItem('cl_users') || '{}');
-      var user = users[u];
-      if (!user || user.password !== p) {
-        err.textContent = 'Invalid username or password.';
-        btn.textContent = 'Sign In'; btn.disabled = false;
-        return;
-      }
-      localStorage.setItem('cl_session', u);
-      location.reload();
-      return;
-    }
-    // Get profile
-    var prof = await _supa.from('profiles').select('*').eq('id', result.data.user.id).single();
-    if (prof.data) {
-      localStorage.setItem('cl_session', prof.data.username);
-      var users = JSON.parse(localStorage.getItem('cl_users') || '{}');
-      users[prof.data.username] = {
-        username: prof.data.username,
-        displayName: prof.data.display_name || prof.data.username,
-        isAdmin: prof.data.is_admin || false,
-        avatar: prof.data.avatar || '🧔',
-        supabaseId: result.data.user.id
-      };
-      localStorage.setItem('cl_users', JSON.stringify(users));
-    }
-    btn.textContent = 'Sign In'; btn.disabled = false;
-    location.reload();
-  }
-
-  async function doRegister() {
-    var u  = document.getElementById('regUsername').value.trim().toLowerCase();
-    var dn = document.getElementById('regDisplayName').value.trim();
-    var p  = document.getElementById('regPassword').value;
-    var err = document.getElementById('regError');
-    err.textContent = '';
-    err.style.color = 'red';
-    if (!u || !p || !dn) { err.textContent = 'All fields required.'; return; }
-    if (p.length < 6)    { err.textContent = 'Password must be 6+ characters.'; return; }
-
-    // Check username not taken
-    var users = JSON.parse(localStorage.getItem('cl_users') || '{}');
-    if (users[u]) { err.textContent = 'Username already taken.'; return; }
-
-    // Save to localStorage immediately — works 100% without Supabase
-    users[u] = { username: u, displayName: dn, avatar: '🧔', isAdmin: false, password: p };
-    localStorage.setItem('cl_users', JSON.stringify(users));
-    localStorage.setItem('cl_session', u);
-
-    // Try Supabase in background (won't block login if it fails)
-    try {
-      var result = await _supa.auth.signUp({ email: u + '@cigarlog.app', password: p });
-      if (result.data && result.data.user) {
-        await _supa.from('profiles').upsert({
-          id: result.data.user.id, username: u,
-          display_name: dn, avatar: '🧔', is_admin: false
-        });
-        users[u].supabaseId = result.data.user.id;
-        localStorage.setItem('cl_users', JSON.stringify(users));
-      }
-    } catch(e) { console.warn('Supabase signup skipped:', e); }
-
-    location.reload();
-  }
-</script>
-
-</head>
-<body>
-
-<!-- NAV -->
-<div class="nav">
-  <div class="nav-logo" onclick="showPage('dashboard')">CigarLog</div>
-  <div class="nav-actions" id="navActions"></div>
-</div>
-
-<!-- AUTH -->
-<div id="page-auth" class="page active">
-  <div class="auth-card">
-    <div id="form-login">
-      <h2 class="auth-title">Welcome back.</h2>
-      <p class="auth-sub">Sign in to your cigar journal</p>
-      <div class="form-group">
-        <label class="form-label">Username</label>
-        <input type="text" class="form-input" id="loginUsername" placeholder="your_handle" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input type="password" class="form-input" id="loginPassword" placeholder="••••••••" />
-      </div>
-      <button id="loginBtn" class="btn btn-primary" onclick="doLogin()" style="width:100%;">Sign In</button>
-      <div id="loginError" style="color:var(--band-red);font-size:0.82rem;margin-top:10px;text-align:center;"></div>
-      <div class="auth-toggle">New here? <a onclick="showAuthForm('register')">Create account →</a></div>
-    </div>
-    <div id="form-register" class="hidden">
-      <h2 class="auth-title">Join the club.</h2>
-      <p class="auth-sub">Start your personal smoke journal</p>
-      <div class="form-group">
-        <label class="form-label">Username</label>
-        <input type="text" class="form-input" id="regUsername" placeholder="your_handle" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Display Name</label>
-        <input type="text" class="form-input" id="regDisplayName" placeholder="Your Name" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input type="password" class="form-input" id="regPassword" placeholder="••••••••" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Invite Code (optional for first user)</label>
-        <input type="text" class="form-input" id="regInviteCode" placeholder="Leave blank if first" />
-      </div>
-      <button id="regBtn" class="btn btn-primary" onclick="doRegister()" style="width:100%;">Create Account</button>
-      <div id="regError" style="color:var(--band-red);font-size:0.82rem;margin-top:10px;text-align:center;"></div>
-      <div class="auth-toggle">Already a member? <a onclick="showAuthForm('login')">Sign in →</a></div>
-    </div>
-  </div>
-</div>
-
-<!-- DASHBOARD -->
-<div id="page-dashboard" class="page">
-  <div class="dash-layout">
-    <div class="dash-main">
-      <div class="dash-header">
-        <h2 id="dashGreeting">Good evening, friend.</h2>
-        <p>Your cigar journal awaits.</p>
-        <div class="dash-stats">
-          <div class="stat-pill"><span class="stat-num" id="statSmokes">0</span><span class="stat-label">Smokes</span></div>
-          <div class="stat-pill"><span class="stat-num" id="statCigars">0</span><span class="stat-label">Cigars</span></div>
-          <div class="stat-pill"><span class="stat-num" id="statAvg">—</span><span class="stat-label">Avg Score</span></div>
-          <div class="stat-pill"><span class="stat-num" id="statFav">—</span><span class="stat-label">Top Rated</span></div>
-        </div>
-      </div>
-
-      <div class="action-btns">
-        <button class="btn btn-primary" onclick="openLogSmoke()">+ Log a Smoke</button>
-        <button class="btn btn-gold" onclick="showPage('messages')">💬 Messages</button>
-        <button class="btn btn-gold" onclick="showPage('events')">🎉 Events</button>
-        <button class="btn btn-gold" onclick="showPage('invite')">📨 Invite a Friend</button>
-        <button class="btn btn-gold" onclick="showPage('settings')">⚙️ Settings</button>
-      </div>
-
-      <div class="search-bar">
-        <span>🔍</span>
-        <input type="text" id="mainSearch" placeholder="Search brand, family or vitola..." oninput="handleSearchInput(this.value)" />
-      </div>
-
-      <div id="searchResults" style="margin-top:16px;"></div>
-      <div class="cigars-grid" id="cigarsGrid"></div>
-    </div>
-
-    <div class="dash-sidebar">
-      <div class="feed-section">
-        <h3>Community Feed</h3>
-        <div class="feed-list" id="feedList"></div>
-        <div class="feed-compose">
-          <div class="feed-input-wrapper">
-            <textarea id="feedText" placeholder="Share your thoughts..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();postFeed();}"></textarea>
-            <button class="feed-attach-btn" onclick="document.getElementById('feedImageInput').click()" title="Attach photo">📎</button>
-            <input type="file" id="feedImageInput" accept="image/*" style="display:none;" />
-          </div>
-          <div id="feedPreview" class="feed-preview"></div>
-        </div>
+      <div style="margin-top:28px;border-top:1px solid var(--light-ash);padding-top:20px;">
+        <h3 style="font-family:'Playfair Display',serif;font-size:1rem;margin-bottom:12px;">Sent Invites</h3>
+        <div id="inviteList"></div>
       </div>
     </div>
   </div>
 </div>
-
-<!-- DETAIL PAGE -->
-<div id="page-detail" class="page">
-  <div style="max-width:1000px;margin:0 auto;padding:40px 20px;">
-    <button class="btn btn-secondary" onclick="showPage('dashboard')" style="margin-bottom:20px;">← Back</button>
-    <div id="detailContent"></div>
-  </div>
-</div>
-
-
-<!-- LOG A SMOKE -->
-<div id="page-log" class="page">
-  <div style="max-width:600px;margin:0 auto;padding:40px 20px;">
-    <button class="btn btn-secondary" onclick="showPage('dashboard')" style="margin-bottom:24px;">← Back to Dashboard</button>
-    <div style="background:white;border-radius:20px;padding:32px;box-shadow:0 4px 30px var(--shadow);">
-      <h2 style="font-family:'Playfair Display',serif;color:var(--dark-tobacco);margin-bottom:24px;">Log a Smoke</h2>
-
-      <!-- Cigar Search -->
-      <div class="form-group">
-        <label class="form-label">Cigar</label>
-        <input type="text" class="form-input" id="logCigarSearch" placeholder="Search brand or family..." autocomplete="off"
-          oninput="handleLogSearch(this.value)" />
-        <div id="logSearchResults" style="margin-top:8px;"></div>
-        <div id="logSelectedCigar" style="display:none;margin-top:10px;padding:10px 14px;background:var(--cream);border-radius:10px;font-size:0.9rem;">
-          <strong id="logSelectedName"></strong>
-          <span id="logSelectedMeta" style="color:var(--ash);margin-left:8px;font-size:0.82rem;"></span>
-          <button onclick="clearLogCigar()" style="float:right;background:none;border:none;color:var(--ash);cursor:pointer;font-size:0.9rem;">✕</button>
-        </div>
-      </div>
-
-      <!-- Rating -->
-      <div class="form-group">
-        <label class="form-label">Your Rating (1–100)</label>
-        <input type="number" class="form-input" id="logRating" min="1" max="100" placeholder="e.g. 92" />
-      </div>
-
-      <!-- Price -->
-      <div class="form-group">
-        <label class="form-label">Price Paid ($)</label>
-        <input type="number" class="form-input" id="logPrice" min="0" step="0.01" placeholder="e.g. 18.50" />
-      </div>
-
-      <!-- Where smoked -->
-      <div class="form-group">
-        <label class="form-label">Where Smoked</label>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <input type="text" class="form-input" id="logLocation" placeholder="e.g. Back porch, Cigar lounge..." style="flex:1;" />
-          <button type="button" onclick="useMyLocation()" title="Use current location" style="background:var(--cream);border:1.5px solid var(--light-ash);border-radius:12px;padding:10px 12px;cursor:pointer;font-size:1.1rem;line-height:1;">📍</button>
-        </div>
-      </div>
-
-      <!-- Notes -->
-      <div class="form-group">
-        <label class="form-label">Tasting Notes / Comments</label>
-        <textarea class="form-textarea" id="logNotes" rows="4" placeholder="Flavors, draw, burn, overall impression..."></textarea>
-      </div>
-
-      <!-- Photo -->
-      <div class="form-group">
-        <label class="form-label">Photo</label>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <label for="logPhoto" style="cursor:pointer;background:var(--cream);border:1.5px solid var(--light-ash);border-radius:12px;padding:10px 16px;font-size:0.88rem;color:var(--tobacco);font-weight:700;">📷 Add Photo</label>
-          <input type="file" id="logPhoto" accept="image/*" capture="environment" style="display:none;" onchange="previewLogPhoto(this)"/>
-          <span id="logPhotoName" style="font-size:0.8rem;color:var(--ash);"></span>
-        </div>
-        <img id="logPhotoPreview" src="" style="display:none;margin-top:8px;max-width:100%;border-radius:10px;max-height:200px;object-fit:cover;" />
-      </div>
-
-      <!-- Date -->
-      <div class="form-group">
-        <label class="form-label">Date Smoked</label>
-        <input type="date" class="form-input" id="logDate" />
-      </div>
-
-      <button class="btn btn-primary" style="width:100%;margin-top:8px;" onclick="submitLog()">Save to Journal</button>
-      <div id="logError" style="color:var(--band-red);font-size:0.82rem;margin-top:10px;text-align:center;"></div>
-    </div>
-  </div>
-</div>
-
-<!-- SETTINGS / ADMIN -->
-<div id="page-settings" class="page">
-  <div style="max-width:1000px; margin:0 auto; padding:40px 20px;">
-    <button class="btn btn-secondary" onclick="showPage('dashboard')" style="margin-bottom:24px;">← Back to Dashboard</button>
-    <h2 style="font-family:'Playfair Display',serif; margin-bottom:24px;">Settings</h2>
-    
-    <div class="admin-section" id="adminPanel" style="display:none;">
-      <h3>Admin Panel</h3>
-      <div class="admin-list" id="adminUsers"></div>
-      <div class="admin-list" id="adminFeed" style="margin-top:32px;">
-        <h4>Recent Feed Posts</h4>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-// STATE
-let currentUser = null;
-let caDatabase = [];
-let logState = {};
-let logStep = 0;
-const LOG_STEPS = ['photo', 'search', 'rate', 'price', 'confirm'];
-
-// DB
-const DB = {
-  getUsers: () => JSON.parse(localStorage.getItem('cl_users') || '{}'),
-  saveUsers: (u) => localStorage.setItem('cl_users', JSON.stringify(u)),
-  getCigars: () => JSON.parse(localStorage.getItem('cl_cigars') || '{}'),
-  saveCigars: (c) => localStorage.setItem('cl_cigars', JSON.stringify(c)),
-  getFeed: () => JSON.parse(localStorage.getItem('cl_feed') || '[]'),
-  saveFeed: (f) => localStorage.setItem('cl_feed', JSON.stringify(f)),
-  getInvites: () => JSON.parse(localStorage.getItem('cl_invites') || '{}'),
-  saveInvites: (i) => localStorage.setItem('cl_invites', JSON.stringify(i)),
-};
-
-// LOAD JSON
-async function loadCA() {
-  try {
-    const resp = await fetch('cigar_brands.json');
-    if (resp.ok) {
-      const raw = await resp.json();
-      caDatabase = raw.brands || [];
-      console.log('✓ Loaded cigar_brands.json — ' + caDatabase.length + ' brands');
-    } else {
-      console.warn('cigar_brands.json not found or invalid');
-    }
-  } catch(e) {
-    console.error('Error loading JSON:', e);
-  }
-}
-
-// NAV & AUTH
-function updateNav() {
-  const nav = document.getElementById('navActions');
-  if (!currentUser) {
-    nav.innerHTML = '<button class="nav-btn" onclick="showPage(\'auth\')">Sign In</button><button class="nav-btn primary" onclick="showAuthForm(\'register\')">Join</button>';
-    return;
-  }
-  let html = `<div class="user-pill" onclick="showPage('dashboard')"><div class="user-avatar-sm">${currentUser.avatar || '🧔'}</div><span>${currentUser.displayName}</span></div>`;
-  html += '<button class="nav-btn" onclick="doLogout()">Sign Out</button>';
-  if (currentUser.isAdmin) html += '<button class="nav-btn btn-gold" onclick="showPage(\'settings\')">Admin</button>';
-  nav.innerHTML = html;
-}
-
-function doLogin() {
-  console.log('doLogin called!');
-  const username = document.getElementById('loginUsername').value.trim().toLowerCase();
-  const password = document.getElementById('loginPassword').value;
-  const err = document.getElementById('loginError');
-  err.textContent = '';
-
-  if (!username || !password) {
-    err.textContent = 'Enter both fields.';
-    return;
-  }
-
-  if (username === 'edjhk' && password === '1899jack') {
-    currentUser = {username: 'edjhk', displayName: 'Ed', isAdmin: true, avatar: '🎩'};
-    localStorage.setItem('cl_session', 'edjhk');
-    updateNav();
-    showPage('dashboard');
-    console.log('Hardcoded login success');
-    return;
-  }
-
-  const users = DB.getUsers();
-  const user = users[username];
-  if (!user || user.password !== password) {
-    err.textContent = 'Invalid username or password.';
-    return;
-  }
-
-  currentUser = user;
-  localStorage.setItem('cl_session', username);
-  updateNav();
-  showPage('dashboard');
-}
-
-function doLogout() {
-  localStorage.removeItem('cl_session');
-  currentUser = null;
-  updateNav();
-  showPage('auth');
-}
-
-// DASHBOARD RENDER
-
-function renderFeed() {
-  var div = document.getElementById('feedPosts');
-  if (!div) return;
-  var feed = DB.getFeed();
-  if (feed.length === 0) {
-    div.innerHTML = '<div style="color:var(--ash);text-align:center;padding:30px;">No posts yet. Say something!</div>';
-    return;
-  }
-  div.innerHTML = '';
-  feed.forEach(function(post) {
-    var isMe = currentUser && post.username === (currentUser.displayName || currentUser.username);
-    var wrap = document.createElement('div');
-    wrap.style.cssText = 'display:flex;flex-direction:column;max-width:75%;' + (isMe ? 'align-self:flex-end;align-items:flex-end;' : 'align-self:flex-start;align-items:flex-start;');
-    var bubble = document.createElement('div');
-    bubble.style.cssText = 'padding:9px 14px;border-radius:' + (isMe ? '18px 18px 4px 18px' : '18px 18px 18px 4px') + ';background:' + (isMe ? 'var(--tobacco)' : 'white') + ';color:' + (isMe ? '#fff' : 'var(--charcoal)') + ';font-size:0.92rem;word-break:break-word;box-shadow:0 1px 4px rgba(0,0,0,0.08);';
-    if (post.photo) {
-      var img = document.createElement('img');
-      img.src = post.photo;
-      img.style.cssText = 'max-width:200px;border-radius:10px;margin-bottom:4px;display:block;';
-      bubble.appendChild(img);
-    }
-    if (post.text) bubble.appendChild(document.createTextNode(post.text));
-    var meta = document.createElement('div');
-    meta.style.cssText = 'font-size:0.7rem;color:var(--ash);margin-top:3px;';
-    meta.textContent = (isMe ? '' : post.username + ' · ') + post.date;
-    wrap.appendChild(bubble);
-    wrap.appendChild(meta);
-    div.appendChild(wrap);
-  });
-  div.scrollTop = div.scrollHeight;
-}
-
-function postToFeed() {
-  var input = document.getElementById('feedInput');
-  var text = input.value.trim();
-  if (!text || !currentUser) return;
-  var post = {
-    id: Date.now(),
-    username: currentUser.displayName || currentUser.username,
-    text: text,
-    date: new Date().toLocaleDateString()
-  };
-  var feed = DB.getFeed();
-  feed.push(post);
-  DB.saveFeed(feed);
-  input.value = '';
-  renderFeed();
-  // Also save to Supabase
-  if (currentUser.supabaseId) {
-    _supa.from('feed_posts').insert({
-      user_id: currentUser.supabaseId,
-      username: currentUser.displayName || currentUser.username,
-      text: text
-    }).then(function(r) {
-      if (r.error) console.warn('Feed post error:', r.error.message);
-    });
-  }
-}
-
-
-function renderDashboard() {
-  if (!currentUser) return;
-  document.getElementById('dashGreeting').textContent = 'Welcome back, ' + (currentUser.displayName || currentUser.username) + '.';
-
-  var allCigars = DB.getCigars();
-  var mine = (allCigars[currentUser.username] || []).slice().reverse();
-
-  // Stats
-  document.getElementById('statSmokes').textContent = mine.length || '0';
-  if (mine.length > 0) {
-    var rated = mine.filter(function(e) { return e.rating; });
-    var avgRating = rated.length ? Math.round(rated.reduce(function(a,b){return a+b.rating;},0)/rated.length) : '—';
-    document.getElementById('statAvg').textContent = avgRating;
-    var byRating = mine.slice().sort(function(a,b){return (b.rating||0)-(a.rating||0);});
-    document.getElementById('statFav').textContent = byRating[0] ? byRating[0].cigarName.split(' ').slice(0,3).join(' ') : '—';
-  } else {
-    document.getElementById('statAvg').textContent = '—';
-    document.getElementById('statFav').textContent = '—';
-  }
-
-  // Grid
-  var grid = document.getElementById('cigarsGrid');
-  if (mine.length === 0) {
-    grid.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--ash);"><h3>Welcome! Log your first smoke</h3></div>';
-    return;
-  }
-  var cards = [];
-  mine.forEach(function(e) {
-    var stars = e.rating ? e.rating + "/100" : "";
-    var price = e.price ? "$" + parseFloat(e.price).toFixed(2) : "";
-    var loc   = e.location || "";
-    var meta  = [price, loc].filter(Boolean).join(" · ");
-    var fam   = (e.family && e.family !== e.brand) ? e.brand + " · " + e.family : e.brand;
-    var row = "<div class='cigar-card' style='padding:18px 20px;'>"
-      + "<div style='display:flex;justify-content:space-between;align-items:flex-start;'>"
-      + "<div><div style='font-size:1rem;font-weight:700;color:#2C1810;'>" + e.cigarName + "</div>"
-      + "<div style='font-size:0.78rem;color:#999;margin-top:2px;'>" + fam + "</div></div>"
-      + "<div style='text-align:right;'>"
-      + (stars ? "<span style='color:#C9A84C;font-weight:700;'>" + stars + "</span>" : "")
-      + "<div style='font-size:0.75rem;color:#999;margin-top:2px;'>" + e.date + "</div></div>"
-      + "</div>"
-      + (e.notes ? "<div style='font-size:0.82rem;color:#444;margin-top:10px;padding-top:10px;border-top:1px solid #eee;'>" + e.notes + "</div>" : "")
-      + (meta ? "<div style='font-size:0.75rem;color:#999;margin-top:6px;'>" + meta + "</div>" : "")
-      + "</div>";
-    cards.push(row);
-  });
-  grid.innerHTML = cards.join("");
-}
-
-// PAGE SWITCHER
-function showPage(page, skipHistory) {
-  if (!skipHistory) history.pushState({page: page}, '', '#' + page);
-  document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); p.style.display='none'; });
-  var target = document.getElementById('page-' + page);
-  if (target) { target.classList.add('active'); target.style.display = (page === 'messages') ? 'flex' : 'block'; }
-  if (page === 'dashboard') renderDashboard();
-  if (page === 'messages') renderFeed();
-  if (page === 'settings' && currentUser?.isAdmin) renderAdminPanel();
-  window.scrollTo(0,0);
-}
-
-// ADMIN PANEL
-function renderAdminPanel() {
-  const panel = document.getElementById('adminPanel');
-  panel.style.display = 'block';
-
-  const usersDiv = document.getElementById('adminUsers');
-  const users = DB.getUsers();
-  let html = '<h4>Users</h4>';
-  Object.values(users).forEach(u => {
-    html += `<div class="admin-item">
-      <span>${u.displayName || u.username} (${u.username})</span>
-      <button class="admin-btn" onclick="deleteUser('${u.username}')">Delete</button>
-    </div>`;
-  });
-  usersDiv.innerHTML = html;
-
-  const feedDiv = document.getElementById('adminFeed');
-  const feed = DB.getFeed().slice(0, 20);
-  html = '<h4>Recent Feed Posts</h4>';
-  feed.forEach(post => {
-    html += `<div class="admin-item">
-      <span>${post.username}: ${post.text.substring(0,60)}${post.text.length > 60 ? '...' : ''}</span>
-      <button class="admin-btn" onclick="deletePost('${post.id}')">Delete</button>
-    </div>`;
-  });
-  feedDiv.innerHTML = html;
-}
-
-function deleteUser(username) {
-  if (!confirm(`Delete user ${username}?`)) return;
-  const users = DB.getUsers();
-  delete users[username];
-  DB.saveUsers(users);
-  renderAdminPanel();
-  showToast('🗑️', 'User deleted');
-}
-
-function deletePost(postId) {
-  if (!confirm('Delete this post?')) return;
-  const feed = DB.getFeed();
-  const newFeed = feed.filter(p => p.id !== postId);
-  DB.saveFeed(newFeed);
-  renderAdminPanel();
-  renderFeed();
-  showToast('🗑️', 'Post deleted');
-}
-
-// SEARCH
-function handleSearchInput(q) {
-  var results = document.getElementById('searchResults');
-  if (!q || q.length < 2) { results.innerHTML = ''; return; }
-  var query = q.toLowerCase().trim();
-  var out = '';
-  for (var bi = 0; bi < caDatabase.length; bi++) {
-    var b = caDatabase[bi];
-    if (b.name.toLowerCase().indexOf('.html') !== -1) continue;
-    var bl = b.name.toLowerCase();
-    var brandHit = bl.indexOf(query) !== -1;
-    var famHit = false, cigHit = false;
-    for (var fi = 0; fi < b.families.length; fi++) {
-      var f = b.families[fi];
-      if (f.name.toLowerCase().indexOf(query) !== -1 || (bl+' '+f.name.toLowerCase()).indexOf(query) !== -1) famHit = true;
-      for (var ci = 0; ci < f.cigars.length; ci++) {
-        if (f.cigars[ci].name.toLowerCase().indexOf(query) !== -1) cigHit = true;
-      }
-    }
-    if (!brandHit && !famHit && !cigHit) continue;
-    out += '<div class="search-brand-header">' + b.name + '</div>';
-    for (var fi2 = 0; fi2 < b.families.length; fi2++) {
-      var fam = b.families[fi2];
-      var fullFam = bl + ' ' + fam.name.toLowerCase();
-      var showFam = brandHit || fam.name.toLowerCase().indexOf(query) !== -1 || fullFam.indexOf(query) !== -1;
-      if (!showFam) {
-        for (var ci2 = 0; ci2 < fam.cigars.length; ci2++) {
-          if (fam.cigars[ci2].name.toLowerCase().indexOf(query) !== -1) { showFam = true; break; }
-        }
-      }
-      if (!showFam) continue;
-      var sb = b.name.replace(/'/g, "&#39;");
-      var sf = fam.name.replace(/'/g, "&#39;");
-      out += '<div class="search-result-family" onclick="selectFamily(\'' + sb + '\',\'' + sf + '\')">' + fam.name + '</div>';
-    }
-  }
-  results.innerHTML = out || '<div style="color:var(--ash);padding:12px;">No matches found.</div>';
-}
-
-function selectBrand(brandName) {
-  document.getElementById('mainSearch').value = brandName;
-  handleSearchInput(brandName);
-}
-
-function selectFamily(brandName, familyName) {
-  var results = document.getElementById('searchResults');
-  var brand = null;
-  for (var i = 0; i < caDatabase.length; i++) {
-    if (caDatabase[i].name === brandName) { brand = caDatabase[i]; break; }
-  }
-  if (!brand) return;
-  var family = null;
-  for (var i = 0; i < brand.families.length; i++) {
-    if (brand.families[i].name === familyName) { family = brand.families[i]; break; }
-  }
-  if (!family) return;
-
-  var sb = brandName.replace(/'/g, "&#39;");
-  var sf = familyName.replace(/'/g, "&#39;");
-  var out = '<div class="search-brand-header" style="cursor:pointer" onclick="document.getElementById(\'searchResults\').innerHTML=\'\';handleSearchInput(document.getElementById(\'mainSearch\').value)">'
-    + '&larr; ' + brandName + ' &rsaquo; ' + familyName + '</div>';
-
-  if (!family.cigars || family.cigars.length === 0) {
-    out += '<div style="color:var(--ash);padding:12px 28px;">No cigars listed yet.</div>';
-  } else {
-    for (var i = 0; i < family.cigars.length; i++) {
-      var c = family.cigars[i];
-      var meta = '';
-      if (c.shape && c.shape !== 'N/A') meta += ' &middot; ' + c.shape;
-      if (c.size  && c.size  !== 'N/A') meta += ' &middot; ' + c.size;
-      var sn = c.name.replace(/'/g, "&#39;");
-      out += '<div class="search-result-cigar" onclick="selectCigar(\'' + sb + '\',\'' + sf + '\',\'' + sn + '\')">'
-        + '&#128306; ' + c.name + meta + '</div>';
-    }
-  }
-  results.innerHTML = out;
-}
-
-function selectCigar(brandName, familyName, cigarName) {
-  var brand = null;
-  for (var i = 0; i < caDatabase.length; i++) {
-    if (caDatabase[i].name === brandName) { brand = caDatabase[i]; break; }
-  }
-  if (!brand) { console.error('Brand not found:', brandName); return; }
-  var family = null;
-  for (var i = 0; i < brand.families.length; i++) {
-    if (brand.families[i].name === familyName) { family = brand.families[i]; break; }
-  }
-  if (!family) { console.error('Family not found:', familyName); return; }
-  var cigar = null;
-  for (var i = 0; i < family.cigars.length; i++) {
-    if (family.cigars[i].name === cigarName) { cigar = family.cigars[i]; break; }
-  }
-  if (!cigar) { console.error('Cigar not found:', cigarName); return; }
-  document.getElementById('mainSearch').value = '';
-  openCigarDetailFromCA(cigar, brandName, familyName, family);
-}
-
-function openCigarDetailFromCA(cigar, brandName, familyName, family) {
-  function v(a, b) {
-    if (a && a !== 'N/A' && a !== '\u2014') return a;
-    if (b && b !== 'N/A' && b !== '\u2014') return b;
-    return null;
-  }
-  var fields = [
-    ['Size',     v(cigar.size,         null)],
-    ['Shape',    v(cigar.shape,        null)],
-    ['Strength', v(cigar.strength,     family ? family.strength     : null)],
-    ['Wrapper',  v(cigar.wrapper_type, family ? family.wrapper_type : null)],
-    ['Binder',   v(cigar.binder,       family ? family.binder       : null)],
-    ['Filler',   v(cigar.filler,       family ? family.filler       : null)],
-    ['Color',    v(cigar.color,        family ? family.color        : null)],
-    ['Country',  v(cigar.country,      family ? family.country      : null)],
-    ['CA Score', v(cigar.ca_ranking,   null)],
-  ];
-  var rows = '';
-  for (var i = 0; i < fields.length; i++) {
-    if (fields[i][1]) {
-      rows += '<div class="cigar-tile-row">'
-        + '<span class="cigar-tile-label">' + fields[i][0] + '</span>'
-        + '<span class="cigar-tile-value">' + fields[i][1] + '</span>'
-        + '</div>';
-    }
-  }
-  var subtitle = (familyName && familyName !== brandName) ? brandName + ' &middot; ' + familyName : brandName;
-  var backFn = "document.getElementById('searchResults').innerHTML='';document.getElementById('mainSearch').value='';document.getElementById('mainSearch').focus();";
-  document.getElementById('searchResults').innerHTML =
-    '<div class="cigar-info-tile">'
-    + '<div class="cigar-tile-header">'
-    + '<button class="cigar-tile-back" onclick="' + backFn + '">&larr; Back</button>'
-    + '<div class="cigar-tile-title">' + cigar.name + '</div>'
-    + '<div class="cigar-tile-subtitle">' + subtitle + '</div>'
-    + '</div>'
-    + '<div class="cigar-tile-body">' + (rows || '<div style="color:var(--ash)">No details available yet.</div>') + '</div>'
-    + '</div>';
-}
-
-
-// ── LOG A SMOKE ──────────────────────────────────────────────────────────────
-var logSelectedCigar = null;
-
-
-function previewLogPhoto(input) {
-  if (input.files && input.files[0]) {
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      var img = document.getElementById('logPhotoPreview');
-      img.src = e.target.result; img.style.display = 'block';
-      document.getElementById('logPhotoName').textContent = input.files[0].name;
-    };
-    reader.readAsDataURL(input.files[0]);
-  }
-}
-
-function useMyLocation() {
-  if (!navigator.geolocation) { showToast('Geolocation not supported'); return; }
-  showToast('Getting location...');
-  navigator.geolocation.getCurrentPosition(function(pos) {
-    var lat = pos.coords.latitude.toFixed(4);
-    var lon = pos.coords.longitude.toFixed(4);
-    fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lon+'&format=json')
-      .then(function(r){ return r.json(); })
-      .then(function(d){
-        var a = d.address || {};
-        var city = a.city || a.town || a.village || a.county || '';
-        var state = a.state || '';
-        document.getElementById('logLocation').value = city + (state ? ', '+state : '') || lat+','+lon;
-      }).catch(function(){ document.getElementById('logLocation').value = lat+','+lon; });
-  }, function(){ showToast('Location access denied'); });
-}
-
-function openLogSmoke() {
-  if (!currentUser) { showPage('auth'); return; }
-  // Reset form
-  document.getElementById('logCigarSearch').value = '';
-  document.getElementById('logSearchResults').innerHTML = '';
-  document.getElementById('logSelectedCigar').style.display = 'none';
-  document.getElementById('logRating').value = '';
-  document.getElementById('logPrice').value = '';
-  document.getElementById('logLocation').value = '';
-  document.getElementById('logNotes').value = '';
-  document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
-  document.getElementById('logError').textContent = '';
-  logSelectedCigar = null;
-  showPage('log');
-}
-
-function handleLogSearch(q) {
-  var resultsDiv = document.getElementById('logSearchResults');
-  if (!q || q.length < 2) { resultsDiv.innerHTML = ''; return; }
-  var query = q.toLowerCase().trim();
-  var out = '';
-  for (var bi = 0; bi < caDatabase.length; bi++) {
-    var b = caDatabase[bi];
-    if (b.name.toLowerCase().indexOf('.html') !== -1) continue;
-    var bl = b.name.toLowerCase();
-    var brandHit = bl.indexOf(query) !== -1;
-    for (var fi = 0; fi < b.families.length; fi++) {
-      var fam = b.families[fi];
-      var famHit = fam.name.toLowerCase().indexOf(query) !== -1 || (bl + ' ' + fam.name.toLowerCase()).indexOf(query) !== -1;
-      if (!brandHit && !famHit) continue;
-      for (var ci = 0; ci < fam.cigars.length; ci++) {
-        var c = fam.cigars[ci];
-        var meta = (c.size && c.size !== 'N/A') ? c.size : '';
-        var row = '<div class="search-result-cigar log-search-row"'
-          + ' data-brand="' + b.name.replace(/"/g,'&quot;') + '"'
-          + ' data-family="' + fam.name.replace(/"/g,'&quot;') + '"'
-          + ' data-cigar="' + c.name.replace(/"/g,'&quot;') + '">'
-          + b.name + ' — ' + c.name + (meta ? ' · ' + meta : '')
-          + '</div>';
-        out += row;
-      }
-    }
-  }
-  resultsDiv.innerHTML = out || '<div style="color:var(--ash);padding:8px 12px;font-size:0.85rem;">No matches.</div>';
-  // Attach click handlers after injecting HTML
-  var rows = resultsDiv.querySelectorAll('.log-search-row');
-  for (var i = 0; i < rows.length; i++) {
-    rows[i].addEventListener('click', function() {
-      selectLogCigar(this.getAttribute('data-brand'), this.getAttribute('data-family'), this.getAttribute('data-cigar'));
-    });
-  }
-}
-
-function selectLogCigar(brandName, familyName, cigarName) {
-  var brand  = null;
-  for (var i = 0; i < caDatabase.length; i++) { if (caDatabase[i].name === brandName) { brand = caDatabase[i]; break; } }
-  if (!brand) return;
-  var family = null;
-  for (var i = 0; i < brand.families.length; i++) { if (brand.families[i].name === familyName) { family = brand.families[i]; break; } }
-  if (!family) return;
-  var cigar = null;
-  for (var i = 0; i < family.cigars.length; i++) { if (family.cigars[i].name === cigarName) { cigar = family.cigars[i]; break; } }
-  if (!cigar) return;
-
-  logSelectedCigar = { brand: brandName, family: familyName, cigar: cigar };
-  document.getElementById('logCigarSearch').value = '';
-  document.getElementById('logSearchResults').innerHTML = '';
-  document.getElementById('logSelectedName').textContent = brandName + ' — ' + cigarName;
-  var meta = [];
-  if (cigar.size  && cigar.size  !== 'N/A') meta.push(cigar.size);
-  if (cigar.shape && cigar.shape !== 'N/A') meta.push(cigar.shape);
-  document.getElementById('logSelectedMeta').textContent = meta.join(' · ');
-  document.getElementById('logSelectedCigar').style.display = 'block';
-}
-
-function clearLogCigar() {
-  logSelectedCigar = null;
-  document.getElementById('logSelectedCigar').style.display = 'none';
-  document.getElementById('logCigarSearch').value = '';
-  document.getElementById('logSearchResults').innerHTML = '';
-}
-
-function submitLog() {
-  var err = document.getElementById('logError');
-  err.textContent = '';
-  if (!logSelectedCigar) { err.textContent = 'Please select a cigar.'; return; }
-  var rating   = document.getElementById('logRating').value.trim();
-  var price    = document.getElementById('logPrice').value.trim();
-  var location = document.getElementById('logLocation').value.trim();
-  var notes    = document.getElementById('logNotes').value.trim();
-  var date     = document.getElementById('logDate').value;
-  if (!rating || rating < 1 || rating > 100) { err.textContent = 'Rating must be 1-100.'; return; }
-  if (!date) { err.textContent = 'Please enter a date.'; return; }
-
-  var entry = {
-    id: Date.now(), date: date,
-    brand: logSelectedCigar.brand, family: logSelectedCigar.family,
-    cigarName: logSelectedCigar.cigar.name,
-    size: logSelectedCigar.cigar.size || 'N/A',
-    shape: logSelectedCigar.cigar.shape || 'N/A',
-    strength: logSelectedCigar.cigar.strength || 'N/A',
-    wrapper: logSelectedCigar.cigar.wrapper_type || 'N/A',
-    rating: parseInt(rating),
-    price: price ? parseFloat(price) : null,
-    location: location, notes: notes, user: currentUser.username,
-    photo: (document.getElementById('logPhotoPreview') && document.getElementById('logPhotoPreview').src && document.getElementById('logPhotoPreview').src !== window.location.href) ? document.getElementById('logPhotoPreview').src : null,
-  };
-
-  // Save to localStorage
-  var cigars = DB.getCigars();
-  if (!cigars[currentUser.username]) cigars[currentUser.username] = [];
-  cigars[currentUser.username].push(entry);
-  DB.saveCigars(cigars);
-
-  // Also save to Supabase if user has supabaseId
-  if (currentUser.supabaseId) {
-    _supa.from('cigar_logs').insert({
-      user_id: currentUser.supabaseId,
-      cigar_name: entry.cigarName, brand: entry.brand, family: entry.family,
-      size: entry.size, shape: entry.shape, strength: entry.strength,
-      wrapper: entry.wrapper, rating: entry.rating,
-      price: entry.price, location: entry.location, notes: entry.notes,
-      date_smoked: entry.date
-    }).then(function(r) {
-      if (r.error) console.warn('Supabase log save error:', r.error.message);
-    });
-  }
-
-  showToast('Smoke logged! 🚬');
-  showPage('dashboard');
-  renderDashboard();
-}
-
-
-
-
-function postMediaToFeed(input) {
-  if (!input.files || !input.files[0] || !currentUser) return;
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var post = { id: Date.now(), username: currentUser.displayName || currentUser.username,
-      text: '', photo: e.target.result, date: new Date().toLocaleDateString() };
-    var feed = DB.getFeed(); feed.push(post); DB.saveFeed(feed);
-    renderFeed();
-  };
-  reader.readAsDataURL(input.files[0]);
-  input.value = '';
-}
-
-function showToast(msg) {
-  var existing = document.getElementById('toast-popup');
-  if (existing) existing.remove();
-  var toast = document.createElement('div');
-  toast.id = 'toast-popup';
-  toast.textContent = msg;
-  toast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);'
-    + 'background:var(--dark-tobacco);color:white;padding:12px 24px;border-radius:30px;'
-    + 'font-size:0.92rem;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.3);'
-    + 'opacity:0;transition:opacity 0.3s;';
-  document.body.appendChild(toast);
-  setTimeout(function() { toast.style.opacity = '1'; }, 10);
-  setTimeout(function() { toast.style.opacity = '0'; }, 2500);
-  setTimeout(function() { toast.remove(); }, 3000);
-}
-
-// INIT
-(async function init() {
-  await loadCA();
-  const session = localStorage.getItem('cl_session');
-  if (session) {
-    const users = DB.getUsers();
-    if (users[session]) {
-      currentUser = users[session];
-      updateNav();
-      showPage('dashboard');
-    }
-  } else {
-    updateNav();
-  }
-})();
-</script>
-<script>
-
-  // Enter key on feed input
-  var feedInput = document.getElementById('feedInput');
-  if (feedInput) {
-    feedInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') { e.preventDefault(); postToFeed(); }
-    });
-  }
-
-  // Browser back button
-  window.addEventListener('popstate', function(e) {
-    var page = (e.state && e.state.page) ? e.state.page : 'dashboard';
-    showPage(page, true);
-  });
-</script>
-
-<!-- COMMUNITY FEED -->
-<div id="page-messages" class="page" style="display:none;flex-direction:column;height:calc(100vh - 64px);max-width:700px;margin:0 auto;">
-  <div style="padding:16px 16px 8px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--light-ash);">
-    <button class="btn btn-secondary" onclick="showPage('dashboard')" style="padding:8px 16px;">← Back</button>
-    <h2 style="font-family:'Playfair Display',serif;color:var(--dark-tobacco);font-size:1.2rem;">💬 Community Feed</h2>
-  </div>
-  <div id="feedPosts" style="flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:10px;"></div>
-  <div style="padding:8px 12px;border-top:1px solid var(--light-ash);background:white;display:flex;align-items:center;gap:8px;">
-    <button onclick="showToast('Emoji picker coming soon! 😄')" style="background:none;border:none;font-size:1.4rem;cursor:pointer;padding:4px;" title="Emoji">🙂</button>
-    <div style="flex:1;display:flex;align-items:center;background:var(--cream);border:1.5px solid var(--light-ash);border-radius:24px;padding:8px 14px;gap:8px;">
-      <input id="feedInput" type="text" placeholder="Message..." style="flex:1;background:none;border:none;outline:none;color:var(--charcoal);font-size:0.95rem;font-family:'Lato',sans-serif;"
-        onkeydown="if(event.key==='Enter'){event.preventDefault();postToFeed();}" />
-      <label for="feedFileInput" style="cursor:pointer;font-size:1.2rem;line-height:1;" title="Attach file">📎</label>
-      <input id="feedFileInput" type="file" accept="image/*,video/*" style="display:none;" onchange="postMediaToFeed(this)" />
-      <label for="feedCameraInput" style="cursor:pointer;font-size:1.2rem;line-height:1;" title="Camera / Gallery">📷</label>
-      <input id="feedCameraInput" type="file" accept="image/*" capture="environment" style="display:none;" onchange="postMediaToFeed(this)" />
-    </div>
-  </div>
-</div>
-
-<!-- EVENTS (placeholder) -->
-<div id="page-events" class="page">
-  <div style="max-width:700px;margin:0 auto;padding:40px 20px;">
-    <button class="btn btn-secondary" onclick="showPage('dashboard')" style="margin-bottom:24px;">← Back</button>
-    <div style="background:white;border-radius:20px;padding:28px;box-shadow:0 4px 30px var(--shadow);">
-      <h2 style="font-family:'Playfair Display',serif;color:var(--dark-tobacco);">🎉 Events</h2>
-      <p style="color:var(--ash);margin-top:12px;">Coming soon — plan smokes with friends.</p>
-    </div>
-  </div>
-</div>
-
-</body>
-</html>
