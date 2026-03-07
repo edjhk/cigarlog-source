@@ -269,17 +269,11 @@ body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--c
         <h2 id="dashGreeting">Good evening, friend.</h2>
         <p>Your cigar journal awaits.</p>
         <div class="dash-stats">
-          <div class="stat-pill"><span class="stat-num" id="statSmokes">0</span><span class="stat-label">Reviews</span></div>
+          <div class="stat-pill"><span class="stat-num" id="statSmokes">0</span><span class="stat-label" id="statLabel"> Reviews</span></div>
         </div>
       </div>
 
-      <div class="action-btns">
-        <button class="btn btn-primary" onclick="openLogSmoke()">+ Log a Smoke</button>
-        <button class="btn btn-gold" onclick="showPage('messages')">💬 Messages</button>
-        <button class="btn btn-gold" onclick="showPage('events')">🎉 Events</button>
-        <button class="btn btn-gold" onclick="showPage('invite')">📨 Invite a Friend</button>
-        <button class="btn btn-gold" onclick="showPage('settings')">⚙️ Settings</button>
-      </div>
+
 
       <div class="search-bar">
         <span>🔍</span>
@@ -370,8 +364,10 @@ body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--c
       <div class="form-group">
         <label class="form-label">Photo</label>
         <div style="display:flex;align-items:center;gap:10px;">
-          <label for="logPhoto" style="cursor:pointer;background:var(--cream);border:1.5px solid var(--light-ash);border-radius:12px;padding:10px 16px;font-size:0.88rem;color:var(--tobacco);font-weight:700;">📷 Add Photo</label>
-          <input type="file" id="logPhoto" accept="image/*" style="display:none;" onchange="previewLogPhoto(this)"/>
+          <label for="logPhoto" style="cursor:pointer;background:var(--cream);border:1.5px solid var(--light-ash);border-radius:12px;padding:10px 16px;font-size:0.88rem;color:var(--tobacco);font-weight:700;">🖼 Gallery</label>
+          <input type="file" id="logPhoto" accept="image/*" style="display:none;" />
+          <label for="logPhotoCamera" style="cursor:pointer;background:var(--cream);border:1.5px solid var(--light-ash);border-radius:12px;padding:10px 16px;font-size:0.88rem;color:var(--tobacco);font-weight:700;">📷 Camera</label>
+          <input type="file" id="logPhotoCamera" accept="image/*" capture="environment" style="display:none;" />
           <span id="logPhotoName" style="font-size:0.8rem;color:var(--ash);"></span>
         </div>
         <img id="logPhotoPreview" src="" style="display:none;margin-top:8px;max-width:100%;border-radius:10px;max-height:200px;object-fit:cover;" />
@@ -448,9 +444,12 @@ function updateNav() {
     nav.innerHTML = '<button class="nav-btn" onclick="showPage(\'auth\')">Sign In</button><button class="nav-btn primary" onclick="showAuthForm(\'register\')">Join</button>';
     return;
   }
-  let html = `<div class="user-pill" onclick="showPage('dashboard')"><div class="user-avatar-sm">${currentUser.avatar || '🧔'}</div><span>${currentUser.displayName}</span></div>`;
-  html += '<button class="nav-btn" onclick="doLogout()">Sign Out</button>';
-  if (currentUser.isAdmin) html += '<button class="nav-btn btn-gold" onclick="showPage(\'settings\')">Admin</button>';
+  let html = '<button class="nav-btn btn-primary" onclick="openLogSmoke()" style="padding:8px 14px;">+ Log</button>';
+  html += '<button class="nav-btn" onclick="showPage(\'messages\')" style="padding:8px 14px;">💬 Feed</button>';
+  html += '<button class="nav-btn" onclick="showPage(\'invite\')" style="padding:8px 14px;">📨 Invite</button>';
+  html += `<div class="user-pill" onclick="showPage('dashboard')"><div class="user-avatar-sm">${currentUser.avatar || '🧔'}</div><span>${currentUser.displayName}</span></div>`;
+  html += '<button class="nav-btn" onclick="doLogout()" style="padding:8px 14px;">Sign Out</button>';
+  if (currentUser.isAdmin) html += '<button class="nav-btn btn-gold" onclick="showPage(\'settings\')" style="padding:8px 14px;">Admin</button>';
   nav.innerHTML = html;
 }
 
@@ -522,6 +521,8 @@ function renderDashboard() {
 
   // Stats
   document.getElementById('statSmokes').textContent = mine.length || '0';
+  var lbl = document.getElementById('statLabel');
+  if (lbl) lbl.textContent = ' ' + (mine.length === 1 ? 'Review' : 'Reviews');
   if (mine.length > 0) {
   } else {
   }
@@ -937,6 +938,17 @@ function showToast(msg) {
 })();
 </script>
 <script>
+
+window.addEventListener('load', function() {
+  var feedFile = document.getElementById('sidebarFeedFile');
+  var feedCam  = document.getElementById('sidebarFeedCam');
+  var logPhoto = document.getElementById('logPhoto');
+  var logCam   = document.getElementById('logPhotoCamera');
+  if (feedFile) feedFile.onchange = function(){ postSidebarMedia(this); };
+  if (feedCam)  feedCam.onchange  = function(){ postSidebarMedia(this); };
+  if (logPhoto) logPhoto.onchange = function(){ previewLogPhoto(this); };
+  if (logCam)   logCam.onchange   = function(){ previewLogPhoto(this); };
+});
 
   // Enter key on feed input
   var feedInput = document.getElementById('feedInput');
