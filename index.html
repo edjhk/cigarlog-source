@@ -107,25 +107,102 @@ body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--c
 
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // Stub ensures doLogin is available before main script loads
-  function doLogin() {
+  const _supa = supabase.createClient('https://flrqhivvjimahfrdoxwt.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZscnFoaXZ2amltYWhmcmRveHd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4ODkyNzUsImV4cCI6MjA4ODQ2NTI3NX0.3PoCVkRGM3fLyu0MXsaz4ZKH1zsuo_HVcKUZpciOAAk');
+</script>
+<script>
+  // Auth helpers — available immediately before main script loads
+  async function doLogin() {
     var u = document.getElementById('loginUsername').value.trim().toLowerCase();
     var p = document.getElementById('loginPassword').value;
     var err = document.getElementById('loginError');
+    err.textContent = '';
     if (!u || !p) { err.textContent = 'Enter both fields.'; return; }
+
+    // Hardcoded admin shortcut
     if (u === 'edjhk' && p === '1899jack') {
       localStorage.setItem('cl_session', 'edjhk');
+      localStorage.setItem('cl_users', JSON.stringify({edjhk:{username:'edjhk',displayName:'Ed',isAdmin:true,avatar:'🎩',password:'1899jack'}}));
       location.reload();
       return;
     }
-    var users = JSON.parse(localStorage.getItem('cl_users') || '{}');
-    var user = users[u];
-    if (!user || user.password !== p) { err.textContent = 'Invalid username or password.'; return; }
-    localStorage.setItem('cl_session', u);
+
+    // Supabase auth
+    var btn = document.getElementById('loginBtn');
+    btn.textContent = 'Signing in...';
+    btn.disabled = true;
+    var result = await _supa.auth.signInWithPassword({ email: u + '@cigarlog.app', password: p });
+    if (result.error && u.includes('@')) {
+      result = await _supa.auth.signInWithPassword({ email: u, password: p });
+    }
+    if (result.error) {
+      // Fallback to localStorage
+      var users = JSON.parse(localStorage.getItem('cl_users') || '{}');
+      var user = users[u];
+      if (!user || user.password !== p) {
+        err.textContent = 'Invalid username or password.';
+        btn.textContent = 'Sign In'; btn.disabled = false;
+        return;
+      }
+      localStorage.setItem('cl_session', u);
+      location.reload();
+      return;
+    }
+    // Get profile
+    var prof = await _supa.from('profiles').select('*').eq('id', result.data.user.id).single();
+    if (prof.data) {
+      localStorage.setItem('cl_session', prof.data.username);
+      var users = JSON.parse(localStorage.getItem('cl_users') || '{}');
+      users[prof.data.username] = {
+        username: prof.data.username,
+        displayName: prof.data.display_name || prof.data.username,
+        isAdmin: prof.data.is_admin || false,
+        avatar: prof.data.avatar || '🧔',
+        supabaseId: result.data.user.id
+      };
+      localStorage.setItem('cl_users', JSON.stringify(users));
+    }
+    btn.textContent = 'Sign In'; btn.disabled = false;
     location.reload();
   }
+
+  async function doRegister() {
+    var u  = document.getElementById('regUsername').value.trim().toLowerCase();
+    var dn = document.getElementById('regDisplayName').value.trim();
+    var p  = document.getElementById('regPassword').value;
+    var err = document.getElementById('regError');
+    err.textContent = '';
+    if (!u || !p || !dn) { err.textContent = 'All fields required.'; return; }
+    if (p.length < 6)    { err.textContent = 'Password must be 6+ characters.'; return; }
+
+    var btn = document.getElementById('regBtn');
+    btn.textContent = 'Creating account...'; btn.disabled = true;
+
+    // Sign up with Supabase using username@cigarlog.app as synthetic email
+    var email = u + '@cigarlog.app';
+    var result = await _supa.auth.signUp({ email: email, password: p });
+    if (result.error) {
+      err.textContent = result.error.message;
+      btn.textContent = 'Create Account'; btn.disabled = false;
+      return;
+    }
+    // Create profile row
+    if (result.data.user) {
+      await _supa.from('profiles').insert({
+        id: result.data.user.id,
+        username: u,
+        display_name: dn,
+        avatar: '🧔',
+        is_admin: false
+      });
+    }
+    btn.textContent = 'Create Account'; btn.disabled = false;
+    err.style.color = 'var(--tobacco)';
+    err.textContent = 'Account created! Check your email to verify, then sign in.';
+  }
 </script>
+
 </head>
 <body>
 
@@ -426,17 +503,29 @@ function postToFeed() {
   var input = document.getElementById('feedInput');
   var text = input.value.trim();
   if (!text || !currentUser) return;
-  var feed = DB.getFeed();
-  feed.push({
+  var post = {
     id: Date.now(),
     username: currentUser.displayName || currentUser.username,
     text: text,
     date: new Date().toLocaleDateString()
-  });
+  };
+  var feed = DB.getFeed();
+  feed.push(post);
   DB.saveFeed(feed);
   input.value = '';
   renderFeed();
+  // Also save to Supabase
+  if (currentUser.supabaseId) {
+    _supa.from('feed_posts').insert({
+      user_id: currentUser.supabaseId,
+      username: currentUser.displayName || currentUser.username,
+      text: text
+    }).then(function(r) {
+      if (r.error) console.warn('Feed post error:', r.error.message);
+    });
+  }
 }
+
 
 function renderDashboard() {
   if (!currentUser) return;
@@ -770,43 +859,53 @@ function clearLogCigar() {
 function submitLog() {
   var err = document.getElementById('logError');
   err.textContent = '';
-
   if (!logSelectedCigar) { err.textContent = 'Please select a cigar.'; return; }
   var rating   = document.getElementById('logRating').value.trim();
   var price    = document.getElementById('logPrice').value.trim();
   var location = document.getElementById('logLocation').value.trim();
   var notes    = document.getElementById('logNotes').value.trim();
   var date     = document.getElementById('logDate').value;
-
-  if (!rating || rating < 1 || rating > 100) { err.textContent = 'Rating must be between 1 and 100.'; return; }
+  if (!rating || rating < 1 || rating > 100) { err.textContent = 'Rating must be 1-100.'; return; }
   if (!date) { err.textContent = 'Please enter a date.'; return; }
 
   var entry = {
-    id:         Date.now(),
-    date:       date,
-    brand:      logSelectedCigar.brand,
-    family:     logSelectedCigar.family,
-    cigarName:  logSelectedCigar.cigar.name,
-    size:       logSelectedCigar.cigar.size   || 'N/A',
-    shape:      logSelectedCigar.cigar.shape  || 'N/A',
-    strength:   logSelectedCigar.cigar.strength || 'N/A',
-    wrapper:    logSelectedCigar.cigar.wrapper_type || 'N/A',
-    rating:     parseInt(rating),
-    price:      price ? parseFloat(price) : null,
-    location:   location,
-    notes:      notes,
-    user:       currentUser.username,
+    id: Date.now(), date: date,
+    brand: logSelectedCigar.brand, family: logSelectedCigar.family,
+    cigarName: logSelectedCigar.cigar.name,
+    size: logSelectedCigar.cigar.size || 'N/A',
+    shape: logSelectedCigar.cigar.shape || 'N/A',
+    strength: logSelectedCigar.cigar.strength || 'N/A',
+    wrapper: logSelectedCigar.cigar.wrapper_type || 'N/A',
+    rating: parseInt(rating),
+    price: price ? parseFloat(price) : null,
+    location: location, notes: notes, user: currentUser.username,
   };
 
+  // Save to localStorage
   var cigars = DB.getCigars();
   if (!cigars[currentUser.username]) cigars[currentUser.username] = [];
   cigars[currentUser.username].push(entry);
   DB.saveCigars(cigars);
 
+  // Also save to Supabase if user has supabaseId
+  if (currentUser.supabaseId) {
+    _supa.from('cigar_logs').insert({
+      user_id: currentUser.supabaseId,
+      cigar_name: entry.cigarName, brand: entry.brand, family: entry.family,
+      size: entry.size, shape: entry.shape, strength: entry.strength,
+      wrapper: entry.wrapper, rating: entry.rating,
+      price: entry.price, location: entry.location, notes: entry.notes,
+      date_smoked: entry.date
+    }).then(function(r) {
+      if (r.error) console.warn('Supabase log save error:', r.error.message);
+    });
+  }
+
   showToast('Smoke logged! 🚬');
   showPage('dashboard');
   renderDashboard();
 }
+
 
 
 function showToast(msg) {
