@@ -265,19 +265,16 @@ body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--c
 <div id="page-dashboard" class="page">
   <div class="dash-layout">
     <div class="dash-main">
-      <div class="dash-header">
-        <h2 id="dashGreeting">Good evening, friend.</h2>
-        <p>Your cigar journal awaits.</p>
-        <div class="dash-stats">
-          <div class="stat-pill"><span class="stat-num" id="statSmokes">0</span><span class="stat-label" id="statLabel"> Reviews</span></div>
+      
+
+
+
+      <div style="background:white;border-radius:16px;box-shadow:0 4px 20px var(--shadow);padding:18px 20px;margin-bottom:24px;">
+        <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--dark-tobacco);margin-bottom:10px;">🔍 Search Cigars</div>
+        <div style="display:flex;align-items:center;background:var(--cream);border:2px solid var(--light-ash);border-radius:12px;padding:10px 16px;gap:10px;transition:border 0.2s;" onfocus-within="this.style.borderColor='var(--tobacco)'">
+          <input type="text" id="mainSearch" placeholder="Search brand, family or vitola..." oninput="handleSearchInput(this.value)"
+            style="flex:1;border:none;background:none;outline:none;font-family:'Lato',sans-serif;font-size:1rem;color:var(--charcoal);" />
         </div>
-      </div>
-
-
-
-      <div class="search-bar">
-        <span>🔍</span>
-        <input type="text" id="mainSearch" placeholder="Search brand, family or vitola..." oninput="handleSearchInput(this.value)" />
       </div>
 
       <div id="searchResults" style="margin-top:16px;"></div>
@@ -445,9 +442,12 @@ function updateNav() {
     return;
   }
   let html = '<button class="nav-btn btn-primary" onclick="openLogSmoke()" style="padding:8px 14px;">+ Log</button>';
-  html += '<button class="nav-btn" onclick="showPage(\'messages\')" style="padding:8px 14px;">💬 Feed</button>';
+  html += '<button class="nav-btn" onclick="showPage(\'messages\')" style="padding:8px 14px;">💬 Messages</button>';
   html += '<button class="nav-btn" onclick="showPage(\'invite\')" style="padding:8px 14px;">📨 Invite</button>';
   html += `<div class="user-pill" onclick="showPage('dashboard')"><div class="user-avatar-sm">${currentUser.avatar || '🧔'}</div><span>${currentUser.displayName}</span></div>`;
+  var revCount = (DB.getCigars()[currentUser.username] || []).length;
+  var revLabel = revCount === 1 ? 'Review' : 'Reviews';
+  html += '<button class="nav-btn" onclick="showPage(\'dashboard\')" style="padding:8px 14px;background:rgba(201,168,76,0.15);border-color:var(--gold);color:var(--gold);" id="navReviewsBtn">' + revCount + ' ' + revLabel + '</button>';
   html += '<button class="nav-btn" onclick="doLogout()" style="padding:8px 14px;">Sign Out</button>';
   if (currentUser.isAdmin) html += '<button class="nav-btn btn-gold" onclick="showPage(\'settings\')" style="padding:8px 14px;">Admin</button>';
   nav.innerHTML = html;
@@ -520,9 +520,8 @@ function renderDashboard() {
   var mine = (allCigars[currentUser.username] || []).slice().reverse();
 
   // Stats
-  document.getElementById('statSmokes').textContent = mine.length || '0';
-  var lbl = document.getElementById('statLabel');
-  if (lbl) lbl.textContent = ' ' + (mine.length === 1 ? 'Review' : 'Reviews');
+  var navRevBtn = document.getElementById('navReviewsBtn');
+  if (navRevBtn) navRevBtn.textContent = mine.length + ' ' + (mine.length === 1 ? 'Review' : 'Reviews');
   if (mine.length > 0) {
   } else {
   }
@@ -626,14 +625,19 @@ function handleSearchInput(q) {
     if (b.name.toLowerCase().indexOf('.html') !== -1) continue;
     var bl = b.name.toLowerCase();
     var brandHit = bl.indexOf(query) !== -1;
+    var brandAdded = false;
     for (var fi = 0; fi < b.families.length; fi++) {
       var fam = b.families[fi];
       var famFull = bl + ' ' + fam.name.toLowerCase();
       if (!brandHit && fam.name.toLowerCase().indexOf(query) === -1 && famFull.indexOf(query) === -1) continue;
       if (count >= 60) break;
+      if (!brandAdded) {
+        out += '<div class="search-brand-header">' + b.name + '</div>';
+        brandAdded = true;
+      }
       var sb = b.name.replace(/'/g,"&#39;"), sf = fam.name.replace(/'/g,"&#39;");
-      out += '<div class="search-result-family" onclick="selectFamily(&quot;'+sb+'&quot;,&quot;'+sf+'&quot;)">'
-           + '<strong>' + b.name + '</strong> &rsaquo; ' + fam.name + '</div>';
+      out += '<div class="search-result-family" style="padding:5px 14px 5px 24px;" onclick="selectFamily(&quot;'+sb+'&quot;,&quot;'+sf+'&quot;)">'
+           + fam.name + '</div>';
       count++;
     }
   }
@@ -778,13 +782,16 @@ function handleLogSearch(q) {
     }
   }
   if (!hits.length) { resultsDiv.innerHTML = '<div style="color:var(--ash);padding:8px 12px;font-size:0.85rem;">No matches.</div>'; return; }
-  var out = '';
+  var out = '', lastBrand = '';
   hits.forEach(function(item) {
     var count = item.fam.cigars ? item.fam.cigars.length : 0;
-    var sb = item.brand.replace(/'/g,'&#39;'), sf = item.fam.name.replace(/'/g,'&#39;');
-    out += '<div style="padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--light-ash);font-size:0.9rem;" onmousedown="expandLogFamily(&quot;'+sb+'&quot;,&quot;'+sf+'&quot;)">'
-         + '<strong>' + item.brand + '</strong> &rsaquo; ' + item.fam.name
-         + ' <span style="color:var(--ash);font-size:0.78rem;">(' + count + ' sizes)</span></div>';
+    var sb = item.brand.replace(/'/g,"&#39;"), sf = item.fam.name.replace(/'/g,"&#39;");
+    if (item.brand !== lastBrand) {
+      out += '<div style="padding:5px 14px 3px;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--dark-tobacco);border-top:1px solid var(--light-ash);margin-top:4px;">' + item.brand + '</div>';
+      lastBrand = item.brand;
+    }
+    out += '<div style="padding:4px 14px 4px 22px;cursor:pointer;border-bottom:1px solid var(--cream);font-size:0.88rem;" onmousedown="expandLogFamily(&quot;'+sb+'&quot;,&quot;'+sf+'&quot;)">'
+         + item.fam.name + ' <span style="color:var(--ash);font-size:0.75rem;">(' + count + ')</span></div>';
   });
   resultsDiv.innerHTML = out;
 }
