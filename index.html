@@ -421,29 +421,30 @@ function updateNav() {
   var links = document.getElementById('navLinks');
   if (!currentUser) {
     if (links) links.innerHTML = '';
-    nav.innerHTML = '<button class="nav-btn" onclick="showPage('auth')">Sign In</button>'
-                  + '<button class="nav-btn primary" onclick="showAuthForm('register')">Join</button>';
+    nav.innerHTML = '<button class="nav-btn" onclick="showPage(&#39;auth&#39;)">Sign In</button>'
+                  + '<button class="nav-btn primary" onclick="showAuthForm(&#39;register&#39;)">Join</button>';
     return;
   }
   if (links) {
     links.innerHTML =
       '<button class="nav-btn btn-primary" onclick="openLogSmoke()" style="padding:6px 12px;">+ Log</button>'
-    + '<button class="nav-btn" onclick="showPage('messages')" style="padding:6px 12px;">💬 Messages</button>'
-    + '<button class="nav-btn" onclick="showPage('events')" style="padding:6px 12px;">🎉 Events</button>'
-    + '<button class="nav-btn" onclick="showPage('invite')" style="padding:6px 12px;">📨 Invite</button>'
-    + '<button class="nav-btn" onclick="showPage('dashboard')" style="padding:6px 12px;background:rgba(201,168,76,0.15);border-color:var(--gold);color:var(--gold);" id="navReviewsBtn">0 Reviews</button>';
+    + '<button class="nav-btn" onclick="showPage(&#39;messages&#39;)" style="padding:6px 12px;">&#128172; Messages</button>'
+    + '<button class="nav-btn" onclick="showPage(&#39;events&#39;)" style="padding:6px 12px;">&#127881; Events</button>'
+    + '<button class="nav-btn" onclick="showPage(&#39;invite&#39;)" style="padding:6px 12px;">&#128232; Invite</button>'
+    + '<button class="nav-btn" onclick="showPage(&#39;dashboard&#39;)" style="padding:6px 12px;background:rgba(201,168,76,0.15);border-color:var(--gold);color:var(--gold);" id="navReviewsBtn">0 Reviews</button>';
   }
   nav.innerHTML =
     '<div class="user-pill" style="position:relative;" onclick="toggleUserMenu()">'
-    + '<div class="user-avatar-sm">' + (currentUser.avatar || '🧔') + '</div>'
+    + '<div class="user-avatar-sm">' + (currentUser.avatar || '') + '</div>'
     + '<span>' + currentUser.displayName + '</span>'
-    + '<span style="font-size:0.7rem;margin-left:4px;color:var(--ash);">▾</span>'
+    + '<span style="font-size:0.7rem;margin-left:4px;color:var(--ash);">&#9660;</span>'
     + '</div>'
     + '<div id="userDropdown" style="display:none;position:absolute;top:58px;right:16px;background:white;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.15);min-width:160px;z-index:200;overflow:hidden;">'
-    + (currentUser.isAdmin ? '<div onclick="showPage('settings');closeUserMenu()" style="padding:12px 16px;cursor:pointer;font-size:0.9rem;border-bottom:1px solid var(--light-ash);">⚙️ Admin</div>' : '')
+    + (currentUser.isAdmin ? '<div onclick="showPage(&#39;settings&#39;);closeUserMenu()" style="padding:12px 16px;cursor:pointer;font-size:0.9rem;border-bottom:1px solid var(--light-ash);">&#9881;&#65039; Admin</div>' : '')
     + '<div onclick="doLogout()" style="padding:12px 16px;cursor:pointer;font-size:0.9rem;color:var(--band-red);">Sign Out</div>'
     + '</div>';
 }
+
 
 function doLogout() {
   localStorage.removeItem('cl_session');
