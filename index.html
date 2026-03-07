@@ -106,17 +106,13 @@ async function doLogin() {
 
   // Hardcoded admin shortcut
   if (u === 'edjhk' && p === '1899jack') {
-    var { data: prof } = await _supa.from('profiles').select('*').eq('username','edjhk').single();
-    if (prof) {
-      localStorage.setItem('cl_session','edjhk');
-    } else {
-      // bootstrap admin profile
-      var r2 = await _supa.auth.signInWithPassword({ email:'edjhk@cigarlog.app', password:'1899jack' });
-      if (!r2.error) {
-        await _supa.from('profiles').upsert({ user_id:r2.data.user.id, username:'edjhk', display_name:'Ed', is_admin:true, avatar:'🎩' });
-        localStorage.setItem('cl_session','edjhk');
-      }
+    // Always sign into Supabase auth to get a live session
+    var r2 = await _supa.auth.signInWithPassword({ email:'edjhk@cigarlog.app', password:'1899jack' });
+    if (!r2.error && r2.data && r2.data.user) {
+      // Upsert profile to ensure user_id is set
+      await _supa.from('profiles').upsert({ user_id: r2.data.user.id, username:'edjhk', display_name:'Ed', is_admin:true, avatar:'🎩' }, { onConflict: 'username' });
     }
+    localStorage.setItem('cl_session','edjhk');
     location.reload(); return;
   }
 
@@ -460,7 +456,10 @@ function doLogout() {
 // ── DASHBOARD ────────────────────────────────────────────────────────────────
 async function renderDashboard() {
   if (!currentUser) return;
-  if (!currentUser.supabaseId) return;
+  if (!currentUser.supabaseId) {
+    document.getElementById('cigarsGrid').innerHTML = '<div style="text-align:center;padding:40px;color:var(--ash);">Loading your profile... <br><small>If this persists, please sign out and sign back in.</small></div>';
+    return;
+  }
   var { data: mine, error } = await _supa.from('cigar_logs')
     .select('*').eq('user_id', currentUser.supabaseId)
     .order('date_smoked', { ascending: false });
@@ -912,14 +911,31 @@ function showToast(msg) {
   await loadCA();
   var session = localStorage.getItem('cl_session');
   if (session) {
-    var { data: prof } = await _supa.from('profiles').select('*').eq('username', session).single();
+    // Try Supabase profile first
+    var { data: prof, error: profErr } = await _supa.from('profiles').select('*').eq('username', session).single();
     if (prof) {
-      currentUser = { username: prof.username, displayName: prof.display_name || prof.username, avatar: prof.avatar || '🧔', isAdmin: prof.is_admin || false, supabaseId: prof.user_id };
+      currentUser = {
+        username:    prof.username,
+        displayName: prof.display_name || prof.username,
+        avatar:      prof.avatar || '🧔',
+        isAdmin:     prof.is_admin || false,
+        supabaseId:  prof.user_id || null
+      };
+      // If supabaseId is missing, try to get it from current Supabase auth session
+      if (!currentUser.supabaseId) {
+        var { data: authData } = await _supa.auth.getSession();
+        if (authData && authData.session && authData.session.user) {
+          currentUser.supabaseId = authData.session.user.id;
+          // Patch the profile row
+          await _supa.from('profiles').update({ user_id: authData.session.user.id }).eq('username', session);
+        }
+      }
       updateNav(); showPage('dashboard'); subscribeToFeed();
     } else {
-      localStorage.removeItem('cl_session'); updateNav();
+      // Profile not found — clear session and show login
+      localStorage.removeItem('cl_session'); updateNav(); showPage('auth');
     }
-  } else { updateNav(); }
+  } else { updateNav(); showPage('auth'); }
 })();
 </script>
 
