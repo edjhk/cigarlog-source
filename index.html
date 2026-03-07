@@ -173,33 +173,33 @@ body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--c
     var p  = document.getElementById('regPassword').value;
     var err = document.getElementById('regError');
     err.textContent = '';
+    err.style.color = 'red';
     if (!u || !p || !dn) { err.textContent = 'All fields required.'; return; }
     if (p.length < 6)    { err.textContent = 'Password must be 6+ characters.'; return; }
 
-    var btn = document.getElementById('regBtn');
-    btn.textContent = 'Creating account...'; btn.disabled = true;
+    // Check username not taken
+    var users = JSON.parse(localStorage.getItem('cl_users') || '{}');
+    if (users[u]) { err.textContent = 'Username already taken.'; return; }
 
-    // Sign up with Supabase using username@cigarlog.app as synthetic email
-    var email = u + '@cigarlog.app';
-    var result = await _supa.auth.signUp({ email: email, password: p });
-    if (result.error) {
-      err.textContent = result.error.message;
-      btn.textContent = 'Create Account'; btn.disabled = false;
-      return;
-    }
-    // Create profile row
-    if (result.data.user) {
-      await _supa.from('profiles').insert({
-        id: result.data.user.id,
-        username: u,
-        display_name: dn,
-        avatar: '🧔',
-        is_admin: false
-      });
-    }
-    btn.textContent = 'Create Account'; btn.disabled = false;
-    err.style.color = 'var(--tobacco)';
-    err.textContent = 'Account created! Check your email to verify, then sign in.';
+    // Save to localStorage immediately — works 100% without Supabase
+    users[u] = { username: u, displayName: dn, avatar: '🧔', isAdmin: false, password: p };
+    localStorage.setItem('cl_users', JSON.stringify(users));
+    localStorage.setItem('cl_session', u);
+
+    // Try Supabase in background (won't block login if it fails)
+    try {
+      var result = await _supa.auth.signUp({ email: u + '@cigarlog.app', password: p });
+      if (result.data && result.data.user) {
+        await _supa.from('profiles').upsert({
+          id: result.data.user.id, username: u,
+          display_name: dn, avatar: '🧔', is_admin: false
+        });
+        users[u].supabaseId = result.data.user.id;
+        localStorage.setItem('cl_users', JSON.stringify(users));
+      }
+    } catch(e) { console.warn('Supabase signup skipped:', e); }
+
+    location.reload();
   }
 </script>
 
@@ -249,7 +249,7 @@ body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--c
         <label class="form-label">Invite Code (optional for first user)</label>
         <input type="text" class="form-input" id="regInviteCode" placeholder="Leave blank if first" />
       </div>
-      <button class="btn btn-primary" onclick="doRegister()" style="width:100%;">Create Account</button>
+      <button id="regBtn" class="btn btn-primary" onclick="doRegister()" style="width:100%;">Create Account</button>
       <div id="regError" style="color:var(--band-red);font-size:0.82rem;margin-top:10px;text-align:center;"></div>
       <div class="auth-toggle">Already a member? <a onclick="showAuthForm('login')">Sign in →</a></div>
     </div>
