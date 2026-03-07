@@ -371,7 +371,7 @@ body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--c
         <label class="form-label">Photo</label>
         <div style="display:flex;align-items:center;gap:10px;">
           <label for="logPhoto" style="cursor:pointer;background:var(--cream);border:1.5px solid var(--light-ash);border-radius:12px;padding:10px 16px;font-size:0.88rem;color:var(--tobacco);font-weight:700;">📷 Add Photo</label>
-          <input type="file" id="logPhoto" accept="image/*" capture="environment" style="display:none;" onchange="previewLogPhoto(this)"/>
+          <input type="file" id="logPhoto" accept="image/*" style="display:none;" onchange="previewLogPhoto(this)"/>
           <span id="logPhotoName" style="font-size:0.8rem;color:var(--ash);"></span>
         </div>
         <img id="logPhotoPreview" src="" style="display:none;margin-top:8px;max-width:100%;border-radius:10px;max-height:200px;object-fit:cover;" />
@@ -454,39 +454,6 @@ function updateNav() {
   nav.innerHTML = html;
 }
 
-function doLogin() {
-  console.log('doLogin called!');
-  const username = document.getElementById('loginUsername').value.trim().toLowerCase();
-  const password = document.getElementById('loginPassword').value;
-  const err = document.getElementById('loginError');
-  err.textContent = '';
-
-  if (!username || !password) {
-    err.textContent = 'Enter both fields.';
-    return;
-  }
-
-  if (username === 'edjhk' && password === '1899jack') {
-    currentUser = {username: 'edjhk', displayName: 'Ed', isAdmin: true, avatar: '🎩'};
-    localStorage.setItem('cl_session', 'edjhk');
-    updateNav();
-    showPage('dashboard');
-    console.log('Hardcoded login success');
-    return;
-  }
-
-  const users = DB.getUsers();
-  const user = users[username];
-  if (!user || user.password !== password) {
-    err.textContent = 'Invalid username or password.';
-    return;
-  }
-
-  currentUser = user;
-  localStorage.setItem('cl_session', username);
-  updateNav();
-  showPage('dashboard');
-}
 
 function doLogout() {
   localStorage.removeItem('cl_session');
@@ -652,8 +619,7 @@ function handleSearchInput(q) {
   var results = document.getElementById('searchResults');
   if (!q || q.length < 2) { results.innerHTML = ''; return; }
   var query = q.toLowerCase().trim();
-  var out = '';
-  var count = 0;
+  var out = '', count = 0;
   for (var bi = 0; bi < caDatabase.length; bi++) {
     var b = caDatabase[bi];
     if (b.name.toLowerCase().indexOf('.html') !== -1) continue;
@@ -662,12 +628,10 @@ function handleSearchInput(q) {
     for (var fi = 0; fi < b.families.length; fi++) {
       var fam = b.families[fi];
       var famFull = bl + ' ' + fam.name.toLowerCase();
-      var famHit  = fam.name.toLowerCase().indexOf(query) !== -1 || famFull.indexOf(query) !== -1;
-      if (!brandHit && !famHit) continue;
+      if (!brandHit && fam.name.toLowerCase().indexOf(query) === -1 && famFull.indexOf(query) === -1) continue;
       if (count >= 60) break;
-      var sb = b.name.replace(/'/g,"&#39;");
-      var sf = fam.name.replace(/'/g,"&#39;");
-      out += '<div class="search-result-family" onclick="selectFamily(\'' + sb + '\',\'' + sf + '\')">'
+      var sb = b.name.replace(/'/g,"&#39;"), sf = fam.name.replace(/'/g,"&#39;");
+      out += '<div class="search-result-family" onclick="selectFamily(&quot;'+sb+'&quot;,&quot;'+sf+'&quot;)">'
            + '<strong>' + b.name + '</strong> &rsaquo; ' + fam.name + '</div>';
       count++;
     }
@@ -807,52 +771,53 @@ function handleLogSearch(q) {
     for (var fi = 0; fi < b.families.length; fi++) {
       var fam = b.families[fi];
       var famFull = bl + ' ' + fam.name.toLowerCase();
-      var famHit  = fam.name.toLowerCase().indexOf(query) !== -1 || famFull.indexOf(query) !== -1;
-      if (brandHit || famHit) hits.push({ brand: b.name, fam: fam });
+      if (brandHit || fam.name.toLowerCase().indexOf(query) !== -1 || famFull.indexOf(query) !== -1) {
+        hits.push({ brand: b.name, fam: fam });
+      }
     }
   }
-  if (hits.length === 0) {
-    resultsDiv.innerHTML = '<div style="color:var(--ash);padding:8px 12px;font-size:0.85rem;">No matches.</div>';
-    return;
-  }
+  if (!hits.length) { resultsDiv.innerHTML = '<div style="color:var(--ash);padding:8px 12px;font-size:0.85rem;">No matches.</div>'; return; }
   var out = '';
   hits.forEach(function(item) {
     var count = item.fam.cigars ? item.fam.cigars.length : 0;
-    var sb = item.brand.replace(/"/g,'&quot;');
-    var sf = item.fam.name.replace(/"/g,'&quot;');
-    out += '<div style="padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--light-ash);font-size:0.9rem;"'
-         + ' onmousedown="expandLogFamily(\"' + sb + '\",\"' + sf + '\")">'
+    var sb = item.brand.replace(/'/g,'&#39;'), sf = item.fam.name.replace(/'/g,'&#39;');
+    out += '<div style="padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--light-ash);font-size:0.9rem;" onmousedown="expandLogFamily(&quot;'+sb+'&quot;,&quot;'+sf+'&quot;)">'
          + '<strong>' + item.brand + '</strong> &rsaquo; ' + item.fam.name
-         + ' <span style="color:var(--ash);font-size:0.78rem;">(' + count + ' sizes)</span>'
-         + '</div>';
+         + ' <span style="color:var(--ash);font-size:0.78rem;">(' + count + ' sizes)</span></div>';
   });
   resultsDiv.innerHTML = out;
 }
 
 function expandLogFamily(brandName, familyName) {
   var resultsDiv = document.getElementById('logSearchResults');
-  var brand = null;
-  for (var i = 0; i < caDatabase.length; i++) { if (caDatabase[i].name === brandName) { brand = caDatabase[i]; break; } }
+  var brand = null, fam = null;
+  for (var i = 0; i < caDatabase.length; i++) {
+    if (caDatabase[i].name === brandName) { brand = caDatabase[i]; break; }
+  }
   if (!brand) return;
-  var fam = null;
-  for (var i = 0; i < brand.families.length; i++) { if (brand.families[i].name === familyName) { fam = brand.families[i]; break; } }
+  for (var i = 0; i < brand.families.length; i++) {
+    if (brand.families[i].name === familyName) { fam = brand.families[i]; break; }
+  }
   if (!fam) return;
-  var out = '<div style="padding:8px 14px;cursor:pointer;font-size:0.82rem;color:var(--tobacco);font-weight:700;border-bottom:1px solid var(--light-ash);"'
-          + ' onmousedown="handleLogSearch(document.getElementById('logCigarSearch').value)">&#8592; Back</div>';
-  out += '<div style="padding:5px 14px;font-size:0.78rem;color:var(--ash);">' + brandName + ' › ' + familyName + '</div>';
+
+  var backFn = "handleLogSearch(document.getElementById(&quot;logCigarSearch&quot;).value)";
+  var out = '<div style="padding:8px 14px;cursor:pointer;font-size:0.82rem;color:var(--tobacco);font-weight:700;border-bottom:1px solid var(--light-ash);" onmousedown="' + backFn + '">&#8592; Back</div>';
+  out += '<div style="padding:5px 14px;font-size:0.78rem;color:var(--ash);">' + brandName + ' &rsaquo; ' + familyName + '</div>';
+
   if (!fam.cigars || fam.cigars.length === 0) {
     out += '<div style="color:var(--ash);padding:8px 14px;font-size:0.85rem;">No sizes listed.</div>';
   } else {
-    fam.cigars.forEach(function(c) {
+    for (var j = 0; j < fam.cigars.length; j++) {
+      var c    = fam.cigars[j];
       var meta = (c.size && c.size !== 'N/A') ? c.size : '';
-      var sn = c.name.replace(/"/g,'&quot;');
-      var sb2 = brandName.replace(/"/g,'&quot;');
-      var sf2 = familyName.replace(/"/g,'&quot;');
-      out += '<div style="padding:9px 14px 9px 22px;cursor:pointer;font-size:0.88rem;border-bottom:1px solid var(--cream);"'
-           + ' onmousedown="selectLogCigar(\"' + sb2 + '\",\"' + sf2 + '\",\"' + sn + '\")">'
-           + c.name + (meta ? ' <span style=\"color:var(--ash);font-size:0.78rem;\">· ' + meta + '</span>' : '')
+      var sn   = c.name.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+      var sb2  = brandName.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+      var sf2  = familyName.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+      out += '<div style="padding:9px 14px 9px 22px;cursor:pointer;font-size:0.88rem;border-bottom:1px solid var(--cream);" onmousedown="selectLogCigar(&quot;'+sb2+'&quot;,&quot;'+sf2+'&quot;,&quot;'+sn+'&quot;)">'
+           + c.name
+           + (meta ? ' <span style="color:var(--ash);font-size:0.78rem;">&middot; ' + meta + '</span>' : '')
            + '</div>';
-    });
+    }
   }
   resultsDiv.innerHTML = out;
 }
@@ -988,135 +953,6 @@ function showToast(msg) {
     document.getElementById('searchResults').innerHTML = '';
     document.getElementById('mainSearch').value = '';
   });
-
-// ── Sidebar feed ─────────────────────────────────────────────
-function renderSidebarFeed() {
-  var div = document.getElementById('sidebarFeedPosts');
-  if (!div) return;
-  var feed = DB.getFeed();
-  div.innerHTML = '';
-  if (feed.length === 0) {
-    div.innerHTML = '<div style="color:var(--ash);text-align:center;padding:20px;font-size:0.85rem;">No posts yet.</div>';
-    return;
-  }
-  feed.forEach(function(post) {
-    var isMe = currentUser && post.username === (currentUser.displayName || currentUser.username);
-    var wrap = document.createElement('div');
-    wrap.style.cssText = 'display:flex;flex-direction:column;max-width:82%;' + (isMe ? 'align-self:flex-end;align-items:flex-end;' : 'align-self:flex-start;align-items:flex-start;');
-    var bubble = document.createElement('div');
-    bubble.style.cssText = 'padding:7px 11px;border-radius:' + (isMe ? '14px 14px 3px 14px' : '14px 14px 14px 3px') + ';background:' + (isMe ? 'var(--tobacco)' : 'var(--cream)') + ';color:' + (isMe ? '#fff' : 'var(--charcoal)') + ';font-size:0.85rem;word-break:break-word;';
-    if (post.photo) { var img = document.createElement('img'); img.src = post.photo; img.style.cssText = 'max-width:140px;border-radius:8px;margin-bottom:3px;display:block;'; bubble.appendChild(img); }
-    if (post.text) bubble.appendChild(document.createTextNode(post.text));
-    var meta = document.createElement('div');
-    meta.style.cssText = 'font-size:0.65rem;color:var(--ash);margin-top:2px;';
-    meta.textContent = (isMe ? '' : post.username + ' · ') + post.date;
-    wrap.appendChild(bubble); wrap.appendChild(meta); div.appendChild(wrap);
-  });
-  div.scrollTop = div.scrollHeight;
-}
-
-function postSidebarFeed() {
-  var input = document.getElementById('sidebarFeedInput');
-  var text = input ? input.value.trim() : '';
-  if (!text || !currentUser) return;
-  var post = { id: Date.now(), username: currentUser.displayName || currentUser.username, text: text, date: new Date().toLocaleDateString() };
-  var feed = DB.getFeed(); feed.push(post); DB.saveFeed(feed);
-  input.value = '';
-  renderSidebarFeed();
-}
-
-function postSidebarMedia(fileInput) {
-  if (!fileInput.files || !fileInput.files[0] || !currentUser) return;
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var post = { id: Date.now(), username: currentUser.displayName || currentUser.username, text: '', photo: e.target.result, date: new Date().toLocaleDateString() };
-    var feed = DB.getFeed(); feed.push(post); DB.saveFeed(feed);
-    renderSidebarFeed();
-  };
-  reader.readAsDataURL(fileInput.files[0]);
-  fileInput.value = '';
-}
-
-// ── Photo preview & geo ───────────────────────────────────────
-function previewLogPhoto(input) {
-  if (input.files && input.files[0]) {
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      var img = document.getElementById('logPhotoPreview');
-      img.src = e.target.result; img.style.display = 'block';
-      document.getElementById('logPhotoName').textContent = input.files[0].name;
-    };
-    reader.readAsDataURL(input.files[0]);
-  }
-}
-
-function useMyLocation() {
-  if (!navigator.geolocation) { showToast('Geolocation not supported'); return; }
-  showToast('Getting location...');
-  navigator.geolocation.getCurrentPosition(function(pos) {
-    var lat = pos.coords.latitude.toFixed(4), lon = pos.coords.longitude.toFixed(4);
-    fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lon+'&format=json')
-      .then(function(r){ return r.json(); })
-      .then(function(d){
-        var a = d.address || {};
-        var city = a.city || a.town || a.village || a.county || '';
-        document.getElementById('logLocation').value = city + (a.state ? ', '+a.state : '') || lat+','+lon;
-      }).catch(function(){ document.getElementById('logLocation').value = lat+','+lon; });
-  }, function(){ showToast('Location access denied'); });
-}
-
-// ── Invite functions ──────────────────────────────────────────
-function generateInvite() {
-  var name = document.getElementById('inviteName').value.trim() || 'Friend';
-  var code = Math.random().toString(36).substring(2,10).toUpperCase();
-  var invites = DB.getInvites();
-  invites[code] = { name: name, created: new Date().toLocaleDateString(), used: false };
-  DB.saveInvites(invites);
-  var base = window.location.href.split('#')[0].split('?')[0];
-  document.getElementById('inviteLinkText').textContent = base + '?invite=' + code;
-  document.getElementById('inviteResult').style.display = 'block';
-  renderInviteList();
-}
-
-function copyInviteLink() {
-  var text = document.getElementById('inviteLinkText').textContent;
-  navigator.clipboard.writeText(text).then(function(){ showToast('Copied! 📋'); }).catch(function(){
-    var el = document.createElement('textarea'); el.value = text; document.body.appendChild(el); el.select();
-    document.execCommand('copy'); document.body.removeChild(el); showToast('Copied! 📋');
-  });
-}
-
-function renderInviteList() {
-  var div = document.getElementById('inviteList');
-  if (!div) return;
-  var invites = DB.getInvites();
-  var keys = Object.keys(invites);
-  if (!keys.length) { div.innerHTML = '<div style="color:var(--ash);font-size:0.85rem;">No invites yet.</div>'; return; }
-  var out = '';
-  keys.forEach(function(code) {
-    var inv = invites[code];
-    out += '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--light-ash);font-size:0.85rem;">'
-      + '<span>' + inv.name + ' <span style="color:var(--ash);font-size:0.75rem;">' + inv.created + '</span></span>'
-      + '<span style="color:' + (inv.used ? 'var(--success)' : 'var(--tobacco)') + ';">' + (inv.used ? '✓ Used' : 'Pending') + '</span></div>';
-  });
-  div.innerHTML = out;
-}
-
-// ── Browser back button ───────────────────────────────────────
-window.addEventListener('popstate', function(e) {
-  var page = (e.state && e.state.page) ? e.state.page : 'dashboard';
-  _showPageInternal(page);
-});
-
-function _showPageInternal(page) {
-  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
-  var t = document.getElementById('page-' + page);
-  if (t) t.classList.add('active');
-  if (page === 'dashboard') { renderDashboard(); renderSidebarFeed(); }
-  if (page === 'invite') renderInviteList();
-  window.scrollTo(0,0);
-}
-
 </script>
 
 <!-- COMMUNITY FEED -->
@@ -1145,8 +981,9 @@ function _showPageInternal(page) {
   </div>
 </div>
 
-</body>
-</html<div id="page-invite" class="page">
+
+<!-- INVITE PAGE -->
+<div id="page-invite" class="page">
   <div style="max-width:600px;margin:0 auto;padding:40px 20px;">
     <button class="btn btn-secondary" onclick="showPage('dashboard')" style="margin-bottom:24px;">← Back</button>
     <div style="background:white;border-radius:20px;padding:32px;box-shadow:0 4px 30px var(--shadow);">
@@ -1163,7 +1000,7 @@ function _showPageInternal(page) {
           <div id="inviteLinkText" style="font-size:0.88rem;color:var(--dark-tobacco);"></div>
         </div>
         <button class="btn btn-gold" style="width:100%;margin-top:12px;" onclick="copyInviteLink()">📋 Copy Link</button>
-        <p style="font-size:0.8rem;color:var(--ash);margin-top:10px;text-align:center;">Works once. Your friend can register immediately.</p>
+        <p style="font-size:0.8rem;color:var(--ash);margin-top:10px;text-align:center;">Works once. Friend can register immediately.</p>
       </div>
       <div style="margin-top:28px;border-top:1px solid var(--light-ash);padding-top:20px;">
         <h3 style="font-family:'Playfair Display',serif;font-size:1rem;margin-bottom:12px;">Sent Invites</h3>
@@ -1172,3 +1009,114 @@ function _showPageInternal(page) {
     </div>
   </div>
 </div>
+
+<script>
+// ── Sidebar feed ──────────────────────────────────────────────
+function renderSidebarFeed() {
+  var div = document.getElementById('sidebarFeedPosts');
+  if (!div) return;
+  var feed = DB.getFeed();
+  div.innerHTML = '';
+  if (!feed.length) { div.innerHTML = '<div style="color:var(--ash);text-align:center;padding:20px;font-size:0.85rem;">No posts yet.</div>'; return; }
+  feed.forEach(function(post) {
+    var isMe = currentUser && post.username === (currentUser.displayName || currentUser.username);
+    var wrap = document.createElement('div');
+    wrap.style.cssText = 'display:flex;flex-direction:column;max-width:82%;' + (isMe ? 'align-self:flex-end;align-items:flex-end;' : 'align-self:flex-start;align-items:flex-start;');
+    var bubble = document.createElement('div');
+    bubble.style.cssText = 'padding:7px 11px;border-radius:' + (isMe ? '14px 14px 3px 14px' : '14px 14px 14px 3px') + ';background:' + (isMe ? 'var(--tobacco)' : 'var(--cream)') + ';color:' + (isMe ? '#fff' : 'var(--charcoal)') + ';font-size:0.85rem;word-break:break-word;';
+    if (post.photo) { var img = document.createElement('img'); img.src = post.photo; img.style.cssText = 'max-width:140px;border-radius:8px;margin-bottom:3px;display:block;'; bubble.appendChild(img); }
+    if (post.text) bubble.appendChild(document.createTextNode(post.text));
+    var meta = document.createElement('div');
+    meta.style.cssText = 'font-size:0.65rem;color:var(--ash);margin-top:2px;';
+    meta.textContent = (isMe ? '' : post.username + ' · ') + post.date;
+    wrap.appendChild(bubble); wrap.appendChild(meta); div.appendChild(wrap);
+  });
+  div.scrollTop = div.scrollHeight;
+}
+
+function postSidebarFeed() {
+  var input = document.getElementById('sidebarFeedInput');
+  var text = input ? input.value.trim() : '';
+  if (!text || !currentUser) return;
+  var post = { id: Date.now(), username: currentUser.displayName || currentUser.username, text: text, date: new Date().toLocaleDateString() };
+  var feed = DB.getFeed(); feed.push(post); DB.saveFeed(feed);
+  input.value = ''; renderSidebarFeed();
+}
+
+function postSidebarMedia(fileInput) {
+  if (!fileInput.files || !fileInput.files[0] || !currentUser) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var post = { id: Date.now(), username: currentUser.displayName || currentUser.username, text: '', photo: e.target.result, date: new Date().toLocaleDateString() };
+    var feed = DB.getFeed(); feed.push(post); DB.saveFeed(feed); renderSidebarFeed();
+  };
+  reader.readAsDataURL(fileInput.files[0]); fileInput.value = '';
+}
+
+// ── Photo + geo ───────────────────────────────────────────────
+function previewLogPhoto(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var img = document.getElementById('logPhotoPreview');
+      img.src = e.target.result; img.style.display = 'block';
+      document.getElementById('logPhotoName').textContent = input.files[0].name;
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function useMyLocation() {
+  if (!navigator.geolocation) { showToast('Geolocation not supported'); return; }
+  showToast('Getting location...');
+  navigator.geolocation.getCurrentPosition(function(pos) {
+    var lat = pos.coords.latitude.toFixed(4), lon = pos.coords.longitude.toFixed(4);
+    fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lon+'&format=json')
+      .then(function(r){ return r.json(); })
+      .then(function(d){ var a = d.address||{}; document.getElementById('logLocation').value = (a.city||a.town||a.village||a.county||'') + (a.state ? ', '+a.state : '') || lat+','+lon; })
+      .catch(function(){ document.getElementById('logLocation').value = lat+','+lon; });
+  }, function(){ showToast('Location access denied'); });
+}
+
+// ── Invite ────────────────────────────────────────────────────
+function generateInvite() {
+  var name = (document.getElementById('inviteName').value.trim()) || 'Friend';
+  var code = Math.random().toString(36).substring(2,10).toUpperCase();
+  var invites = DB.getInvites(); invites[code] = { name: name, created: new Date().toLocaleDateString(), used: false }; DB.saveInvites(invites);
+  var base = window.location.href.split('#')[0].split('?')[0];
+  document.getElementById('inviteLinkText').textContent = base + '?invite=' + code;
+  document.getElementById('inviteResult').style.display = 'block'; renderInviteList();
+}
+function copyInviteLink() {
+  var text = document.getElementById('inviteLinkText').textContent;
+  navigator.clipboard.writeText(text).then(function(){ showToast('Copied! 📋'); }).catch(function(){ var el=document.createElement('textarea');el.value=text;document.body.appendChild(el);el.select();document.execCommand('copy');document.body.removeChild(el);showToast('Copied!'); });
+}
+function renderInviteList() {
+  var div = document.getElementById('inviteList'); if (!div) return;
+  var invites = DB.getInvites(), keys = Object.keys(invites);
+  if (!keys.length) { div.innerHTML = '<div style="color:var(--ash);font-size:0.85rem;">No invites yet.</div>'; return; }
+  var rows = '';
+  keys.forEach(function(code) {
+    var inv = invites[code];
+    var color = inv.used ? 'var(--success)' : 'var(--tobacco)';
+    var status = inv.used ? 'Used' : 'Pending';
+    rows += '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--light-ash);font-size:0.85rem;">'
+          + '<span>' + inv.name + ' <span style="color:var(--ash);font-size:0.75rem;">' + inv.created + '</span></span>'
+          + '<span style="color:' + color + ';">' + status + '</span></div>';
+  });
+  div.innerHTML = rows;
+}
+
+// ── Browser back ──────────────────────────────────────────────
+window.addEventListener('popstate', function(e) {
+  var page = (e.state && e.state.page) ? e.state.page : 'dashboard';
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  var t = document.getElementById('page-'+page); if(t) t.classList.add('active');
+  if (page==='dashboard') { renderDashboard(); setTimeout(renderSidebarFeed,50); }
+  if (page==='invite') renderInviteList();
+  window.scrollTo(0,0);
+});
+</script>
+
+</body>
+</html>
