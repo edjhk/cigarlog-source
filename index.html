@@ -213,8 +213,11 @@ body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--c
 
 <!-- NAV -->
 <div class="nav">
-  <div class="nav-logo" onclick="showPage('dashboard')">CigarLog</div>
-  <div class="nav-actions" id="navActions"></div>
+  <div style="display:flex;align-items:center;gap:6px;">
+    <div class="nav-logo" onclick="showPage('dashboard')">CigarLog</div>
+    <div id="navLinks" style="display:flex;gap:4px;align-items:center;margin-left:12px;"></div>
+  </div>
+  <div id="navActions" style="display:flex;align-items:center;gap:8px;"></div>
 </div>
 
 <!-- AUTH -->
@@ -270,9 +273,9 @@ body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--c
 
 
       <div style="background:white;border-radius:16px;box-shadow:0 4px 20px var(--shadow);padding:18px 20px;margin-bottom:24px;">
-        <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--dark-tobacco);margin-bottom:10px;">🔍 Search Cigars</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--dark-tobacco);margin-bottom:10px;">Cigar Buying Guide</div>
         <div style="display:flex;align-items:center;background:var(--cream);border:2px solid var(--light-ash);border-radius:12px;padding:10px 16px;gap:10px;transition:border 0.2s;" onfocus-within="this.style.borderColor='var(--tobacco)'">
-          <input type="text" id="mainSearch" placeholder="Search brand, family or vitola..." oninput="handleSearchInput(this.value)"
+          <input type="text" id="mainSearch" placeholder="🔍 Search brand, family or vitola..." oninput="handleSearchInput(this.value)"
             style="flex:1;border:none;background:none;outline:none;font-family:'Lato',sans-serif;font-size:1rem;color:var(--charcoal);" />
         </div>
       </div>
@@ -435,20 +438,48 @@ async function loadCA() {
 }
 
 // NAV & AUTH
+function toggleUserMenu() {
+  var d = document.getElementById('userDropdown');
+  if (d) d.style.display = d.style.display === 'none' ? 'block' : 'none';
+}
+function closeUserMenu() {
+  var d = document.getElementById('userDropdown');
+  if (d) d.style.display = 'none';
+}
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.user-pill')) closeUserMenu();
+});
+
 function updateNav() {
   const nav = document.getElementById('navActions');
   if (!currentUser) {
-    nav.innerHTML = '<button class="nav-btn" onclick="showPage(\'auth\')">Sign In</button><button class="nav-btn primary" onclick="showAuthForm(\'register\')">Join</button>';
-    return;
-  }
-  let html = '<button class="nav-btn btn-primary" onclick="openLogSmoke()" style="padding:8px 14px;">+ Log</button>';
-  html += '<button class="nav-btn" onclick="showPage(\'messages\')" style="padding:8px 14px;">💬 Messages</button>';
-  html += '<button class="nav-btn" onclick="showPage(\'invite\')" style="padding:8px 14px;">📨 Invite</button>';
-  html += `<div class="user-pill" onclick="showPage('dashboard')"><div class="user-avatar-sm">${currentUser.avatar || '🧔'}</div><span>${currentUser.displayName}</span></div>`;
-  var revCount = (DB.getCigars()[currentUser.username] || []).length;
+var revCount = (DB.getCigars()[currentUser.username] || []).length;
   var revLabel = revCount === 1 ? 'Review' : 'Reviews';
-  html += '<button class="nav-btn" onclick="showPage(\'dashboard\')" style="padding:8px 14px;background:rgba(201,168,76,0.15);border-color:var(--gold);color:var(--gold);" id="navReviewsBtn">' + revCount + ' ' + revLabel + '</button>';
-  html += '<button class="nav-btn" onclick="doLogout()" style="padding:8px 14px;">Sign Out</button>';
+
+  // Left side: nav links
+  var links = document.getElementById('navLinks');
+  if (links) {
+    links.innerHTML =
+      '<button class="nav-btn btn-primary" onclick="openLogSmoke()" style="padding:6px 12px;font-size:0.82rem;">+ Log</button>'
+    + '<button class="nav-btn" onclick="showPage(\'messages\')" style="padding:6px 12px;font-size:0.82rem;">💬 Messages</button>'
+    + '<button class="nav-btn" onclick="showPage(\'events\')" style="padding:6px 12px;font-size:0.82rem;">🎉 Events</button>'
+    + '<button class="nav-btn" onclick="showPage(\'invite\')" style="padding:6px 12px;font-size:0.82rem;">📨 Invite</button>'
+    + '<button class="nav-btn" onclick="showPage(\'dashboard\')" style="padding:6px 12px;font-size:0.82rem;background:rgba(201,168,76,0.15);border-color:var(--gold);color:var(--gold);" id="navReviewsBtn">' + revCount + ' ' + revLabel + '</button>';
+  }
+
+  // Right side: user pill with dropdown
+  var nav = document.getElementById('navActions');
+  nav.innerHTML =
+    '<div class="user-pill" style="position:relative;cursor:pointer;" onclick="toggleUserMenu()">'
+    + '<div class="user-avatar-sm">' + (currentUser.avatar || '🧔') + '</div>'
+    + '<span>' + currentUser.displayName + '</span>'
+    + '<span style="font-size:0.7rem;margin-left:4px;color:var(--ash);">▾</span>'
+    + '</div>'
+    + '<div id="userDropdown" style="display:none;position:absolute;top:58px;right:16px;background:white;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.15);min-width:160px;z-index:200;overflow:hidden;">'
+    + (currentUser.isAdmin ? '<div onclick="showPage(\'settings\');closeUserMenu()" style="padding:12px 16px;cursor:pointer;font-size:0.9rem;border-bottom:1px solid var(--light-ash);">⚙️ Admin</div>' : '')
+    + '<div onclick="doLogout()" style="padding:12px 16px;cursor:pointer;font-size:0.9rem;color:var(--band-red);">Sign Out</div>'
+    + '</div>';;">Sign Out</button>';
   if (currentUser.isAdmin) html += '<button class="nav-btn btn-gold" onclick="showPage(\'settings\')" style="padding:8px 14px;">Admin</button>';
   nav.innerHTML = html;
 }
@@ -522,6 +553,8 @@ function renderDashboard() {
   // Stats
   var navRevBtn = document.getElementById('navReviewsBtn');
   if (navRevBtn) navRevBtn.textContent = mine.length + ' ' + (mine.length === 1 ? 'Review' : 'Reviews');
+  // Refresh nav links to update review count
+  if (currentUser) updateNav();
   if (mine.length > 0) {
   } else {
   }
