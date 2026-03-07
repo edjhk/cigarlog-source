@@ -76,6 +76,10 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--charcoal)
   padding:12px 24px;border-radius:30px;font-size:0.92rem;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.3);opacity:0;transition:opacity 0.3s;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// Ensure supabase library is available before any code runs
+window._supaReady = false;
+</script>
 </head>
 <body>
 
@@ -277,10 +281,14 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--charcoal)
 <div id="toast-el" class="toast"></div>
 
 <script>
-const _supa = supabase.createClient(
-  "https://flrqhivvjimahfrdoxwt.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZscnFoaXZ2amltYWhmcmRveHd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4ODkyNzUsImV4cCI6MjA4ODQ2NTI3NX0.3PoCVkRGM3fLyu0MXsaz4ZKH1zsuo_HVcKUZpciOAAk"
-);
+var _supa;
+function _initSupa() {
+  if (_supa) return;
+  _supa = supabase.createClient(
+    "https://flrqhivvjimahfrdoxwt.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZscnFoaXZ2amltYWhmcmRveHd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4ODkyNzUsImV4cCI6MjA4ODQ2NTI3NX0.3PoCVkRGM3fLyu0MXsaz4ZKH1zsuo_HVcKUZpciOAAk"
+  );
+}
 
 var currentUser = null;
 var caDatabase  = [];
@@ -844,6 +852,7 @@ function showToast(msg) {
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 (async function init() {
+  _initSupa();
   await loadCA();
   var session = localStorage.getItem("cl_session");
   if (!session) { updateNav(); return; }
@@ -863,6 +872,7 @@ function showToast(msg) {
 })();
 
 window.addEventListener("load", function() {
+  _initSupa();
   var ff = document.getElementById("sidebarFeedFile");
   var fc = document.getElementById("sidebarFeedCam");
   var lp = document.getElementById("logPhoto");
