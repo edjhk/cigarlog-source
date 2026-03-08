@@ -872,24 +872,42 @@ async function postSidebarMedia(fileInput) {
 
 // ── INVITES ───────────────────────────────────────────────────────────────────
 async function generateInvite() {
-  var name = document.getElementById('inviteName').value.trim() || 'Friend';
+  var name = document.getElementById('inviteName').value.trim();
+  if (!name) { showToast('Please enter a name for the invite.'); return; }
   var token = Math.random().toString(36).substring(2,10).toUpperCase();
-  console.log('currentUser:', JSON.stringify(currentUser));
-  var result = await supa.from('invites').insert({
+  var expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+  var { error } = await supa.from('invites').insert({
     invited_by: currentUser.supabaseId,
     invited_name: name,
-    invited_email: null,
+    invited_email: '',
     token: token,
-    used: false
+    used: false,
+    expires_at: expiresAt,
+    accepted_by: null
   });
-  console.log('insert result:', JSON.stringify(result));
-  if (result.error) { showToast('Error: ' + result.error.message); return; }
+  if (error) { showToast('Error: ' + error.message); return; }
   var link = window.location.origin + window.location.pathname + '?invite=' + token;
   document.getElementById('inviteLinkText').textContent = link;
   document.getElementById('inviteResult').style.display = 'block';
   renderInviteList();
 }
 
+async function regenerateInvite(oldId, name) {
+  var token = Math.random().toString(36).substring(2,10).toUpperCase();
+  var expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+  var { error } = await supa.from('invites').update({
+    token: token,
+    used: false,
+    expires_at: expiresAt,
+    accepted_by: null
+  }).eq('id', oldId);
+  if (error) { showToast('Error: ' + error.message); return; }
+  var link = window.location.origin + window.location.pathname + '?invite=' + token;
+  document.getElementById('inviteLinkText').textContent = link;
+  document.getElementById('inviteResult').style.display = 'block';
+  showToast('New link generated for ' + name + '!');
+  renderInviteList();
+}
 
 function copyInviteLink() {
   navigator.clipboard.writeText(document.getElementById('inviteLinkText').textContent)
@@ -899,22 +917,55 @@ function copyInviteLink() {
 async function renderInviteList() {
   var div = document.getElementById('inviteList');
   if (!div || !currentUser) return;
-  var { data: invites } = await supa.from('invites').select()
+  var { data: invites } = await supa.from('invites').select('*')
     .eq('invited_by', currentUser.supabaseId)
     .order('created_at', { ascending: false });
   if (!invites || !invites.length) {
-    div.innerHTML = '<div style="color:var(--ash);font-size:0.85rem;">No invites yet.</div>';
+    div.innerHTML = "<div style='color:var(--ash);font-size:0.85rem;'>No invites yet.</div>";
     return;
   }
-  div.innerHTML = invites.map(function(inv) {
-    return `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--light-ash);font-size:0.85rem;">
-      <span>${inv.invited_name}</span>
-      <span style="color:var(--ash);font-size:0.75rem;">${new Date(inv.created_at).toLocaleDateString()}</span>
-      <span style="color:${inv.used ? 'var(--success)' : 'var(--tobacco)'};">${inv.used ? 'Used' : 'Pending'}</span>
-    </div>`;
-  }).join('');
+  div.innerHTML = '';
+  invites.forEach(function(inv) {
+    var now = new Date();
+    var expired = inv.expires_at && new Date(inv.expires_at) < now;
+    var status, statusColor;
+    if (inv.accepted_by) {
+      status = '✓ Confirmed — ' + inv.accepted_by;
+      statusColor = 'var(--success)';
+    } else if (expired) {
+      status = 'Expired';
+      statusColor = 'var(--ash)';
+    } else {
+      status = 'Pending';
+      statusColor = 'var(--tobacco)';
+    }
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--light-ash);font-size:0.85rem;gap:8px;';
+    var left = document.createElement('div');
+    left.innerHTML = '<strong>' + inv.invited_name + '</strong>'
+      + '<div style="font-size:0.75rem;color:var(--ash);margin-top:2px;">'
+      + (inv.expires_at ? 'Expires ' + new Date(inv.expires_at).toLocaleDateString() : 'No expiry')
+      + '</div>';
+    var right = document.createElement('div');
+    right.style.cssText = 'display:flex;align-items:center;gap:8px;text-align:right;';
+    var statusSpan = document.createElement('span');
+    statusSpan.style.cssText = 'color:' + statusColor + ';font-size:0.78rem;font-weight:700;';
+    statusSpan.textContent = status;
+    right.appendChild(statusSpan);
+    if (expired && !inv.accepted_by) {
+      var regenBtn = document.createElement('button');
+      regenBtn.style.cssText = 'background:var(--cream);border:1.5px solid var(--light-ash);border-radius:8px;padding:4px 10px;font-size:0.75rem;cursor:pointer;color:var(--tobacco);font-weight:700;';
+      regenBtn.textContent = 'New Link';
+      (function(id, n) {
+        regenBtn.onclick = function() { regenerateInvite(id, n); };
+      })(inv.id, inv.invited_name);
+      right.appendChild(regenBtn);
+    }
+    row.appendChild(left);
+    row.appendChild(right);
+    div.appendChild(row);
+  });
 }
-
 
 // ADMIN
 function switchAdminTab(tab) {
