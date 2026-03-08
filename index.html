@@ -308,8 +308,8 @@ async function doRegister() {
   btn.textContent = "Create Account"; btn.disabled = false;
   location.reload();
   // Mark invite as used if one was provided
-const usedToken = document.getElementById('regInviteCode').value.trim();
-if (usedToken) {
+  const usedToken = document.getElementById('regInviteCode').value.trim();
+  if (usedToken) {
   await supa
     .from('invites')
     .update({ used: true, acceptedby: result.data.user.id })
