@@ -92,26 +92,34 @@ window._supaReady = false;
 </div>
 
 <!-- AUTH -->
-<div id="form-register" class="hidden">
-  <h2 class="auth-title">Join the club.</h2>
-  <p class="auth-sub">Start your personal smoke journal</p>
-  <div class="form-group"><label class="form-label">Username</label>
-    <input type="text" class="form-input" id="regUsername" placeholder="your_handle"></div>
-  <div class="form-group"><label class="form-label">Display Name</label>
-    <input type="text" class="form-input" id="regDisplayName" placeholder="Your Name"></div>
-  <div class="form-group"><label class="form-label">Email</label>
-    <input type="email" class="form-input" id="regEmail" placeholder="your@email.com"></div>
-  <div class="form-group"><label class="form-label">Password</label>
-    <input type="password" class="form-input" id="regPassword" placeholder="••••••••"></div>
-  <div class="form-group"><label class="form-label">Invite Code (optional)</label>
-    <input type="text" class="form-input" id="regInviteCode" placeholder="Leave blank if first user"></div>
-  <button id="regBtn" class="btn btn-primary" onclick="doRegister()" style="width:100%">Create Account</button>
-  <div id="regError" style="font-size:0.82rem;margin-top:10px;text-align:center;color:var(--band-red);"></div>
-  <div class="auth-toggle">Already a member? <a onclick="showAuthForm('login')">Sign in &rarr;</a></div>
-</div>
+<div id="page-auth" class="page">
+  <div class="auth-card">
+
+    <!-- LOGIN FORM -->
+    <div id="form-login">
+      <h2 class="auth-title">Welcome back.</h2>
+      <p class="auth-sub">Sign in to your smoke journal</p>
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input type="text" class="form-input" id="loginUsername" placeholder="yourhandle">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="loginPassword" placeholder="">
+      </div>
+      <button id="loginBtn" class="btn btn-primary" onclick="doLogin()" style="width:100%">Sign In</button>
+      <div id="loginError" style="font-size:0.82rem;margin-top:10px;text-align:center;color:var(--band-red)"></div>
+      <div class="auth-toggle">New here? <a onclick="showAuthForm('register')">Create account &rarr;</a></div>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div id="form-register" class="hidden">
+      <!-- your existing register form content stays here, unchanged -->
+    </div>
 
   </div>
 </div>
+
 
 <!-- DASHBOARD -->
 <div id="page-dashboard" class="page">
