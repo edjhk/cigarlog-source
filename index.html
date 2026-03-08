@@ -617,7 +617,9 @@ function handleSearchInput(q) {
       if (!added) {
         var hdr = document.createElement("div");
         hdr.className = "search-brand-header"; hdr.textContent = b.name;
+        hdr.style.display = "none";
         results.appendChild(hdr); added = true;
+
       }
       (function(bName, fName) {
         var row = document.createElement("div");
