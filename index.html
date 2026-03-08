@@ -279,7 +279,7 @@ function initSupa() {
   );
   return supa;
 }
-
+var _supa = initSupa();
 var currentUser = null;
 var caDatabase  = [];
 var logSelectedCigar = null;
@@ -872,7 +872,7 @@ async function postSidebarMedia(fileInput) {
 
 // ── INVITES ───────────────────────────────────────────────────────────────────
 async function generateInvite() {
-  var name = document.getElementById('invite_Name').value.trim() || 'Friend';
+  var name = document.getElementById('inviteName').value.trim() || 'Friend';
   var token = Math.random().toString(36).substring(2,10).toUpperCase();
   var { error } = await supa.from('invites').insert({
     invited_by: currentUser.supabaseId,
@@ -1023,17 +1023,14 @@ function showToast(msg) {
   await loadCA();
   var session = localStorage.getItem('clsession');
   if (!session) { updateNav(); return; }
-  var { data: prof } = await _supa.from("profiles").select("*").eq("username", session).single();
-  if (!prof) { localStorage.removeItem("cl_session"); updateNav(); return; }
+  var { data: prof } = await supa.from("profiles").select("*").eq("username", session).single();
 
+  if (!prof) { localStorage.removeItem("cl_session"); updateNav(); return; }
   currentUser = { username: prof.username, displayName: prof.display_name || prof.username, avatar: prof.avatar || "", isAdmin: prof.is_admin || false, supabaseId: prof.id };
   updateNav();
   showPage("dashboard");
   subscribeToFeed();
-})();
 
-window.addEventListener("load", function() {
-  _init();
   var ff = document.getElementById("sidebarFeedFile");
   var fc = document.getElementById("sidebarFeedCam");
   var lp = document.getElementById("logPhoto");
@@ -1042,7 +1039,7 @@ window.addEventListener("load", function() {
   if (fc) fc.onchange = function() { postSidebarMedia(this); };
   if (lp) lp.onchange = function() { previewLogPhoto(this); };
   if (lc) lc.onchange = function() { previewLogPhoto(this); };
-});
+})();
 
 window.addEventListener('popstate', function(e) {
   if (e.state && e.state.page) {
