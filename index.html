@@ -980,14 +980,8 @@ function showToast(msg) {
   if (!session) { updateNav(); return; }
   var { data: prof } = await _supa.from("profiles").select("*").eq("username", session).single();
   if (!prof) { localStorage.removeItem("cl_session"); updateNav(); return; }
-  if (!prof.user_id) {
-    var { data: authData } = await _supa.auth.getSession();
-    if (authData && authData.session) {
-      await _supa.from("profiles").update({ user_id: authData.session.user.id }).eq("username", session);
-      prof.user_id = authData.session.user.id;
-    }
-  }
-  currentUser = { username: prof.username, displayName: prof.display_name || prof.username, avatar: prof.avatar || "", isAdmin: prof.is_admin || false, supabaseid: prof.id };
+
+  currentUser = { username: prof.username, displayName: prof.display_name || prof.username, avatar: prof.avatar || "", isAdmin: prof.is_admin || false, supabaseId: prof.id };
   updateNav();
   showPage("dashboard");
   subscribeToFeed();
