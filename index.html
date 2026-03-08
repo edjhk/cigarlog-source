@@ -1095,14 +1095,14 @@ async function init() {
 
     if (inv && !inv.used && new Date(inv.expires_at) > new Date()) {
       updateNav();
-      showPage('auth');
-      showAuthForm('register');
+      document.getElementById('form-register').classList.remove('hidden');
       document.getElementById('regInviteCode').value = inviteToken;
-      showToast("You've been invited by a friend! Create your account below.");
+      showToast("You've been invited! Fill in your details below.");
     } else {
       updateNav();
-      showPage('auth');
       showToast('This invite link is invalid or has already been used.');
+    }
+
     }
     return;
   }
