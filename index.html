@@ -291,25 +291,6 @@ function showAuthForm(which) {
 }
 
 async function doRegister() {
-  var u = document.getElementById('regUsername').value.trim().toLowerCase();
-  var dn = document.getElementById('regDisplayName').value.trim();
-  var em = document.getElementById('regEmail').value.trim();
-  var p = document.getElementById('regPassword').value;
-  var err = document.getElementById('regError');
-  err.textContent = '';
-  if (!u || !p || !dn) { err.textContent = 'All fields required.'; return; }
-  if (p.length < 6) { err.textContent = 'Password must be 6+ characters.'; return; }
-  var btn = document.getElementById('regBtn');
-  btn.textContent = 'Creating...'; btn.disabled = true;
-  var result = await supa.auth.signUp({ email: em || (u + '@cigarlog.app'), password: p });
-  if (result.error) { err.textContent = result.error.message; btn.textContent = 'Create Account'; btn.disabled = false; return; }
-  await supa.from('profiles').insert({ userid: result.data.user.id, username: u, displayname: dn, avatar: '🎩', isadmin: false, email: em || null });
-  localStorage.setItem('cl_session', u);
-  btn.textContent = 'Create Account'; btn.disabled = false;
-  location.reload();
-}
-
-async function doRegister() {
   var u   = document.getElementById("regUsername").value.trim().toLowerCase();
   var dn  = document.getElementById("regDisplayName").value.trim();
   var p   = document.getElementById("regPassword").value;
