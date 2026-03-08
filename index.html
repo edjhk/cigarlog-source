@@ -453,7 +453,8 @@ function navGo(page) {
 function showPage(page) {
   document.querySelectorAll(".page").forEach(function(p) { p.classList.remove("active"); });
   var t = document.getElementById("page-" + page);
-  if (t) t.classList.add("active");
+  if (!t) { console.warn("showPage: no element found for page-" + page); return; }
+  t.classList.add("active");
   if (page === "dashboard")  { renderDashboard(); renderSidebarFeed(); if (!_feedChannel) subscribeToFeed(); }
   if (page === "messages")   { renderFeed(); }
   if (page === "invite")     { renderInviteList(); }
