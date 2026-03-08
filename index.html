@@ -450,6 +450,7 @@ function showPage(page) {
   var t = document.getElementById("page-" + page);
   if (!t) { console.warn("showPage: no element found for page-" + page); return; }
   t.classList.add("active");
+  history.pushState({ page: page }, '', '#' + page);
   if (page === "dashboard")  { renderDashboard(); renderSidebarFeed(); if (!_feedChannel) subscribeToFeed(); }
   if (page === "messages")   { renderFeed(); }
   if (page === "invite")     { renderInviteList(); }
@@ -1028,6 +1029,15 @@ window.addEventListener("load", function() {
   if (lp) lp.onchange = function() { previewLogPhoto(this); };
   if (lc) lc.onchange = function() { previewLogPhoto(this); };
 });
+
+window.addEventListener('popstate', function(e) {
+  if (e.state && e.state.page) {
+    showPage(e.state.page);
+  } else {
+    showPage('dashboard');
+  }
+});
+
 </script>
 </body>
 </html>
