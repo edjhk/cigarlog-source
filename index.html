@@ -713,22 +713,42 @@ function handleLogSearch(q) {
     var bl = b.name.toLowerCase(), brandHit = bl.indexOf(query) !== -1;
     for (var fi = 0; fi < b.families.length; fi++) {
       var fam = b.families[fi];
-      if (brandHit || fam.name.toLowerCase().indexOf(query) !== -1 || (bl+" "+fam.name.toLowerCase()).indexOf(query) !== -1)
+      if (brandHit || fam.name.toLowerCase().indexOf(query) !== -1 || (bl + " " + fam.name.toLowerCase()).indexOf(query) !== -1)
         hits.push({ brand: b.name, fam: fam });
     }
   }
-  if (!hits.length) { div.innerHTML = "<div style='color:var(--ash);padding:8px 12px;font-size:0.85rem;'>No matches.</div>"; return; }
-  var out = "", lastBrand = "";
+  div.innerHTML = "";
+  if (!hits.length) {
+    var empty = document.createElement("div");
+    empty.style.cssText = "color:var(--ash);padding:8px 12px;font-size:0.85rem;";
+    empty.textContent = "No matches.";
+    div.appendChild(empty); return;
+  }
+  var lastBrand = "";
   hits.forEach(function(item) {
     var count = item.fam.cigars ? item.fam.cigars.length : 0;
     if (item.brand !== lastBrand) {
-      out += "<div style='padding:5px 14px 3px;font-size:0.78rem;font-weight:700;text-transform:uppercase;color:var(--dark-tobacco);border-top:1px solid var(--light-ash);margin-top:4px;'>" + item.brand + "</div>";
+      var hdr = document.createElement("div");
+      hdr.style.cssText = "padding:5px 14px 3px;font-size:0.78rem;font-weight:700;text-transform:uppercase;color:var(--dark-tobacco);border-top:1px solid var(--light-ash);margin-top:4px;";
+      hdr.textContent = item.brand;
+      div.appendChild(hdr);
       lastBrand = item.brand;
     }
-    out += "<div style='padding:4px 14px 4px 22px;cursor:pointer;border-bottom:1px solid var(--cream);font-size:0.88rem;' onmousedown="expandLogFamily('" + item.brand.replace(/'/g,"&#39;") + "','" + item.fam.name.replace(/'/g,"&#39;") + "')">" + item.fam.name + " <span style='color:var(--ash);font-size:0.75rem;'>(" + count + ")</span></div>";
+    var row = document.createElement("div");
+    row.style.cssText = "padding:4px 14px 4px 22px;cursor:pointer;border-bottom:1px solid var(--cream);font-size:0.88rem;";
+    var nameSpan = document.createElement("span");
+    nameSpan.textContent = item.fam.name + " ";
+    var countSpan = document.createElement("span");
+    countSpan.style.cssText = "color:var(--ash);font-size:0.75rem;";
+    countSpan.textContent = "(" + count + ")";
+    row.appendChild(nameSpan); row.appendChild(countSpan);
+    (function(bn, fn) {
+      row.onmousedown = function() { expandLogFamily(bn, fn); };
+    })(item.brand, item.fam.name);
+    div.appendChild(row);
   });
-  div.innerHTML = out;
 }
+
 
 function expandLogFamily(brandName, familyName) {
   var div = document.getElementById("logSearchResults");
@@ -737,18 +757,34 @@ function expandLogFamily(brandName, familyName) {
   if (!brand) return;
   for (var i = 0; i < brand.families.length; i++) { if (brand.families[i].name === familyName) { fam = brand.families[i]; break; } }
   if (!fam) return;
-  var out = "<div style='padding:8px 14px;cursor:pointer;font-size:0.82rem;color:var(--tobacco);font-weight:700;border-bottom:1px solid var(--light-ash);' onmousedown="handleLogSearch(document.getElementById('logCigarSearch').value)">&larr; Back</div>";
-  out += "<div style='padding:5px 14px;font-size:0.78rem;color:var(--ash);'>" + brandName + " &rsaquo; " + familyName + "</div>";
+  div.innerHTML = "";
+  var back = document.createElement("div");
+  back.style.cssText = "padding:8px 14px;cursor:pointer;font-size:0.82rem;color:var(--tobacco);font-weight:700;border-bottom:1px solid var(--light-ash);";
+  back.textContent = "\u2190 Back";
+  back.onmousedown = function() { handleLogSearch(document.getElementById("logCigarSearch").value); };
+  div.appendChild(back);
+  var breadcrumb = document.createElement("div");
+  breadcrumb.style.cssText = "padding:5px 14px;font-size:0.78rem;color:var(--ash);";
+  breadcrumb.textContent = brandName + " \u203a " + familyName;
+  div.appendChild(breadcrumb);
   if (!fam.cigars || !fam.cigars.length) {
-    out += "<div style='color:var(--ash);padding:8px 14px;font-size:0.85rem;'>No sizes listed.</div>";
-  } else {
-    fam.cigars.forEach(function(c) {
-      var meta = (c.size && c.size !== "N/A") ? " &middot; " + c.size : "";
-      out += "<div style='padding:9px 14px 9px 22px;cursor:pointer;font-size:0.88rem;border-bottom:1px solid var(--cream);' onmousedown="selectLogCigar('" + brandName.replace(/'/g,"&#39;") + "','" + familyName.replace(/'/g,"&#39;") + "','" + c.name.replace(/'/g,"&#39;") + "')">" + c.name + meta + "</div>";
-    });
+    var empty = document.createElement("div");
+    empty.style.cssText = "color:var(--ash);padding:8px 14px;font-size:0.85rem;";
+    empty.textContent = "No sizes listed.";
+    div.appendChild(empty); return;
   }
-  div.innerHTML = out;
+  fam.cigars.forEach(function(c) {
+    var row = document.createElement("div");
+    row.style.cssText = "padding:9px 14px 9px 22px;cursor:pointer;font-size:0.88rem;border-bottom:1px solid var(--cream);";
+    var meta = (c.size && c.size !== "N/A") ? " \u00b7 " + c.size : "";
+    row.textContent = c.name + meta;
+    (function(bn, fn, cn) {
+      row.onmousedown = function() { selectLogCigar(bn, fn, cn); };
+    })(brandName, familyName, c.name);
+    div.appendChild(row);
+  });
 }
+
 
 function selectLogCigar(brandName, familyName, cigarName) {
   var brand = null, family = null, cigar = null;
