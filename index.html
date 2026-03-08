@@ -92,35 +92,24 @@ window._supaReady = false;
 </div>
 
 <!-- AUTH -->
-<div id="page-auth" class="page active">
-  <div class="auth-card">
-    <div id="form-login">
-      <h2 class="auth-title">Welcome back.</h2>
-      <p class="auth-sub">Sign in to your cigar journal</p>
-      <div class="form-group"><label class="form-label">Username</label>
-        <input type="text" class="form-input" id="loginUsername" placeholder="your_handle"></div>
-      <div class="form-group"><label class="form-label">Password</label>
-        <input type="password" class="form-input" id="loginPassword" placeholder="••••••••"
-          onkeydown="if(event.key==='Enter')doLogin()"></div>
-      <button id="loginBtn" class="btn btn-primary" onclick="doLogin()" style="width:100%">Sign In</button>
-      <div id="loginError" style="color:var(--band-red);font-size:0.82rem;margin-top:10px;text-align:center;"></div>
-      <div class="auth-toggle">New here? <a onclick="showAuthForm('register')">Create account &rarr;</a></div>
-    </div>
-    <div id="form-register" class="hidden">
-      <h2 class="auth-title">Join the club.</h2>
-      <p class="auth-sub">Start your personal smoke journal</p>
-      <div class="form-group"><label class="form-label">Username</label>
-        <input type="text" class="form-input" id="regUsername" placeholder="your_handle"></div>
-      <div class="form-group"><label class="form-label">Display Name</label>
-        <input type="text" class="form-input" id="regDisplayName" placeholder="Your Name"></div>
-      <div class="form-group"><label class="form-label">Password</label>
-        <input type="password" class="form-input" id="regPassword" placeholder="••••••••"></div>
-      <div class="form-group"><label class="form-label">Invite Code (optional)</label>
-        <input type="text" class="form-input" id="regInviteCode" placeholder="Leave blank if first user"></div>
-      <button id="regBtn" class="btn btn-primary" onclick="doRegister()" style="width:100%">Create Account</button>
-      <div id="regError" style="font-size:0.82rem;margin-top:10px;text-align:center;color:var(--band-red);"></div>
-      <div class="auth-toggle">Already a member? <a onclick="showAuthForm('login')">Sign in &rarr;</a></div>
-    </div>
+<div id="form-register" class="hidden">
+  <h2 class="auth-title">Join the club.</h2>
+  <p class="auth-sub">Start your personal smoke journal</p>
+  <div class="form-group"><label class="form-label">Username</label>
+    <input type="text" class="form-input" id="regUsername" placeholder="your_handle"></div>
+  <div class="form-group"><label class="form-label">Display Name</label>
+    <input type="text" class="form-input" id="regDisplayName" placeholder="Your Name"></div>
+  <div class="form-group"><label class="form-label">Email</label>
+    <input type="email" class="form-input" id="regEmail" placeholder="your@email.com"></div>
+  <div class="form-group"><label class="form-label">Password</label>
+    <input type="password" class="form-input" id="regPassword" placeholder="••••••••"></div>
+  <div class="form-group"><label class="form-label">Invite Code (optional)</label>
+    <input type="text" class="form-input" id="regInviteCode" placeholder="Leave blank if first user"></div>
+  <button id="regBtn" class="btn btn-primary" onclick="doRegister()" style="width:100%">Create Account</button>
+  <div id="regError" style="font-size:0.82rem;margin-top:10px;text-align:center;color:var(--band-red);"></div>
+  <div class="auth-toggle">Already a member? <a onclick="showAuthForm('login')">Sign in &rarr;</a></div>
+</div>
+
   </div>
 </div>
 
@@ -263,14 +252,20 @@ window._supaReady = false;
 <!-- SETTINGS -->
 <div id="page-settings" class="page">
   <div style="max-width:1000px;margin:0 auto;padding:40px 20px;">
-    <button class="btn btn-secondary" onclick="event.stopPropagation();showPage('dashboard');" style="margin-bottom:24px;">&larr; Back</button>    <h2 style="font-family:'Playfair Display',serif;margin-bottom:24px;">Settings</h2>
+    <button class="btn btn-secondary" onclick="event.stopPropagation();showPage('dashboard');" style="margin-bottom:24px;">← Back</button>
+    <h2 style="font-family:'Playfair Display',serif;margin-bottom:24px;">Settings</h2>
     <div class="admin-section" id="adminPanel" style="display:none;">
-      <h3>Admin Panel</h3>
+      <h3 style="margin-bottom:16px;">Admin Panel</h3>
+      <div style="display:flex;gap:8px;margin-bottom:20px;">
+        <button class="btn btn-secondary" id="adminTabUsers" onclick="switchAdminTab('users')" style="padding:6px 18px;font-size:0.85rem;">👤 Users</button>
+        <button class="btn btn-secondary" id="adminTabMessages" onclick="switchAdminTab('messages')" style="padding:6px 18px;font-size:0.85rem;">💬 Messages</button>
+      </div>
       <div id="adminUsers"></div>
-      <div id="adminFeed" style="margin-top:24px;"></div>
+      <div id="adminFeed" style="display:none;"></div>
     </div>
   </div>
 </div>
+
 
 <div id="toast-el" class="toast"></div>
 
@@ -295,41 +290,22 @@ function showAuthForm(which) {
   document.getElementById("form-register").classList.toggle("hidden", which !== "register");
 }
 
-async function doLogin() {
-  var u   = document.getElementById("loginUsername").value.trim().toLowerCase();
-  var p   = document.getElementById("loginPassword").value;
-  var err = document.getElementById("loginError");
-  err.textContent = "";
-  if (!u || !p) { err.textContent = "Enter both fields."; return; }
-
-  var btn = document.getElementById("loginBtn");
-  btn.textContent = "Signing in..."; btn.disabled = true;
-
-  var email = u.includes("@") ? u : u + "@cigarlog.app";
-  var result = await _supa.auth.signInWithPassword({ email: email, password: p });
-  if (result.error && !u.includes("@")) {
-    result = await _supa.auth.signInWithPassword({ email: u, password: p });
-  }
-  if (result.error) {
-    err.textContent = "Invalid username or password.";
-    btn.textContent = "Sign In"; btn.disabled = false; return;
-  }
-  var uid = result.data.user.id;
-  var { data: prof } = await _supa.from("profiles").select("*").eq("id", uid).single();
-  if (!prof) {
-    var { data: prof2 } = await _supa.from("profiles").select("*").eq("username", u).single();
-    if (prof2) {
-      await _supa.from("profiles").update({ user_id: uid }).eq("username", u);
-      prof = prof2; prof.user_id = uid;
-    }
-  }
-  if (prof) {
-    localStorage.setItem("cl_session", prof.username);
-  } else {
-    err.textContent = "Profile not found. Contact admin.";
-    btn.textContent = "Sign In"; btn.disabled = false; return;
-  }
-  btn.textContent = "Sign In"; btn.disabled = false;
+async function doRegister() {
+  var u = document.getElementById('regUsername').value.trim().toLowerCase();
+  var dn = document.getElementById('regDisplayName').value.trim();
+  var em = document.getElementById('regEmail').value.trim();
+  var p = document.getElementById('regPassword').value;
+  var err = document.getElementById('regError');
+  err.textContent = '';
+  if (!u || !p || !dn) { err.textContent = 'All fields required.'; return; }
+  if (p.length < 6) { err.textContent = 'Password must be 6+ characters.'; return; }
+  var btn = document.getElementById('regBtn');
+  btn.textContent = 'Creating...'; btn.disabled = true;
+  var result = await supa.auth.signUp({ email: em || (u + '@cigarlog.app'), password: p });
+  if (result.error) { err.textContent = result.error.message; btn.textContent = 'Create Account'; btn.disabled = false; return; }
+  await supa.from('profiles').insert({ userid: result.data.user.id, username: u, displayname: dn, avatar: '🎩', isadmin: false, email: em || null });
+  localStorage.setItem('cl_session', u);
+  btn.textContent = 'Create Account'; btn.disabled = false;
   location.reload();
 }
 
@@ -940,46 +916,89 @@ async function renderInviteList() {
   }).join("");
 }
 
-// ── ADMIN ─────────────────────────────────────────────────────────────────────
+// ADMIN
+function switchAdminTab(tab) {
+  document.getElementById('adminUsers').style.display = tab === 'users' ? 'block' : 'none';
+  document.getElementById('adminFeed').style.display = tab === 'messages' ? 'block' : 'none';
+  document.getElementById('adminTabUsers').style.background = tab === 'users' ? 'var(--ember)' : '';
+  document.getElementById('adminTabMessages').style.background = tab === 'messages' ? 'var(--ember)' : '';
+}
+
 async function renderAdminPanel() {
-  var panel = document.getElementById("adminPanel"); panel.style.display = "block";
-  var { data: users } = await _supa.from("profiles").select("*").order("created_at");
-  var uDiv = document.getElementById("adminUsers");
-  uDiv.innerHTML = "<h4 style='margin-bottom:12px;'>Users</h4>";
-  (users || []).forEach(function(u) {
-    var row = document.createElement("div"); row.className = "admin-item";
-    var label = document.createElement("span");
-    label.textContent = (u.display_name || u.username) + " (" + u.username + ")";
-    var btn = document.createElement("button"); btn.className = "admin-btn"; btn.textContent = "Delete";
-    btn.onclick = function() { deleteUser(u.id); };
-    row.appendChild(label); row.appendChild(btn); uDiv.appendChild(row);
-  });
-  var { data: posts } = await _supa.from("feed_posts").select("*").order("created_at", { ascending: false }).limit(20);
-  var pDiv = document.getElementById("adminFeed");
-  pDiv.innerHTML = "<h4 style='margin-bottom:12px;margin-top:24px;'>Recent Posts</h4>";
-  (posts || []).forEach(function(p) {
-    var row = document.createElement("div"); row.className = "admin-item";
-    var label = document.createElement("span");
-    label.textContent = (p.username || "") + ": " + (p.text || "").substring(0,60);
-    var btn = document.createElement("button"); btn.className = "admin-btn"; btn.textContent = "Delete";
-    btn.onclick = function() { deletePost(p.id); };
-    row.appendChild(label); row.appendChild(btn); pDiv.appendChild(row);
+  var panel = document.getElementById('adminPanel');
+  panel.style.display = 'block';
+  switchAdminTab('users');
+  await renderAdminUsers();
+  await renderAdminMessages();
+}
+
+async function renderAdminUsers() {
+  var uDiv = document.getElementById('adminUsers');
+  uDiv.innerHTML = '<div style="color:var(--ash);padding:12px;">Loading...</div>';
+  var { data: users } = await supa.from('profiles').select().order('created_at');
+  uDiv.innerHTML = '';
+  if (!users || !users.length) { uDiv.innerHTML = '<div style="color:var(--ash);">No users found.</div>'; return; }
+  users.forEach(function(u) {
+    var row = document.createElement('div');
+    row.className = 'admin-item';
+    row.innerHTML = `
+      <div>
+        <div style="font-weight:700;font-size:0.92rem;">${u.displayname || u.username}</div>
+        <div style="font-size:0.75rem;color:var(--ash);">@${u.username} · ${u.email || 'no email'} · joined ${u.created_at ? new Date(u.created_at).toLocaleDateString() : '?'}</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        ${u.email ? `<button class="admin-btn" style="background:var(--tobacco);" onclick="sendPasswordReset('${u.email}','${u.displayname||u.username}')">Reset PW</button>` : ''}
+        <button class="admin-btn" onclick="deleteUser('${u.id}')">Delete</button>
+      </div>`;
+    uDiv.appendChild(row);
   });
 }
 
+async function renderAdminMessages() {
+  var pDiv = document.getElementById('adminFeed');
+  pDiv.innerHTML = '<div style="color:var(--ash);padding:12px;">Loading...</div>';
+  var { data: posts } = await supa.from('feedposts').select().order('created_at', { ascending: false }).limit(50);
+  pDiv.innerHTML = '';
+  if (!posts || !posts.length) { pDiv.innerHTML = '<div style="color:var(--ash);">No messages.</div>'; return; }
+  posts.forEach(function(p) {
+    var row = document.createElement('div');
+    row.className = 'admin-item';
+    row.innerHTML = `
+      <div>
+        <div style="font-weight:700;font-size:0.88rem;">${p.username}</div>
+        <div style="font-size:0.82rem;color:var(--charcoal);margin-top:2px;">${(p.text||'').substring(0,80)}${p.photourl ? ' 📷' : ''}</div>
+        <div style="font-size:0.72rem;color:var(--ash);margin-top:2px;">${new Date(p.created_at).toLocaleString()}</div>
+      </div>
+      <button class="admin-btn" onclick="deletePost('${p.id}')">Delete</button>`;
+    pDiv.appendChild(row);
+  });
+}
 
 async function deleteUser(id) {
-  if (!confirm("Delete this user?")) return;
-  var { error } = await _supa.from("profiles").delete().eq("id", id);
-  if (error) { showToast("Error: " + error.message); return; }
-  renderAdminPanel(); showToast("User deleted");
+  if (!confirm('Delete this user?')) return;
+  var { error } = await supa.from('profiles').delete().eq('id', id);
+  if (error) { showToast('Error: ' + error.message); return; }
+  showToast('User deleted');
+  renderAdminUsers();
 }
 
 async function deletePost(id) {
-  if (!confirm("Delete this post?")) return;
-  await _supa.from("feed_posts").delete().eq("id", id);
-  renderAdminPanel(); renderSidebarFeed(); showToast("Post deleted");
+  if (!confirm('Delete this message?')) return;
+  await supa.from('feedposts').delete().eq('id', id);
+  showToast('Message deleted');
+  renderAdminMessages();
+  renderSidebarFeed();
 }
+
+async function sendPasswordReset(email, name) {
+  if (!confirm('Send password reset email to ' + name + '?')) return;
+  var { error } = await supa.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + window.location.pathname
+  });
+  if (error) { showToast('Error: ' + error.message); return; }
+  showToast('Reset email sent to ' + name);
+}
+
 
 // ── LOCATION ──────────────────────────────────────────────────────────────────
 function useMyLocation() {
