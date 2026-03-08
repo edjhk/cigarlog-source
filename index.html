@@ -887,22 +887,30 @@ async function generateInvite() {
   renderInviteList();
 }
 
-
 function copyInviteLink() {
-  navigator.clipboard.writeText(document.getElementById("inviteLinkText").textContent)
-    .then(function() { showToast("Link copied!"); });
+  navigator.clipboard.writeText(document.getElementById('inviteLinkText').textContent)
+    .then(function() { showToast('Link copied!'); });
 }
 
 async function renderInviteList() {
-  var div = document.getElementById("inviteList"); if (!div || !currentUser) return;
-  var { data: invites } = await _supa.from("invites").select("*").eq("invited_by", currentUser.supabaseId).order("created_at", { ascending: false });
-  if (!invites || !invites.length) { div.innerHTML = "<div style='color:var(--ash);font-size:0.85rem;'>No invites yet.</div>"; return; }
+  var div = document.getElementById('inviteList');
+  if (!div || !currentUser) return;
+  var { data: invites } = await initSupa().from('invites').select()
+    .eq('invited_by', currentUser.supabaseId)
+    .order('created_at', { ascending: false });
+  if (!invites || !invites.length) {
+    div.innerHTML = '<div style="color:var(--ash);font-size:0.85rem;">No invites yet.</div>';
+    return;
+  }
   div.innerHTML = invites.map(function(inv) {
-    return "<div style='display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--light-ash);font-size:0.85rem;'>"
-      + "<span>" + inv.invited_name + " <span style='color:var(--ash);font-size:0.75rem;'>" + new Date(inv.created_at).toLocaleDateString() + "</span></span>"
-      + "<span style='color:" + (inv.used ? "var(--success)" : "var(--tobacco)") + ";'>" + (inv.used ? "Used" : "Pending") + "</span></div>";
-  }).join("");
+    return `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--light-ash);font-size:0.85rem;">
+      <span>${inv.invited_name}</span>
+      <span style="color:var(--ash);font-size:0.75rem;">${new Date(inv.created_at).toLocaleDateString()}</span>
+      <span style="color:${inv.used ? 'var(--success)' : 'var(--tobacco)'};">${inv.used ? 'Used' : 'Pending'}</span>
+    </div>`;
+  }).join('');
 }
+
 
 // ADMIN
 function switchAdminTab(tab) {
