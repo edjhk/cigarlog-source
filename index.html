@@ -286,6 +286,7 @@ var logSelectedCigar = null;
 var _feedChannel = null;
 
 // ── AUTH ──────────────────────────────────────────────────────────────────────
+// ── AUTH ──────────────────────────────────────────────────────────────────────
 function showAuthForm(which) {
   document.getElementById("form-login").classList.toggle("hidden", which !== "login");
   document.getElementById("form-register").classList.toggle("hidden", which !== "register");
@@ -304,18 +305,16 @@ async function doRegister() {
   var result = await _supa.auth.signUp({ email: u + "@cigarlog.app", password: p });
   if (result.error) { err.textContent = result.error.message; btn.textContent = "Create Account"; btn.disabled = false; return; }
   await _supa.from("profiles").insert({ user_id: result.data.user.id, username: u, display_name: dn, avatar: "", is_admin: false });
-  localStorage.setItem("cl_session", u);
-  btn.textContent = "Create Account"; btn.disabled = false;
-  location.reload();
   // Mark invite as used if one was provided
   const usedToken = document.getElementById('regInviteCode').value.trim();
   if (usedToken) {
-  await supa
-    .from('invites')
-    .update({ used: true, acceptedby: result.data.user.id })
-    .eq('token', usedToken);
-}
-
+    await _supa.from('invites')
+      .update({ used: true, accepted_by: result.data.user.id })
+      .eq('token', usedToken);
+  }
+  localStorage.setItem("cl_session", u);
+  btn.textContent = "Create Account"; btn.disabled = false;
+  location.reload();
 }
 
 function doLogout() {
@@ -325,6 +324,7 @@ function doLogout() {
   updateNav();
   showPage("auth");
 }
+
 
 // ── NAV ───────────────────────────────────────────────────────────────────────
 function toggleUserMenu() {
@@ -884,14 +884,14 @@ async function generateInvite() {
   var name = document.getElementById('inviteName').value.trim();
   if (!name) { showToast('Please enter a name for the invite.'); return; }
   var token = Math.random().toString(36).substring(2,10).toUpperCase();
-  var expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+  var expires_at = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
   var { error } = await supa.from('invites').insert({
     invited_by: currentUser.supabaseId,
     invited_name: name,
     invited_email: '',
     token: token,
     used: false,
-    expires_at: expiresAt
+    expires_at: expires_at
   });
   if (error) { showToast('Error: ' + error.message); return; }
   var link = window.location.origin + window.location.pathname + '?invite=' + token;
@@ -902,11 +902,11 @@ async function generateInvite() {
 
 async function regenerateInvite(oldId, name) {
   var token = Math.random().toString(36).substring(2,10).toUpperCase();
-  var expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+  var expires_at = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
   var { error } = await supa.from('invites').update({
     token: token,
     used: false,
-    expires_at: expiresAt,
+    expires_at: expires_at,
     accepted_by: null
   }).eq('id', oldId);
   if (error) { showToast('Error: ' + error.message); return; }
@@ -1082,51 +1082,39 @@ function showToast(msg) {
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 async function init() {
-  await loadCA;
+  await loadCA();
 
   // ── Handle invite link FIRST ──────────────────────────
   const urlParams = new URLSearchParams(window.location.search);
   const inviteToken = urlParams.get('invite');
   if (inviteToken) {
-      // ... your invite validation code ...
-      return;
-  }
+    const { data: inv } = await _supa
+      .from('invites')
+      .select()
+      .eq('token', inviteToken)
+      .single();
 
+    if (inv && !inv.used && new Date(inv.expires_at) > new Date()) {
+      updateNav();
+      showPage('auth');
+      showAuthForm('register');
+      document.getElementById('regInviteCode').value = inviteToken;
+      showToast("You've been invited by a friend! Create your account below.");
+    } else {
+      updateNav();
+      showPage('auth');
+      showToast('This invite link is invalid or has already been used.');
+    }
+    return;
+  }
   // ── THEN check session ────────────────────────────────
-  var session = localStorage.getItem('clsession');
-  if (!session) {
-    updateNav();
-    showPage('auth');
-    return;
-  }
-  // ... rest of init ...
-}
-
-  // Validate the token against Supabase
-  const { data: inv } = await supa
-    .from('invites')
-    .select()
-    .eq('token', inviteToken)
-    .single();
-
-  if (inv && !inv.used && new Date(inv.expiresat) > new Date()) {
-    // Valid invite — pre-fill the code and show registration
-    updateNav();
-    showPage('auth');
-    showAuthForm('register');
-    document.getElementById('regInviteCode').value = inviteToken;
-    showToast(`You've been invited by a friend! Create your account below.`);
-    return; // stop init from redirecting to auth or dashboard
-  } else {
-    // Invalid or expired
-    updateNav();
-    showPage('auth');
-    showToast('This invite link is invalid or has already been used.');
-    return;
-  }
-}
-// ── End invite handling ───────────────────────────────────
-
+  var session = localStorage.getItem('cl_session');
+  if (!session) { updateNav(); showPage('auth'); return; }
+  var { data: profile } = await _supa.from('profiles').select().eq('username', session).single();
+  if (!profile) { updateNav(); showPage('auth'); return; }
+  currentUser = { supabaseId: profile.user_id, username: profile.username, displayName: profile.display_name, avatar: profile.avatar, isAdmin: profile.is_admin };
+  updateNav();
+  showPage('dashboard');
 
   var ff = document.getElementById("sidebarFeedFile");
   var fc = document.getElementById("sidebarFeedCam");
@@ -1136,7 +1124,7 @@ async function init() {
   if (fc) fc.onchange = function() { postSidebarMedia(this); };
   if (lp) lp.onchange = function() { previewLogPhoto(this); };
   if (lc) lc.onchange = function() { previewLogPhoto(this); };
-})();
+}
 
 window.addEventListener('popstate', function(e) {
   if (e.state && e.state.page) {
