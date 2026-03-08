@@ -848,7 +848,7 @@ function appendSidebarPost(post) {
   var bubble = document.createElement("div");
   bubble.style.cssText = "padding:7px 11px;border-radius:" + (isMe ? "14px 14px 3px 14px" : "14px 14px 14px 3px") + ";background:" + (isMe ? "var(--tobacco)" : "var(--cream)") + ";color:" + (isMe ? "#fff" : "var(--charcoal)") + ";font-size:0.85rem;word-break:break-word;";
   if (post.photo_url) { var img = document.createElement("img"); img.src = post.photo_url; img.style.cssText = "max-width:140px;border-radius:8px;margin-bottom:3px;display:block;"; bubble.appendChild(img); }
-    if (post.text) {
+  if (post.text) {
     if (/(https?:\/\/[^\s]+)/g.test(post.text)) {
       post.text.split(/(https?:\/\/[^\s]+)/g).forEach(function(part) {
         if (/^https?:\/\//.test(part)) {
@@ -860,14 +860,17 @@ function appendSidebarPost(post) {
           card.style.cssText = 'margin-top:6px;border-radius:10px;overflow:hidden;border:1px solid var(--light-ash);cursor:pointer;max-width:280px;';
           card.onclick = function(){ window.open(part,'_blank'); };
           bubble.appendChild(card);
-          _supa.functions.invoke('link-preview', { body: { url: part } }).then(function(r) {
-            if (!r.data || r.data.error) return;
-            var d = r.data;
+          fetch('https://flrqhivvjimahfrdoxwt.supabase.co/functions/v1/link-preview', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZscnFoaXZ2amltYWhmcmRveHd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4ODkyNzUsImV4cCI6MjA4ODQ2NTI3NX0.3PoCVkRGM3fLyu0MXsaz4ZKH1zsuo_HVcKUZpciOAAk' },
+            body: JSON.stringify({ url: part })
+          }).then(function(res) { return res.json(); }).then(function(r) {
+            if (!r || r.error) return;
             card.innerHTML =
-              (d.image ? '<img src="'+d.image+'" style="width:100%;max-height:130px;object-fit:cover;display:block;">' : '') +
+              (r.image ? '<img src="'+r.image+'" style="width:100%;max-height:130px;object-fit:cover;display:block;">' : '') +
               '<div style="padding:8px 10px;background:#fff;">' +
-              '<div style="font-size:0.82rem;font-weight:700;color:var(--charcoal);line-height:1.3;margin-bottom:3px;">'+d.title+'</div>' +
-              '<div style="font-size:0.72rem;color:var(--ash);">'+d.domain+'</div>' +
+              '<div style="font-size:0.82rem;font-weight:700;color:var(--charcoal);line-height:1.3;margin-bottom:3px;">'+r.title+'</div>' +
+              '<div style="font-size:0.72rem;color:var(--ash);">'+r.domain+'</div>' +
               '</div>';
           });
         } else if (part) {
@@ -878,14 +881,13 @@ function appendSidebarPost(post) {
       bubble.appendChild(document.createTextNode(post.text));
     }
   }
-
-
   var meta = document.createElement("div");
   meta.style.cssText = "font-size:0.65rem;color:var(--ash);margin-top:2px;";
   meta.textContent = (isMe ? "" : post.username + " · ") + new Date(post.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   wrap.appendChild(bubble); wrap.appendChild(meta); div.appendChild(wrap);
   div.scrollTop = div.scrollHeight;
 }
+
 
 function subscribeToFeed() {
   if (_feedChannel) _supa.removeChannel(_feedChannel);
