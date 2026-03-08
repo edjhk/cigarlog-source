@@ -850,7 +850,8 @@ function appendSidebarPost(post) {
   var bubble = document.createElement("div");
   bubble.style.cssText = "padding:7px 11px;border-radius:" + (isMe ? "14px 14px 3px 14px" : "14px 14px 14px 3px") + ";background:" + (isMe ? "var(--tobacco)" : "var(--cream)") + ";color:" + (isMe ? "#fff" : "var(--charcoal)") + ";font-size:0.85rem;word-break:break-word;";
   if (post.photo_url) { var img = document.createElement("img"); img.src = post.photo_url; img.style.cssText = "max-width:140px;border-radius:8px;margin-bottom:3px;display:block;"; bubble.appendChild(img); }
-  if (post.text) bubble.appendChild(document.createTextNode(post.text));
+  if (post.text) if(/(https?:\/\/[^\s]+)/g.test(post.text)){post.text.split(/(https?:\/\/[^\s]+)/g).forEach(function(p){if(/^https?:\/\//.test(p)){var a=document.createElement('a');a.href=p;a.textContent=p;a.target='_blank';a.style.color='var(--gold-light)';bubble.appendChild(a);}else if(p){bubble.appendChild(document.createTextNode(p));}});}else{bubble.appendChild(document.createTextNode(post.text));}
+
   var meta = document.createElement("div");
   meta.style.cssText = "font-size:0.65rem;color:var(--ash);margin-top:2px;";
   meta.textContent = (isMe ? "" : post.username + " · ") + new Date(post.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
