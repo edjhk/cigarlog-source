@@ -974,9 +974,11 @@ async function renderAdminPanel() {
 
 async function deleteUser(id) {
   if (!confirm("Delete this user?")) return;
-  await _supa.from("profiles").delete().eq("id", id);
+  var { error } = await _supa.from("profiles").delete().eq("id", id);
+  if (error) { showToast("Error: " + error.message); return; }
   renderAdminPanel(); showToast("User deleted");
 }
+
 async function deletePost(id) {
   if (!confirm("Delete this post?")) return;
   await _supa.from("feed_posts").delete().eq("id", id);
