@@ -901,7 +901,7 @@ async function postSidebarFeed() {
   if (!text || !currentUser) return;
   input.value = "";
   await _supa.from("feed_posts").insert({ user_id: currentUser.supabaseId, username: currentUser.displayName || currentUser.username, text: text });
-  appendSidebarPost({ username: currentUser.displayName || currentUser.username, text: text, photo_url: photoUrl || null, created_at: new Date().toISOString() });
+  appendSidebarPost({ username: currentUser.displayName || currentUser.username, text: text, photo_url: null, created_at: new Date().toISOString() });
 
 }
 
