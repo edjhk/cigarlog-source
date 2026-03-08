@@ -874,19 +874,22 @@ async function postSidebarMedia(fileInput) {
 async function generateInvite() {
   var name = document.getElementById('inviteName').value.trim() || 'Friend';
   var token = Math.random().toString(36).substring(2,10).toUpperCase();
-  var { error } = await supa.from('invites').insert({
+  console.log('currentUser:', JSON.stringify(currentUser));
+  var result = await supa.from('invites').insert({
     invited_by: currentUser.supabaseId,
     invited_name: name,
     invited_email: null,
     token: token,
     used: false
   });
-  if (error) { showToast('Error: ' + error.message); return; }
+  console.log('insert result:', JSON.stringify(result));
+  if (result.error) { showToast('Error: ' + result.error.message); return; }
   var link = window.location.origin + window.location.pathname + '?invite=' + token;
   document.getElementById('inviteLinkText').textContent = link;
   document.getElementById('inviteResult').style.display = 'block';
   renderInviteList();
 }
+
 
 function copyInviteLink() {
   navigator.clipboard.writeText(document.getElementById('inviteLinkText').textContent)
