@@ -1081,23 +1081,27 @@ function showToast(msg) {
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
-(async function init() {
-  await loadCA();
-  var session = localStorage.getItem('cl_session');
-  if (!session) { updateNav(); showPage('auth'); return; }
-  var { data: prof } = await supa.from("profiles").select("*").eq("username", session).single();
+async function init() {
+  await loadCA;
 
-  if (!prof) { localStorage.removeItem("cl_session"); updateNav(); return; }
-  currentUser = { username: prof.username, displayName: prof.display_name || prof.username, avatar: prof.avatar || "", isAdmin: prof.is_admin || false, supabaseId: prof.id };
-  updateNav();
-  showPage("dashboard");
-  subscribeToFeed();
+  // ── Handle invite link FIRST ──────────────────────────
+  const urlParams = new URLSearchParams(window.location.search);
+  const inviteToken = urlParams.get('invite');
+  if (inviteToken) {
+      // ... your invite validation code ...
+      return;
+  }
 
-  // ── Handle invite link ────────────────────────────────────
-const urlParams = new URLSearchParams(window.location.search);
-const inviteToken = urlParams.get('invite');
+  // ── THEN check session ────────────────────────────────
+  var session = localStorage.getItem('clsession');
+  if (!session) {
+    updateNav();
+    showPage('auth');
+    return;
+  }
+  // ... rest of init ...
+}
 
-if (inviteToken) {
   // Validate the token against Supabase
   const { data: inv } = await supa
     .from('invites')
