@@ -884,7 +884,7 @@ async function generateInvite() {
   if (!name) { showToast('Please enter a name for the invite.'); return; }
   var token = Math.random().toString(36).substring(2,10).toUpperCase();
   var expires_at = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
-  var { error } = await supa.from('invites').insert({
+  var { error } = await _supa.from('invites').insert({
     invited_by: currentUser.supabaseId,
     invited_name: name,
     invited_email: '',
@@ -902,7 +902,7 @@ async function generateInvite() {
 async function regenerateInvite(oldId, name) {
   var token = Math.random().toString(36).substring(2,10).toUpperCase();
   var expires_at = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
-  var { error } = await supa.from('invites').update({
+  var { error } = await _supa.from('invites').update({
     token: token,
     used: false,
     expires_at: expires_at,
@@ -924,7 +924,7 @@ function copyInviteLink() {
 async function renderInviteList() {
   var div = document.getElementById('inviteList');
   if (!div || !currentUser) return;
-  var { data: invites } = await supa.from('invites').select('*')
+  var { data: invites } = await _supa.from('invites').select('*')
     .eq('invited_by', currentUser.supabaseId)
     .order('created_at', { ascending: false });
   if (!invites || !invites.length) {
@@ -993,7 +993,7 @@ async function renderAdminPanel() {
 async function renderAdminUsers() {
   var uDiv = document.getElementById('adminUsers');
   uDiv.innerHTML = '<div style="color:var(--ash);padding:12px;">Loading...</div>';
-  var { data: users } = await supa.from('profiles').select().order('created_at');
+  var { data: users } = await _supa.from('profiles').select().order('created_at');
   uDiv.innerHTML = '';
   if (!users || !users.length) { uDiv.innerHTML = '<div style="color:var(--ash);">No users found.</div>'; return; }
   users.forEach(function(u) {
@@ -1001,11 +1001,11 @@ async function renderAdminUsers() {
     row.className = 'admin-item';
     row.innerHTML = `
       <div>
-        <div style="font-weight:700;font-size:0.92rem;">${u.displayname || u.username}</div>
+        <div style="font-weight:700;font-size:0.92rem;">${u.display_name || u.username}</div>
         <div style="font-size:0.75rem;color:var(--ash);">@${u.username} · ${u.email || 'no email'} · joined ${u.created_at ? new Date(u.created_at).toLocaleDateString() : '?'}</div>
       </div>
       <div style="display:flex;gap:8px;align-items:center;">
-        ${u.email ? `<button class="admin-btn" style="background:var(--tobacco);" onclick="sendPasswordReset('${u.email}','${u.displayname||u.username}')">Reset PW</button>` : ''}
+        ${u.email ? `<button class="admin-btn" style="background:var(--tobacco);" onclick="sendPasswordReset('${u.email}','${u.display_name||u.username}')">Reset PW</button>` : ''}
         <button class="admin-btn" onclick="deleteUser('${u.id}')">Delete</button>
       </div>`;
     uDiv.appendChild(row);
@@ -1015,7 +1015,7 @@ async function renderAdminUsers() {
 async function renderAdminMessages() {
   var pDiv = document.getElementById('adminFeed');
   pDiv.innerHTML = '<div style="color:var(--ash);padding:12px;">Loading...</div>';
-  var { data: posts } = await supa.from('feedposts').select().order('created_at', { ascending: false }).limit(50);
+  var { data: posts } = await _supa.from('feedposts').select().order('created_at', { ascending: false }).limit(50);
   pDiv.innerHTML = '';
   if (!posts || !posts.length) { pDiv.innerHTML = '<div style="color:var(--ash);">No messages.</div>'; return; }
   posts.forEach(function(p) {
@@ -1024,7 +1024,7 @@ async function renderAdminMessages() {
     row.innerHTML = `
       <div>
         <div style="font-weight:700;font-size:0.88rem;">${p.username}</div>
-        <div style="font-size:0.82rem;color:var(--charcoal);margin-top:2px;">${(p.text||'').substring(0,80)}${p.photourl ? ' 📷' : ''}</div>
+        <div style="font-size:0.82rem;color:var(--charcoal);margin-top:2px;">${(p.text||'').substring(0,80)}${p.photo_url ? ' 📷' : ''}</div>
         <div style="font-size:0.72rem;color:var(--ash);margin-top:2px;">${new Date(p.created_at).toLocaleString()}</div>
       </div>
       <button class="admin-btn" onclick="deletePost('${p.id}')">Delete</button>`;
@@ -1034,7 +1034,7 @@ async function renderAdminMessages() {
 
 async function deleteUser(id) {
   if (!confirm('Delete this user?')) return;
-  var { error } = await supa.from('profiles').delete().eq('id', id);
+  var { error } = await _supa.from('profiles').delete().eq('id', id);
   if (error) { showToast('Error: ' + error.message); return; }
   showToast('User deleted');
   renderAdminUsers();
@@ -1042,7 +1042,7 @@ async function deleteUser(id) {
 
 async function deletePost(id) {
   if (!confirm('Delete this message?')) return;
-  await supa.from('feedposts').delete().eq('id', id);
+  await _supa.from('feedposts').delete().eq('id', id);
   showToast('Message deleted');
   renderAdminMessages();
   renderSidebarFeed();
@@ -1050,7 +1050,7 @@ async function deletePost(id) {
 
 async function sendPasswordReset(email, name) {
   if (!confirm('Send password reset email to ' + name + '?')) return;
-  var { error } = await supa.auth.resetPasswordForEmail(email, {
+  var { error } = await _supa.auth.resetPasswordForEmail(email, {
     redirectTo: window.location.origin + window.location.pathname
   });
   if (error) { showToast('Error: ' + error.message); return; }
