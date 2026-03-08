@@ -301,13 +301,18 @@ async function doRegister() {
   if (p.length < 6)    { err.textContent = "Password must be 6+ characters."; return; }
   var btn = document.getElementById("regBtn");
   btn.textContent = "Creating..."; btn.disabled = true;
-  var result = await _supa.auth.signUp({ email: u + "@cigarlog.app", password: p });
-  if (result.error) { err.textContent = result.error.message; btn.textContent = "Create Account"; btn.disabled = false; return; }
-  await _supa.from("profiles").insert({ user_id: result.data.user.id, username: u, display_name: dn, avatar: "", is_admin: false });
-  localStorage.setItem("cl_session", u);
-  btn.textContent = "Create Account"; btn.disabled = false;
-  location.reload();
-}
+  var result = await supa.from('invites').insert({
+    invited_by: currentUser.supabaseId,
+    invited_name: name,
+    invited_email: '',
+    token: token,
+    used: false,
+    expires_at: expiresAt,
+    accepted_by: null
+  });
+  console.log('invite insert result:', JSON.stringify(result));
+  if (result.error) { showToast('Error: ' + result.error.message); return; }
+
 
 function doLogout() {
   localStorage.removeItem("cl_session");
