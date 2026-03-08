@@ -1084,6 +1084,37 @@ function showToast(msg) {
   showPage("dashboard");
   subscribeToFeed();
 
+  // ── Handle invite link ────────────────────────────────────
+const urlParams = new URLSearchParams(window.location.search);
+const inviteToken = urlParams.get('invite');
+
+if (inviteToken) {
+  // Validate the token against Supabase
+  const { data: inv } = await supa
+    .from('invites')
+    .select()
+    .eq('token', inviteToken)
+    .single();
+
+  if (inv && !inv.used && new Date(inv.expiresat) > new Date()) {
+    // Valid invite — pre-fill the code and show registration
+    updateNav();
+    showPage('auth');
+    showAuthForm('register');
+    document.getElementById('regInviteCode').value = inviteToken;
+    showToast(`You've been invited by a friend! Create your account below.`);
+    return; // stop init from redirecting to auth or dashboard
+  } else {
+    // Invalid or expired
+    updateNav();
+    showPage('auth');
+    showToast('This invite link is invalid or has already been used.');
+    return;
+  }
+}
+// ── End invite handling ───────────────────────────────────
+
+
   var ff = document.getElementById("sidebarFeedFile");
   var fc = document.getElementById("sidebarFeedCam");
   var lp = document.getElementById("logPhoto");
