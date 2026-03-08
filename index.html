@@ -876,7 +876,7 @@ async function generateInvite() {
   if (!name) { showToast('Please enter a name for the invite.'); return; }
   var token = Math.random().toString(36).substring(2,10).toUpperCase();
   var expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
-  var result = await supa.from('invites').insert({
+  var { error } = await supa.from('invites').insert({
     invited_by: currentUser.supabaseId,
     invited_name: name,
     invited_email: '',
@@ -884,9 +884,7 @@ async function generateInvite() {
     used: false,
     expires_at: expiresAt
   });
-  console.log('invite insert result:', JSON.stringify(result));
-  if (result.error) { showToast('Error: ' + result.error.message); return; }
-
+  if (error) { showToast('Error: ' + error.message); return; }
   var link = window.location.origin + window.location.pathname + '?invite=' + token;
   document.getElementById('inviteLinkText').textContent = link;
   document.getElementById('inviteResult').style.display = 'block';
