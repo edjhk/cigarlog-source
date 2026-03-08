@@ -163,7 +163,7 @@ window._supaReady = false;
 <!-- DETAIL -->
 <div id="page-detail" class="page">
   <div style="max-width:1000px;margin:0 auto;padding:40px 20px;">
-    <button class="btn btn-secondary" onclick="showPage('dashboard')" style="margin-bottom:20px;">&larr; Back</button>
+    <button class="btn btn-secondary" onclick="event.stopPropagation();showPage('dashboard');" style="margin-bottom:24px;">&larr; Back</button>
     <div id="detailContent"></div>
   </div>
 </div>
@@ -171,8 +171,7 @@ window._supaReady = false;
 <!-- LOG A SMOKE -->
 <div id="page-log" class="page">
   <div style="max-width:600px;margin:0 auto;padding:40px 20px;">
-    <button class="btn btn-secondary" onclick="showPage('dashboard')" style="margin-bottom:24px;">&larr; Back</button>
-    <div style="background:white;border-radius:20px;padding:32px;box-shadow:0 4px 30px var(--shadow);">
+    <button class="btn btn-secondary" onclick="event.stopPropagation();showPage('dashboard');" style="margin-bottom:24px;">&larr; Back</button>    <div style="background:white;border-radius:20px;padding:32px;box-shadow:0 4px 30px var(--shadow);">
       <h2 style="font-family:'Playfair Display',serif;color:var(--dark-tobacco);margin-bottom:24px;">Log a Smoke</h2>
       <div class="form-group">
         <label class="form-label">Cigar</label>
@@ -217,8 +216,7 @@ window._supaReady = false;
 <!-- MESSAGES PAGE -->
 <div id="page-messages" class="page">
   <div style="max-width:700px;margin:0 auto;padding:40px 20px;">
-    <button class="btn btn-secondary" onclick="showPage('dashboard')" style="margin-bottom:24px;">&larr; Back</button>
-    <div style="background:white;border-radius:20px;padding:28px;box-shadow:0 4px 30px var(--shadow);">
+    <button class="btn btn-secondary" onclick="event.stopPropagation();showPage('dashboard');" style="margin-bottom:24px;">&larr; Back</button>    <div style="background:white;border-radius:20px;padding:28px;box-shadow:0 4px 30px var(--shadow);">
       <h2 style="font-family:'Playfair Display',serif;color:var(--dark-tobacco);margin-bottom:20px;">Community Feed</h2>
       <div style="display:flex;gap:10px;margin-bottom:20px;">
         <input type="text" id="feedInput" class="form-input" placeholder="Share a smoke, a thought..." style="flex:1;">
@@ -232,8 +230,7 @@ window._supaReady = false;
 <!-- EVENTS -->
 <div id="page-events" class="page">
   <div style="max-width:700px;margin:0 auto;padding:40px 20px;">
-    <button class="btn btn-secondary" onclick="showPage('dashboard')" style="margin-bottom:24px;">&larr; Back</button>
-    <div style="background:white;border-radius:20px;padding:28px;box-shadow:0 4px 30px var(--shadow);">
+    <button class="btn btn-secondary" onclick="event.stopPropagation();showPage('dashboard');" style="margin-bottom:24px;">&larr; Back</button>    <div style="background:white;border-radius:20px;padding:28px;box-shadow:0 4px 30px var(--shadow);">
       <h2 style="font-family:'Playfair Display',serif;color:var(--dark-tobacco);">Events</h2>
       <p style="color:var(--ash);margin-top:12px;">Coming soon — plan smokes with friends.</p>
     </div>
@@ -243,8 +240,7 @@ window._supaReady = false;
 <!-- INVITE -->
 <div id="page-invite" class="page">
   <div style="max-width:600px;margin:0 auto;padding:40px 20px;">
-    <button class="btn btn-secondary" onclick="showPage('dashboard')" style="margin-bottom:24px;">&larr; Back</button>
-    <div style="background:white;border-radius:20px;padding:32px;box-shadow:0 4px 30px var(--shadow);">
+    <button class="btn btn-secondary" onclick="event.stopPropagation();showPage('dashboard');" style="margin-bottom:24px;">&larr; Back</button>    <div style="background:white;border-radius:20px;padding:32px;box-shadow:0 4px 30px var(--shadow);">
       <h2 style="font-family:'Playfair Display',serif;color:var(--dark-tobacco);margin-bottom:8px;">Invite a Friend</h2>
       <p style="color:var(--ash);font-size:0.9rem;margin-bottom:24px;">Generate a one-time invite link.</p>
       <div class="form-group"><label class="form-label">Friend's Name (optional)</label>
@@ -268,8 +264,7 @@ window._supaReady = false;
 <!-- SETTINGS -->
 <div id="page-settings" class="page">
   <div style="max-width:1000px;margin:0 auto;padding:40px 20px;">
-    <button class="btn btn-secondary" onclick="showPage('dashboard')" style="margin-bottom:24px;">&larr; Back</button>
-    <h2 style="font-family:'Playfair Display',serif;margin-bottom:24px;">Settings</h2>
+    <button class="btn btn-secondary" onclick="event.stopPropagation();showPage('dashboard');" style="margin-bottom:24px;">&larr; Back</button>    <h2 style="font-family:'Playfair Display',serif;margin-bottom:24px;">Settings</h2>
     <div class="admin-section" id="adminPanel" style="display:none;">
       <h3>Admin Panel</h3>
       <div id="adminUsers"></div>
