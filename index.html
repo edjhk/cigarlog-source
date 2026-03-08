@@ -1021,8 +1021,8 @@ function showToast(msg) {
 // ── INIT ──────────────────────────────────────────────────────────────────────
 (async function init() {
   await loadCA();
-  var session = localStorage.getItem('clsession');
-  if (!session) { updateNav(); return; }
+  var session = localStorage.getItem('cl_session');
+  if (!session) { updateNav(); showPage('auth'); return; }
   var { data: prof } = await supa.from("profiles").select("*").eq("username", session).single();
 
   if (!prof) { localStorage.removeItem("cl_session"); updateNav(); return; }
