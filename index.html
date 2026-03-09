@@ -315,16 +315,17 @@ async function doLogin() {
   if (!u || !p) { err.textContent = 'Username and password required.'; return; }
   var btn = document.getElementById('loginBtn');
   btn.textContent = 'Signing in...'; btn.disabled = true;
-  var { data, error } = await supa.auth.signInWithPassword({ email: u + '@cigarlog.app', password: p });
+  var { data, error } = await _supa.auth.signInWithPassword({ email: u + '@cigarlog.app', password: p });
   if (error) { err.textContent = error.message; btn.textContent = 'Sign In'; btn.disabled = false; return; }
-  var { data: profile } = await supa.from('profiles').select('*').eq('username', u).single();
+  var { data: profile } = await _supa.from('profiles').select('*').eq('username', u).single();
   if (!profile) { err.textContent = 'Profile not found.'; btn.textContent = 'Sign In'; btn.disabled = false; return; }
   currentUser = { supabaseId: profile.user_id, username: profile.username, displayName: profile.display_name, avatar: profile.avatar, isAdmin: profile.is_admin };
-  localStorage.setItem('clsession', u);
+  localStorage.setItem('cl_session', u);
   btn.textContent = 'Sign In'; btn.disabled = false;
   updateNav();
   showPage('dashboard');
 }
+
 function showAuthForm(which) {
   document.getElementById("form-login").classList.toggle("hidden", which !== "login");
   document.getElementById("form-register").classList.toggle("hidden", which !== "register");
