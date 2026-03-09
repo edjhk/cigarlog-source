@@ -319,7 +319,7 @@ async function doLogin() {
   if (error) { err.textContent = error.message; btn.textContent = 'Sign In'; btn.disabled = false; return; }
   var { data: profile } = await supa.from('profiles').select('*').eq('username', u).single();
   if (!profile) { err.textContent = 'Profile not found.'; btn.textContent = 'Sign In'; btn.disabled = false; return; }
-  currentUser = { supabaseId: profile.userid, username: profile.username, displayName: profile.displayname, avatar: profile.avatar, isAdmin: profile.isadmin };
+  currentUser = { supabaseId: profile.user_id, username: profile.username, displayName: profile.display_name, avatar: profile.avatar, isAdmin: profile.is_admin };
   localStorage.setItem('clsession', u);
   btn.textContent = 'Sign In'; btn.disabled = false;
   updateNav();
