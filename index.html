@@ -1163,7 +1163,6 @@ async function init() {
   if (fc) fc.onchange = function() { postSidebarMedia(this); };
   if (lp) lp.onchange = function() { previewLogPhoto(this); };
   if (lc) lc.onchange = function() { previewLogPhoto(this); };
-}
 
 window.addEventListener('popstate', function(e) {
   if (e.state && e.state.page) {
