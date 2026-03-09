@@ -325,8 +325,7 @@ async function doLogin() {
   updateNav();
   showPage('dashboard');
 }
-
-function showAuthForm(which) {
+  function showAuthForm(which) {
   document.getElementById("form-login").classList.toggle("hidden", which !== "login");
   document.getElementById("form-register").classList.toggle("hidden", which !== "register");
 }
