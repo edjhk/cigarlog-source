@@ -1122,30 +1122,26 @@ function showToast(msg) {
 async function init() {
   await loadCA();
 
-  // ── Handle invite link FIRST ──────────────────────────
   const urlParams = new URLSearchParams(window.location.search);
   const inviteToken = urlParams.get('invite');
   if (inviteToken) {
-    const { data: inv } = await _supa
-      .from('invites')
-      .select()
-      .eq('token', inviteToken)
-      .single();
-
+    const { data: inv } = await _supa.from('invites').select().eq('token', inviteToken).single();
     if (inv && !inv.used && new Date(inv.expires_at) > new Date()) {
       updateNav();
+      showPage('auth');
       document.getElementById('form-register').classList.remove('hidden');
+      document.getElementById('form-login').classList.add('hidden');
       document.getElementById('regInviteCode').value = inviteToken;
       showToast("You've been invited! Fill in your details below.");
     } else {
       updateNav();
+      showPage('auth');
       showToast('This invite link is invalid or has already been used.');
-    }
-
     }
     return;
   }
-  // ── THEN check session ────────────────────────────────
+
+  // Check session
   var session = localStorage.getItem('cl_session');
   if (!session) { updateNav(); showPage('auth'); return; }
   var { data: profile } = await _supa.from('profiles').select().eq('username', session).single();
@@ -1163,14 +1159,14 @@ async function init() {
   if (lp) lp.onchange = function() { previewLogPhoto(this); };
   if (lc) lc.onchange = function() { previewLogPhoto(this); };
 
-window.addEventListener('popstate', function(e) {
-  if (e.state && e.state.page) {
-    showPage(e.state.page);
-  } else {
-    showPage('dashboard');
-  }
-});
+  window.addEventListener('popstate', function(e) {
+    if (e.state && e.state.page) { showPage(e.state.page); }
+    else { showPage('dashboard'); }
+  });
+}
+
 init();
+
 </script>
 </body>
 </html>
