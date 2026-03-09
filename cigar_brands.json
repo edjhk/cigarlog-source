@@ -1587,7 +1587,24 @@
       "families": [
         {
           "name": "Arturo Fuente Opusx",
-          "cigars": [],
+          "cigars": [
+            {
+              "name": "Angel's Share Reserva d'Chateau",
+              "size": "Churchill\n                        \nView Tasting Note",
+              "shape": "Churchill",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Dom. Rep.",
+              "binder": "Dom. Rep.",
+              "filler": "Dom. Rep.",
+              "country": "Dominican Republic",
+              "ca_ranking": "95",
+              "ca_price": "$24.37",
+              "ca_issue_date": "January 1, 2026",
+              "ca_length": "7\"",
+              "ca_gauge": "48"
+            }
+          ],
           "strength": "N/A",
           "wrapper_type": "N/A",
           "binder": "N/A",
@@ -10274,6 +10291,22 @@
               "filler": "N/A",
               "country": "Dominican Republic",
               "ca_ranking": "N/A"
+            },
+            {
+              "name": "Celestial",
+              "size": "Toro\n                        \nView Tasting Note",
+              "shape": "Toro",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Nicaragua",
+              "binder": "Nicaragua",
+              "filler": "Nicaragua",
+              "country": "Dominican Republic",
+              "ca_ranking": "96",
+              "ca_price": "$13.50",
+              "ca_issue_date": "January 1, 2025",
+              "ca_length": "6 1/8\"",
+              "ca_gauge": "50"
             }
           ],
           "strength": "Medium",
@@ -10705,6 +10738,22 @@
               "filler": "N/A",
               "country": "Honduras",
               "ca_ranking": "N/A"
+            },
+            {
+              "name": "Choix Supreme",
+              "size": "Robusto\n                        \nView Tasting Note",
+              "shape": "Robusto",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Cuba",
+              "binder": "Cuba",
+              "filler": "Cuba",
+              "country": "Cuba",
+              "ca_ranking": "95",
+              "ca_price": "£29.10",
+              "ca_issue_date": "February 1, 2025",
+              "ca_length": "5\"",
+              "ca_gauge": "48"
             }
           ],
           "strength": "Medium - Full",
@@ -18198,10 +18247,14 @@
               "strength": "Full",
               "color": "Maduro",
               "wrapper_type": "Connecticut Broadleaf",
-              "binder": "N/A",
-              "filler": "N/A",
+              "binder": "Brazil",
+              "filler": "Honduras, Nicaragua",
               "country": "Nicaragua",
-              "ca_ranking": "N/A"
+              "ca_ranking": "95",
+              "ca_price": "$16.25",
+              "ca_issue_date": "January 1, 2026",
+              "ca_length": "6\"",
+              "ca_gauge": "46"
             },
             {
               "name": "Coronets Tins",
@@ -20498,6 +20551,22 @@
               "filler": "N/A",
               "country": "Nicaragua",
               "ca_ranking": "N/A"
+            },
+            {
+              "name": "Grand Robusto",
+              "size": "Grande\n                        \nView Tasting Note",
+              "shape": "Grande",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Ecuador",
+              "binder": "Nicaragua",
+              "filler": "Nicaragua",
+              "country": "Nicaragua",
+              "ca_ranking": "98",
+              "ca_price": "$13.30",
+              "ca_issue_date": "January 1, 2025",
+              "ca_length": "5\"",
+              "ca_gauge": "60"
             }
           ],
           "strength": "Full",
@@ -22436,6 +22505,22 @@
               "filler": "N/A",
               "country": "Nicaragua",
               "ca_ranking": "N/A"
+            },
+            {
+              "name": "Maduro Torpedo",
+              "size": "Figurado\n                        \nView Tasting Note",
+              "shape": "Figurado",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Mexico",
+              "binder": "Nicaragua",
+              "filler": "Nicaragua",
+              "country": "Nicaragua",
+              "ca_ranking": "95",
+              "ca_price": "$16.63",
+              "ca_issue_date": "January 1, 2025",
+              "ca_length": "6 1/2\"",
+              "ca_gauge": "52"
             }
           ],
           "strength": "Medium",
@@ -22804,6 +22889,38 @@
               "filler": "N/A",
               "country": "Nicaragua",
               "ca_ranking": "N/A"
+            },
+            {
+              "name": "60th Anniversary Perfecto",
+              "size": "Figurado\n                        \nView Tasting Note",
+              "shape": "Figurado",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Nicaragua",
+              "binder": "Nicaragua",
+              "filler": "Nicaragua",
+              "country": "Nicaragua",
+              "ca_ranking": "97",
+              "ca_price": "$75.00",
+              "ca_issue_date": "January 1, 2026",
+              "ca_length": "6 1/2\"",
+              "ca_gauge": "56"
+            },
+            {
+              "name": "Serie 1926 No. 6",
+              "size": "Robusto\n                        \nView Tasting Note",
+              "shape": "Robusto",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Nicaragua",
+              "binder": "Nicaragua",
+              "filler": "Nicaragua",
+              "country": "Nicaragua",
+              "ca_ranking": "96",
+              "ca_price": "$17.40",
+              "ca_issue_date": "January 1, 2025",
+              "ca_length": "4 3/4\"",
+              "ca_gauge": "50"
             }
           ],
           "strength": "Medium - Full",
@@ -25949,7 +26066,40 @@
       "families": [
         {
           "name": "Rocky Patel",
-          "cigars": [],
+          "cigars": [
+            {
+              "name": "Emerald Robusto",
+              "size": "Toro\n                        \nView Tasting Note",
+              "shape": "Toro",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Ecuador",
+              "binder": "Mexico, Nicaragua",
+              "filler": "Honduras, Nicaragua",
+              "country": "Nicaragua",
+              "ca_ranking": "95",
+              "ca_price": "$11.75",
+              "ca_issue_date": "January 1, 2026",
+              "ca_length": "5 1/2\"",
+              "ca_gauge": "50"
+            },
+            {
+              "name": "Conviction Toro",
+              "size": "Toro\n                        \nView Tasting Note",
+              "shape": "Toro",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Mexico",
+              "binder": "Nicaragua",
+              "filler": "Nicaragua",
+              "country": "Nicaragua",
+              "ca_ranking": "95",
+              "ca_price": "$100.00",
+              "ca_issue_date": "January 1, 2025",
+              "ca_length": "6 1/2\"",
+              "ca_gauge": "52"
+            }
+          ],
           "strength": "N/A",
           "wrapper_type": "N/A",
           "binder": "N/A",
@@ -30316,6 +30466,2097 @@
           "filler": "N/A",
           "color": "Maduro",
           "country": "Nicaragua"
+        }
+      ]
+    },
+    {
+      "name": "Tatuaje La Verite Vintage 2013",
+      "families": [
+        {
+          "name": "Tatuaje La Verite Vintage 2013",
+          "cigars": [],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "N/A"
+        }
+      ]
+    },
+    {
+      "name": "Tatuaje Limited Release",
+      "families": [
+        {
+          "name": "Tatuaje Limited Release",
+          "cigars": [
+            {
+              "name": "Tatuaje 8-9-8 (6 3/",
+              "size": "6 3/4 x 44",
+              "shape": "Lonsdale",
+              "strength": "Medium - Full",
+              "color": "Colorado",
+              "wrapper_type": "Undisclosed",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Tatuaje Avion 13 Corojo (6 7/",
+              "size": "6 7/8 x 52",
+              "shape": "Double Perfecto",
+              "strength": "Medium - Full",
+              "color": "Colorado",
+              "wrapper_type": "Nicaraguan Corojo",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Tatuaje Cohetes Corojo",
+              "size": "4 x 50",
+              "shape": "Petite Robusto",
+              "strength": "Medium - Full",
+              "color": "Colorado",
+              "wrapper_type": "Nicaraguan Corojo",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Limited Lancero Collection 10-Ct",
+              "size": "7 1/2 x 38",
+              "shape": "Lancero",
+              "strength": "Varies",
+              "color": "Varies",
+              "wrapper_type": "Varies",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Pca 2025 (5 5/",
+              "size": "5 5/8 x 54",
+              "shape": "Robusto",
+              "strength": "Full",
+              "color": "Colorado",
+              "wrapper_type": "Nicaraguan Corojo",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Tuxtla Belle Encre (5-3/",
+              "size": "5 3/8 x 48",
+              "shape": "Perfecto",
+              "strength": "Medium - Full",
+              "color": "Maduro",
+              "wrapper_type": "Mexican San Andres",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Tatuaje Pork Tenderloin (5 1/",
+              "size": "5 1/8 x 52",
+              "shape": "Robusto",
+              "strength": "Medium - Full",
+              "color": "Maduro",
+              "wrapper_type": "Connecticut Broadleaf",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Tatuaje T110 Corojo (4 3/",
+              "size": "4 3/8 x 52",
+              "shape": "Petite Robusto",
+              "strength": "Medium - Full",
+              "color": "Colorado",
+              "wrapper_type": "Nicaraguan Corojo",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            }
+          ],
+          "strength": "Medium - Full",
+          "wrapper_type": "Undisclosed",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "Colorado",
+          "country": "USA"
+        }
+      ]
+    },
+    {
+      "name": "Tatuaje Miami",
+      "families": [
+        {
+          "name": "Tatuaje Miami",
+          "cigars": [
+            {
+              "name": "A Uno Reserva",
+              "size": "9.25 x 47",
+              "shape": "Presidente",
+              "strength": "Full",
+              "color": "Colorado Maduro",
+              "wrapper_type": "Nicaraguan Corojo 99",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Cojonu 2003 Ltd",
+              "size": "6 1/2 x 52",
+              "shape": "Toro",
+              "strength": "Full",
+              "color": "Colorado Maduro",
+              "wrapper_type": "Ecuadorian Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Cojonu 2003 Series L",
+              "size": "4 x 50",
+              "shape": "Corona Extra",
+              "strength": "Medium - Full",
+              "color": "Colorado Maduro",
+              "wrapper_type": "Ecuadorian Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Cojonu 2006 Ltd",
+              "size": "5 1/2 x 52",
+              "shape": "Torpedo",
+              "strength": "Full",
+              "color": "Colorado Maduro",
+              "wrapper_type": "Ecuadorian Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Cojonu 2009 Ltd",
+              "size": "6 3/4 x 48",
+              "shape": "Torpedo",
+              "strength": "Full",
+              "color": "Colorado Maduro",
+              "wrapper_type": "Ecuadorian Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Especiales",
+              "size": "7 1/2 x 38",
+              "shape": "Lancero",
+              "strength": "Full",
+              "color": "Colorado Maduro",
+              "wrapper_type": "Ecuadorian Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Gran Cojonu",
+              "size": "6 1/2 x 60",
+              "shape": "Gordo",
+              "strength": "Full",
+              "color": "Colorado Maduro",
+              "wrapper_type": "Ecuadorian Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Gran Cojonu Series A",
+              "size": "5 x 60",
+              "shape": "Gordo",
+              "strength": "Full",
+              "color": "Colorado Maduro",
+              "wrapper_type": "Ecuadorian Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Havana Cazadores",
+              "size": "6.37 x 43",
+              "shape": "Lonsdale",
+              "strength": "Full",
+              "color": "Colorado Maduro",
+              "wrapper_type": "Nicaraguan Corojo 99",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "J21 Reserva",
+              "size": "5 x 50",
+              "shape": "Robusto",
+              "strength": "Full",
+              "color": "Colorado Maduro",
+              "wrapper_type": "Ecuadorian Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "K222",
+              "size": "5 7/8 x 52",
+              "shape": "Toro",
+              "strength": "Full",
+              "color": "Colorado Maduro",
+              "wrapper_type": "Ecuadorian Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Noellas",
+              "size": "5.12 x 42",
+              "shape": "Corona",
+              "strength": "Full",
+              "color": "Colorado Maduro",
+              "wrapper_type": "Ecuadorian Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Rc184",
+              "size": "7.25 x 57",
+              "shape": "Perfecto",
+              "strength": "Full",
+              "color": "Colorado Maduro",
+              "wrapper_type": "Nicaraguan Corojo 99",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Rc233",
+              "size": "9.12 x 55",
+              "shape": "Presidente",
+              "strength": "Full",
+              "color": "Colorado Maduro",
+              "wrapper_type": "Nicaraguan Corojo 99",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Regios",
+              "size": "5.50 x 50",
+              "shape": "Robusto",
+              "strength": "Full",
+              "color": "Colorado Maduro",
+              "wrapper_type": "Nicaraguan Corojo 99",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Reserva Sw Short Churchill",
+              "size": "4 3/4 x 47",
+              "shape": "Corona Extra",
+              "strength": "Full",
+              "color": "Colorado",
+              "wrapper_type": "Nicaraguan Corojo 99",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Sw Reserva",
+              "size": "7.62 x 47",
+              "shape": "Churchill",
+              "strength": "Full",
+              "color": "Colorado Maduro",
+              "wrapper_type": "Nicaraguan Corojo 99",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Tainos",
+              "size": "7.62 x 49",
+              "shape": "Churchill",
+              "strength": "Full",
+              "color": "Colorado Maduro",
+              "wrapper_type": "Nicaraguan Corojo 99",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Unicos Torpedo",
+              "size": "6 1/8 x 52",
+              "shape": "Torpedo",
+              "strength": "Full",
+              "color": "Colorado Maduro",
+              "wrapper_type": "Nicaraguan Corojo 99",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            }
+          ],
+          "strength": "Full",
+          "wrapper_type": "Nicaraguan Corojo 99",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "Colorado Maduro",
+          "country": "USA"
+        }
+      ]
+    },
+    {
+      "name": "Tatuaje Monster Series",
+      "families": [
+        {
+          "name": "Tatuaje Monster Series",
+          "cigars": [
+            {
+              "name": "Cazadores Edition 10-Ct",
+              "size": "6 3/8 x 43",
+              "shape": "Long Corona",
+              "strength": "Medium - Full",
+              "color": "Varies",
+              "wrapper_type": "Varies",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Skinny Monsters Chuck",
+              "size": "6 x 38",
+              "shape": "Panatella",
+              "strength": "Medium - Full",
+              "color": "Colorado",
+              "wrapper_type": "Ecuadorian Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Skinny Monsters Drac",
+              "size": "6 x 38",
+              "shape": "Panatella",
+              "strength": "Medium - Full",
+              "color": "Maduro",
+              "wrapper_type": "Ecuadorian Maduro Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Skinny Monsters Face",
+              "size": "6 x 38",
+              "shape": "Panatella",
+              "strength": "Medium - Full",
+              "color": "Maduro",
+              "wrapper_type": "Mexican San Andres",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Skinny Monsters Frank",
+              "size": "6 x 38",
+              "shape": "Panatella",
+              "strength": "Medium - Full",
+              "color": "Maduro",
+              "wrapper_type": "Connecticut Broadleaf",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Skinny Monsters Hyde",
+              "size": "6 x 38",
+              "shape": "Panatella",
+              "strength": "Medium - Full",
+              "color": "Colorado",
+              "wrapper_type": "Ecuadorian Sumatra",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Skinny Monsters Jason",
+              "size": "6 x 38",
+              "shape": "Panatella",
+              "strength": "Medium - Full",
+              "color": "Maduro",
+              "wrapper_type": "Connecticut Broadleaf",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Skinny Monsters Jekyll",
+              "size": "6 x 38",
+              "shape": "Panatella",
+              "strength": "Medium - Full",
+              "color": "Colorado",
+              "wrapper_type": "Ecuadorian Sancti Spiritus",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Skinny Monsters Lanceros Edition 10-Ct",
+              "size": "7 1/2 x 38",
+              "shape": "Lancero",
+              "strength": "Medium - Full",
+              "color": "Varies",
+              "wrapper_type": "Varies",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Skinny Monsters Mummy",
+              "size": "6 x 38",
+              "shape": "Panatella",
+              "strength": "Medium - Full",
+              "color": "Colorado",
+              "wrapper_type": "Nicaragua Criollo",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Skinny Monsters Tiff",
+              "size": "6 x 38",
+              "shape": "Panatella",
+              "strength": "Medium",
+              "color": "Colorado Claro",
+              "wrapper_type": "Ecuadorian Connecticut",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Skinny Monsters Wolf",
+              "size": "6 x 38",
+              "shape": "Panatella",
+              "strength": "Medium - Full",
+              "color": "Colorado",
+              "wrapper_type": "Ecuadorian Sumatra",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            }
+          ],
+          "strength": "Medium - Full",
+          "wrapper_type": "Varies",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "Varies",
+          "country": "Nicaragua"
+        }
+      ]
+    },
+    {
+      "name": "Tatuaje Negociant Monopole",
+      "families": [
+        {
+          "name": "Tatuaje Negociant Monopole",
+          "cigars": [],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "N/A"
+        }
+      ]
+    },
+    {
+      "name": "Tatuaje Series P",
+      "families": [
+        {
+          "name": "Tatuaje Series P",
+          "cigars": [
+            {
+              "name": "Tatuaje Miami Series P1 Gold (5 5/",
+              "size": "5 5/8 x 46",
+              "shape": "Corona Extra",
+              "strength": "Medium - Full",
+              "color": "Oscuro",
+              "wrapper_type": "Rosado Oscuro",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Tatuaje Miami Series P1 Silver (5 5/",
+              "size": "5 5/8 x 46",
+              "shape": "Corona Extra",
+              "strength": "Medium - Full",
+              "color": "Claro",
+              "wrapper_type": "Rosado",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Tatuaje Miami Series P2 Gold",
+              "size": "5 x 50",
+              "shape": "Robusto",
+              "strength": "Medium - Full",
+              "color": "Oscuro",
+              "wrapper_type": "Rosado Oscuro",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Tatuaje Miami Series P2 Silver",
+              "size": "5 x 50",
+              "shape": "Robusto",
+              "strength": "Medium - Full",
+              "color": "Claro",
+              "wrapper_type": "Rosado",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Tatuaje Miami Series P3 Gold",
+              "size": "4 x 50",
+              "shape": "Robusto",
+              "strength": "Medium - Full",
+              "color": "Oscuro",
+              "wrapper_type": "Rosado Oscuro",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Tatuaje Miami Series P3 Silver",
+              "size": "4 x 50",
+              "shape": "Robusto",
+              "strength": "Medium - Full",
+              "color": "Claro",
+              "wrapper_type": "Rosado",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Robusto",
+              "size": "5 x 50",
+              "shape": "Robusto",
+              "strength": "Medium",
+              "color": "Colorado",
+              "wrapper_type": "Ecuadorian Sumatra",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Short Robusto",
+              "size": "4 1/2 x 52",
+              "shape": "Robusto",
+              "strength": "Medium",
+              "color": "Colorado",
+              "wrapper_type": "Ecuadorian Sumatra",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Toro",
+              "size": "6 x 50",
+              "shape": "Toro",
+              "strength": "Medium",
+              "color": "Colorado",
+              "wrapper_type": "Ecuadorian Sumatra",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            }
+          ],
+          "strength": "Medium - Full",
+          "wrapper_type": "Rosado Oscuro",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "Oscuro",
+          "country": "USA"
+        }
+      ]
+    },
+    {
+      "name": "Tatuaje Tattoo",
+      "families": [
+        {
+          "name": "Tatuaje Tattoo",
+          "cigars": [
+            {
+              "name": "Adivino Toro Grande",
+              "size": "5 1/2 x 58",
+              "shape": "Gordo",
+              "strength": "Medium - Full",
+              "color": "Oscuro",
+              "wrapper_type": "Ecuadorian Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Bonitos Torpedo",
+              "size": "6 1/8 x 52",
+              "shape": "Torpedo",
+              "strength": "Medium - Full",
+              "color": "Oscuro",
+              "wrapper_type": "Ecuadorian Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Caballeros Robusto",
+              "size": "5 x 50",
+              "shape": "Robusto",
+              "strength": "Medium - Full",
+              "color": "Oscuro",
+              "wrapper_type": "Ecuadorian Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Universo Toro",
+              "size": "6 x 50",
+              "shape": "Toro",
+              "strength": "Medium - Full",
+              "color": "Oscuro",
+              "wrapper_type": "Ecuadorian Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            }
+          ],
+          "strength": "Medium - Full",
+          "wrapper_type": "Ecuadorian Habano",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "Oscuro",
+          "country": "Nicaragua"
+        }
+      ]
+    },
+    {
+      "name": "Todos Las Dias By Dunbarton",
+      "families": [
+        {
+          "name": "Todos Las Dias By Dunbarton",
+          "cigars": [],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "N/A"
+        }
+      ]
+    },
+    {
+      "name": "Torrisi",
+      "families": [
+        {
+          "name": "Torrisi",
+          "cigars": [],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "N/A"
+        }
+      ]
+    },
+    {
+      "name": "Toscano Cigars",
+      "families": [
+        {
+          "name": "Toscano Cigars",
+          "cigars": [],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "N/A"
+        }
+      ]
+    },
+    {
+      "name": "Trader Jack%27S Aromatic",
+      "families": [
+        {
+          "name": "Trader Jack%27S Aromatic",
+          "cigars": [
+            {
+              "name": "Trader Jack'S Aromatic Lonsdale 6 1/",
+              "size": "6 1/2 x 44",
+              "shape": "Lonsdale",
+              "strength": "Mild",
+              "color": "Colorado",
+              "wrapper_type": "Sumatra",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Dominican Republic",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Trader Jack'S Aromatic Midnight Lonsdale",
+              "size": "6 1/2 x 44",
+              "shape": "Lonsdale",
+              "strength": "Medium",
+              "color": "Maduro",
+              "wrapper_type": "Connecticut Broadleaf",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Dominican Republic",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Trader Jack'S Aromatic Sunrise Lonsdale",
+              "size": "6 1/2 x 44",
+              "shape": "Lonsdale",
+              "strength": "Medium",
+              "color": "Maduro",
+              "wrapper_type": "Connecticut Broadleaf",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Dominican Republic",
+              "ca_ranking": "N/A"
+            }
+          ],
+          "strength": "Mild",
+          "wrapper_type": "Sumatra",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "Colorado",
+          "country": "Dominican Republic"
+        }
+      ]
+    },
+    {
+      "name": "Tuscarora Cigars",
+      "families": [
+        {
+          "name": "Tuscarora Cigars",
+          "cigars": [
+            {
+              "name": "Breva Maduro",
+              "size": "5 1/2 x 48",
+              "shape": "Robusto",
+              "strength": "Medium",
+              "color": "Maduro",
+              "wrapper_type": "Connecticut Broadleaf",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Palma Maduro",
+              "size": "6 x 46",
+              "shape": "Lonsdale",
+              "strength": "Medium",
+              "color": "Maduro",
+              "wrapper_type": "Connecticut Broadleaf",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "USA",
+              "ca_ranking": "N/A"
+            }
+          ],
+          "strength": "Medium",
+          "wrapper_type": "Connecticut Broadleaf",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "Maduro",
+          "country": "USA"
+        }
+      ]
+    },
+    {
+      "name": "Vallejuelo Cigars",
+      "families": [
+        {
+          "name": "Vallejuelo Cigars",
+          "cigars": [
+            {
+              "name": "Churchill",
+              "size": "6 x 54",
+              "shape": "Toro",
+              "strength": "Medium - Full",
+              "color": "Colorado",
+              "wrapper_type": "Ecuadorian Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Dominican Republic",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Gordo",
+              "size": "6 x 60",
+              "shape": "Gordo",
+              "strength": "Medium - Full",
+              "color": "Colorado",
+              "wrapper_type": "Ecuadorian Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Dominican Republic",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Gran Toro",
+              "size": "6 x 54",
+              "shape": "Toro",
+              "strength": "Medium - Full",
+              "color": "Colorado",
+              "wrapper_type": "Ecuadorian Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Dominican Republic",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Robusto",
+              "size": "5 x 50",
+              "shape": "Robusto",
+              "strength": "Full",
+              "color": "Colorado",
+              "wrapper_type": "Ecuadorian Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Dominican Republic",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Robusto Gordo",
+              "size": "5 x 54",
+              "shape": "Robusto",
+              "strength": "Full",
+              "color": "Colorado",
+              "wrapper_type": "Ecuadorian Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Dominican Republic",
+              "ca_ranking": "N/A"
+            }
+          ],
+          "strength": "Medium - Full",
+          "wrapper_type": "Ecuadorian Habano",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "Colorado",
+          "country": "Dominican Republic"
+        }
+      ]
+    },
+    {
+      "name": "Vallejuelo Medio Tiempo",
+      "families": [
+        {
+          "name": "Vallejuelo Medio Tiempo",
+          "cigars": [
+            {
+              "name": "Piramides",
+              "size": "6 1/4 x 55",
+              "shape": "Pyramid",
+              "strength": "Full",
+              "color": "Colorado Maduro",
+              "wrapper_type": "Mexican San Andres",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Dominican Republic",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Robusto",
+              "size": "5 x 54",
+              "shape": "Robusto",
+              "strength": "Full",
+              "color": "Colorado Maduro",
+              "wrapper_type": "Mexican San Andres",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Dominican Republic",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Toro",
+              "size": "6 x 54",
+              "shape": "Toro",
+              "strength": "Full",
+              "color": "Colorado Maduro",
+              "wrapper_type": "Mexican San Andres",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Dominican Republic",
+              "ca_ranking": "N/A"
+            }
+          ],
+          "strength": "Full",
+          "wrapper_type": "Mexican San Andres",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "Colorado Maduro",
+          "country": "Dominican Republic"
+        }
+      ]
+    },
+    {
+      "name": "Viaje",
+      "families": [
+        {
+          "name": "Viaje",
+          "cigars": [
+            {
+              "name": "Fifteen Plus Two And A Half Anniversary Silver",
+              "size": "Toro\n                        \nView Tasting Note",
+              "shape": "Toro",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Nicaragua",
+              "binder": "Nicaragua",
+              "filler": "Nicaragua",
+              "country": "Nicaragua",
+              "ca_ranking": "95",
+              "ca_price": "$16.32",
+              "ca_issue_date": "January 1, 2026",
+              "ca_length": "6\"",
+              "ca_gauge": "54"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "N/A"
+        }
+      ]
+    },
+    {
+      "name": "Viaje Chicharrones",
+      "families": [
+        {
+          "name": "Viaje Chicharrones",
+          "cigars": [
+            {
+              "name": "Viaje Chicharrones",
+              "size": "4 1/2 x 48",
+              "shape": "Robusto",
+              "strength": "Full",
+              "color": "Varies",
+              "wrapper_type": "Varies",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            }
+          ],
+          "strength": "Full",
+          "wrapper_type": "Varies",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "Varies",
+          "country": "Nicaragua"
+        }
+      ]
+    },
+    {
+      "name": "Viaje Circa %2745",
+      "families": [
+        {
+          "name": "Viaje Circa %2745",
+          "cigars": [
+            {
+              "name": "Viaje Circa '45 No. 1 Nicaragua Robusto",
+              "size": "5 x 52",
+              "shape": "Robusto",
+              "strength": "Medium - Full",
+              "color": "Colorado",
+              "wrapper_type": "Nicaraguan Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Viaje Circa '45 No. 2 Nicaragua Toro",
+              "size": "6 x 54",
+              "shape": "Toro",
+              "strength": "Medium - Full",
+              "color": "Colorado",
+              "wrapper_type": "Nicaraguan Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            },
+            {
+              "name": "Viaje Circa '45 No. 3 Nicaragua Gordo",
+              "size": "5 1/2 x 58",
+              "shape": "Gordo",
+              "strength": "Medium - Full",
+              "color": "Colorado",
+              "wrapper_type": "Nicaraguan Habano",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "N/A"
+            }
+          ],
+          "strength": "Medium - Full",
+          "wrapper_type": "Nicaraguan Habano",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "Colorado",
+          "country": "Nicaragua"
+        }
+      ]
+    },
+    {
+      "name": "Aging Room Quattro Nicaragua Concerto Impromptu",
+      "families": [
+        {
+          "name": "Aging Room Quattro Nicaragua Concerto Impromptu",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Figurado\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "95",
+              "ca_price": "$17.08",
+              "ca_issue_date": "January 1, 2026"
+            },
+            {
+              "name": "",
+              "size": "Figurado\n                        \nView Tasting Note",
+              "shape": "Figurado",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Nicaragua",
+              "binder": "Nicaragua",
+              "filler": "Nicaragua",
+              "country": "Nicaragua",
+              "ca_ranking": "95",
+              "ca_price": "$17.08",
+              "ca_issue_date": "January 1, 2026",
+              "ca_length": "6\"",
+              "ca_gauge": "52"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Nicaragua"
+        }
+      ]
+    },
+    {
+      "name": "Cohiba Ambar",
+      "families": [
+        {
+          "name": "Cohiba Ambar",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Robusto\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Cuba",
+              "ca_ranking": "97",
+              "ca_price": "£74.60",
+              "ca_issue_date": "January 1, 2026"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Cuba"
+        }
+      ]
+    },
+    {
+      "name": "Cuesta-Rey Centro Fino Sungrown Pyramid No. 9",
+      "families": [
+        {
+          "name": "Cuesta-Rey Centro Fino Sungrown Pyramid No. 9",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Figurado\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Dominican Republic",
+              "ca_ranking": "95",
+              "ca_price": "$11.45",
+              "ca_issue_date": "January 1, 2026"
+            },
+            {
+              "name": "",
+              "size": "Figurado\n                        \nView Tasting Note",
+              "shape": "Figurado",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Ecuador",
+              "binder": "Dom. Rep.",
+              "filler": "Dom. Rep.",
+              "country": "Dominican Republic",
+              "ca_ranking": "95",
+              "ca_price": "$11.45",
+              "ca_issue_date": "January 1, 2026",
+              "ca_length": "6 1/4\"",
+              "ca_gauge": "52"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Dominican Republic"
+        }
+      ]
+    },
+    {
+      "name": "Davidoff Millennium Blend Series Piramides",
+      "families": [
+        {
+          "name": "Davidoff Millennium Blend Series Piramides",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Figurado\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Dominican Republic",
+              "ca_ranking": "95",
+              "ca_price": "$36.30",
+              "ca_issue_date": "January 1, 2026"
+            },
+            {
+              "name": "",
+              "size": "Figurado\n                        \nView Tasting Note",
+              "shape": "Figurado",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Ecuador",
+              "binder": "Dom. Rep.",
+              "filler": "Dom. Rep.",
+              "country": "Dominican Republic",
+              "ca_ranking": "95",
+              "ca_price": "$36.30",
+              "ca_issue_date": "January 1, 2026",
+              "ca_length": "6 1/8\"",
+              "ca_gauge": "52"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Dominican Republic"
+        }
+      ]
+    },
+    {
+      "name": "Diplomaticos Genios Exclusivo Phoenicia",
+      "families": [
+        {
+          "name": "Diplomaticos Genios Exclusivo Phoenicia",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Toro\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Cuba",
+              "ca_ranking": "95",
+              "ca_price": "£0.00",
+              "ca_issue_date": "January 1, 2026"
+            },
+            {
+              "name": "",
+              "size": "Toro\n                        \nView Tasting Note",
+              "shape": "Toro",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Cuba",
+              "binder": "Cuba",
+              "filler": "Cuba",
+              "country": "Cuba",
+              "ca_ranking": "95",
+              "ca_price": "£0.00",
+              "ca_issue_date": "January 1, 2026",
+              "ca_length": "5 1/2\"",
+              "ca_gauge": "52"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Cuba"
+        }
+      ]
+    },
+    {
+      "name": "Ferio Tego Timeless Supreme 650",
+      "families": [
+        {
+          "name": "Ferio Tego Timeless Supreme 650",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Toro\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "95",
+              "ca_price": "$12.25",
+              "ca_issue_date": "January 1, 2026"
+            },
+            {
+              "name": "",
+              "size": "Toro\n                        \nView Tasting Note",
+              "shape": "Toro",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Nicaragua",
+              "binder": "Nicaragua",
+              "filler": "Nicaragua",
+              "country": "Nicaragua",
+              "ca_ranking": "95",
+              "ca_price": "$12.25",
+              "ca_issue_date": "January 1, 2026",
+              "ca_length": "6\"",
+              "ca_gauge": "50"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Nicaragua"
+        }
+      ]
+    },
+    {
+      "name": "Fuente Fuente OpusX Angel's Share Reserva d'Chateau",
+      "families": [
+        {
+          "name": "Fuente Fuente OpusX Angel's Share Reserva d'Chateau",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Churchill\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Dominican Republic",
+              "ca_ranking": "95",
+              "ca_price": "$24.37",
+              "ca_issue_date": "January 1, 2026"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Dominican Republic"
+        }
+      ]
+    },
+    {
+      "name": "Gellis Family Cigars Saunter",
+      "families": [
+        {
+          "name": "Gellis Family Cigars Saunter",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Robusto\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Dominican Republic",
+              "ca_ranking": "95",
+              "ca_price": "$15.00",
+              "ca_issue_date": "January 1, 2026"
+            },
+            {
+              "name": "",
+              "size": "Robusto\n                        \nView Tasting Note",
+              "shape": "Robusto",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Ecuador",
+              "binder": "Ecuador",
+              "filler": "Dom. Rep., Nicaragua",
+              "country": "Dominican Republic",
+              "ca_ranking": "95",
+              "ca_price": "$15.00",
+              "ca_issue_date": "January 1, 2026",
+              "ca_length": "5 1/4\"",
+              "ca_gauge": "48"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Dominican Republic"
+        }
+      ]
+    },
+    {
+      "name": "La Flor Dominicana 30 Years Chisel",
+      "families": [
+        {
+          "name": "La Flor Dominicana 30 Years Chisel",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Figurado\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Dominican Republic",
+              "ca_ranking": "95",
+              "ca_price": "$30.00",
+              "ca_issue_date": "January 1, 2026"
+            },
+            {
+              "name": "",
+              "size": "Figurado\n                        \nView Tasting Note",
+              "shape": "Figurado",
+              "strength": "Mild",
+              "color": "N/A",
+              "wrapper_type": "Ecuador",
+              "binder": "Dom. Rep.",
+              "filler": "Dom. Rep.",
+              "country": "Dominican Republic",
+              "ca_ranking": "95",
+              "ca_price": "$30.00",
+              "ca_issue_date": "January 1, 2026",
+              "ca_length": "6 1/2\"",
+              "ca_gauge": "58"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Dominican Republic"
+        }
+      ]
+    },
+    {
+      "name": "Macanudo Emissary France Churchill",
+      "families": [
+        {
+          "name": "Macanudo Emissary France Churchill",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Churchill\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Honduas",
+              "ca_ranking": "95",
+              "ca_price": "$16.99",
+              "ca_issue_date": "January 1, 2026"
+            },
+            {
+              "name": "",
+              "size": "Churchill\n                        \nView Tasting Note",
+              "shape": "Churchill",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Ecuador",
+              "binder": "U.S.A./Conn. Broadleaf",
+              "filler": "Brazil, Dom. Rep., France, U.S.A./Conn. Broadleaf",
+              "country": "Honduas",
+              "ca_ranking": "95",
+              "ca_price": "$16.99",
+              "ca_issue_date": "January 1, 2026",
+              "ca_length": "7\"",
+              "ca_gauge": "48"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Honduas"
+        }
+      ]
+    },
+    {
+      "name": "Nasser The Goat By A.J. Fernandez Toro",
+      "families": [
+        {
+          "name": "Nasser The Goat By A.J. Fernandez Toro",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Toro\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "95",
+              "ca_price": "$16.00",
+              "ca_issue_date": "January 1, 2026"
+            },
+            {
+              "name": "",
+              "size": "Toro\n                        \nView Tasting Note",
+              "shape": "Toro",
+              "strength": "Mild",
+              "color": "N/A",
+              "wrapper_type": "Mexico",
+              "binder": "Nicaragua",
+              "filler": "Nicaragua",
+              "country": "Nicaragua",
+              "ca_ranking": "95",
+              "ca_price": "$16.00",
+              "ca_issue_date": "January 1, 2026",
+              "ca_length": "6\"",
+              "ca_gauge": "52"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Nicaragua"
+        }
+      ]
+    },
+    {
+      "name": "Padrón 60th Anniversary Perfecto",
+      "families": [
+        {
+          "name": "Padrón 60th Anniversary Perfecto",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Figurado\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "97",
+              "ca_price": "$75.00",
+              "ca_issue_date": "January 1, 2026"
+            },
+            {
+              "name": "",
+              "size": "Figurado\n                        \nView Tasting Note",
+              "shape": "Figurado",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Nicaragua",
+              "binder": "Nicaragua",
+              "filler": "Nicaragua",
+              "country": "Nicaragua",
+              "ca_ranking": "97",
+              "ca_price": "$75.00",
+              "ca_issue_date": "January 1, 2026",
+              "ca_length": "6 1/2\"",
+              "ca_gauge": "56"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Nicaragua"
+        }
+      ]
+    },
+    {
+      "name": "Tatuaje Black Petite Lancero",
+      "families": [
+        {
+          "name": "Tatuaje Black Petite Lancero",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Panetela\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "96",
+              "ca_price": "$8.50",
+              "ca_issue_date": "January 1, 2026"
+            },
+            {
+              "name": "",
+              "size": "Panetela\n                        \nView Tasting Note",
+              "shape": "Panetela",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Nicaragua",
+              "binder": "Nicaragua",
+              "filler": "Nicaragua",
+              "country": "Nicaragua",
+              "ca_ranking": "96",
+              "ca_price": "$8.50",
+              "ca_issue_date": "January 1, 2026",
+              "ca_length": "6\"",
+              "ca_gauge": "25"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Nicaragua"
+        }
+      ]
+    },
+    {
+      "name": "Trinidad Espíritu Series No. 3 Belicoso",
+      "families": [
+        {
+          "name": "Trinidad Espíritu Series No. 3 Belicoso",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Figurado\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "95",
+              "ca_price": "$13.19",
+              "ca_issue_date": "January 1, 2026"
+            },
+            {
+              "name": "",
+              "size": "Figurado\n                        \nView Tasting Note",
+              "shape": "Figurado",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Mexico",
+              "binder": "Nicaragua",
+              "filler": "Nicaragua",
+              "country": "Nicaragua",
+              "ca_ranking": "95",
+              "ca_price": "$13.19",
+              "ca_issue_date": "January 1, 2026",
+              "ca_length": "6 1/8\"",
+              "ca_gauge": "52"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Nicaragua"
+        }
+      ]
+    },
+    {
+      "name": "Sancho Panza Belicoso",
+      "families": [
+        {
+          "name": "Sancho Panza Belicoso",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Figurado\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Cuba",
+              "ca_ranking": "95",
+              "ca_price": "£34.30",
+              "ca_issue_date": "October 1, 2025"
+            },
+            {
+              "name": "",
+              "size": "Figurado\n                        \nView Tasting Note",
+              "shape": "Figurado",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Cuba",
+              "binder": "Cuba",
+              "filler": "Cuba",
+              "country": "Cuba",
+              "ca_ranking": "95",
+              "ca_price": "£34.30",
+              "ca_issue_date": "October 1, 2025",
+              "ca_length": "5 1/2\"",
+              "ca_gauge": "52"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Cuba"
+        }
+      ]
+    },
+    {
+      "name": "Cohiba Ambar",
+      "families": [
+        {
+          "name": "Cohiba Ambar",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Robusto\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Cuba",
+              "ca_ranking": "95",
+              "ca_price": "£74.60",
+              "ca_issue_date": "April 1, 2025"
+            },
+            {
+              "name": "",
+              "size": "Robusto\n                        \nView Tasting Note",
+              "shape": "Robusto",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Cuba",
+              "binder": "Cuba",
+              "filler": "Cuba",
+              "country": "Cuba",
+              "ca_ranking": "95",
+              "ca_price": "£74.60",
+              "ca_issue_date": "April 1, 2025",
+              "ca_length": "5 1/4\"",
+              "ca_gauge": "53"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Cuba"
+        }
+      ]
+    },
+    {
+      "name": "Cohiba Pirámides Extra",
+      "families": [
+        {
+          "name": "Cohiba Pirámides Extra",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Figurado\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Cuba",
+              "ca_ranking": "95",
+              "ca_price": "£111.30",
+              "ca_issue_date": "February 1, 2025"
+            },
+            {
+              "name": "",
+              "size": "Figurado\n                        \nView Tasting Note",
+              "shape": "Figurado",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Cuba",
+              "binder": "Cuba",
+              "filler": "Cuba",
+              "country": "Cuba",
+              "ca_ranking": "95",
+              "ca_price": "£111.30",
+              "ca_issue_date": "February 1, 2025",
+              "ca_length": "6 1/4\"",
+              "ca_gauge": "54"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Cuba"
+        }
+      ]
+    },
+    {
+      "name": "Montecristo 1935 Anniversary Nicaragua Espeso",
+      "families": [
+        {
+          "name": "Montecristo 1935 Anniversary Nicaragua Espeso",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Grande\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "97",
+              "ca_price": "$18.00",
+              "ca_issue_date": "January 1, 2025"
+            },
+            {
+              "name": "",
+              "size": "Grande\n                        \nView Tasting Note",
+              "shape": "Grande",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Nicaragua",
+              "binder": "Nicaragua",
+              "filler": "Nicaragua",
+              "country": "Nicaragua",
+              "ca_ranking": "97",
+              "ca_price": "$18.00",
+              "ca_issue_date": "January 1, 2025",
+              "ca_length": "5 1/2\"",
+              "ca_gauge": "60"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Nicaragua"
+        }
+      ]
+    },
+    {
+      "name": "Padrón Serie 1926 No. 6",
+      "families": [
+        {
+          "name": "Padrón Serie 1926 No. 6",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Robusto\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "96",
+              "ca_price": "$17.40",
+              "ca_issue_date": "January 1, 2025"
+            },
+            {
+              "name": "",
+              "size": "Robusto\n                        \nView Tasting Note",
+              "shape": "Robusto",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Nicaragua",
+              "binder": "Nicaragua",
+              "filler": "Nicaragua",
+              "country": "Nicaragua",
+              "ca_ranking": "96",
+              "ca_price": "$17.40",
+              "ca_issue_date": "January 1, 2025",
+              "ca_length": "4 3/4\"",
+              "ca_gauge": "50"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Nicaragua"
+        }
+      ]
+    },
+    {
+      "name": "Partagás Línea Maestra Maestro",
+      "families": [
+        {
+          "name": "Partagás Línea Maestra Maestro",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Figurado\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Cuba",
+              "ca_ranking": "95",
+              "ca_price": "£71.30",
+              "ca_issue_date": "January 1, 2025"
+            },
+            {
+              "name": "",
+              "size": "Figurado\n                        \nView Tasting Note",
+              "shape": "Figurado",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Cuba",
+              "binder": "Cuba",
+              "filler": "Cuba",
+              "country": "Cuba",
+              "ca_ranking": "95",
+              "ca_price": "£71.30",
+              "ca_issue_date": "January 1, 2025",
+              "ca_length": "5 1/4\"",
+              "ca_gauge": "56"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Cuba"
+        }
+      ]
+    },
+    {
+      "name": "Montecristo 1935 Anniversary Edición Doble Diamante Toro",
+      "families": [
+        {
+          "name": "Montecristo 1935 Anniversary Edición Doble Diamante Toro",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Toro\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Nicaragua",
+              "ca_ranking": "95",
+              "ca_price": "$150.00",
+              "ca_issue_date": "December 1, 2024"
+            },
+            {
+              "name": "",
+              "size": "Toro\n                        \nView Tasting Note",
+              "shape": "Toro",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Nicaragua",
+              "binder": "Nicaragua",
+              "filler": "Nicaragua",
+              "country": "Nicaragua",
+              "ca_ranking": "95",
+              "ca_price": "$150.00",
+              "ca_issue_date": "December 1, 2024",
+              "ca_length": "6 1/2\"",
+              "ca_gauge": "54"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Nicaragua"
+        }
+      ]
+    },
+    {
+      "name": "Romeo y Julieta Wide Churchill",
+      "families": [
+        {
+          "name": "Romeo y Julieta Wide Churchill",
+          "cigars": [
+            {
+              "name": "Unknown",
+              "size": "Robusto\n                        \nView Tasting Note",
+              "shape": "N/A",
+              "strength": "N/A",
+              "color": "N/A",
+              "wrapper_type": "N/A",
+              "binder": "N/A",
+              "filler": "N/A",
+              "country": "Cuba",
+              "ca_ranking": "96",
+              "ca_price": "£42.40",
+              "ca_issue_date": "December 1, 2024"
+            },
+            {
+              "name": "",
+              "size": "Robusto\n                        \nView Tasting Note",
+              "shape": "Robusto",
+              "strength": "Medium",
+              "color": "N/A",
+              "wrapper_type": "Cuba",
+              "binder": "Cuba",
+              "filler": "Cuba",
+              "country": "Cuba",
+              "ca_ranking": "96",
+              "ca_price": "£42.40",
+              "ca_issue_date": "December 1, 2024",
+              "ca_length": "5 1/8\"",
+              "ca_gauge": "55"
+            }
+          ],
+          "strength": "N/A",
+          "wrapper_type": "N/A",
+          "binder": "N/A",
+          "filler": "N/A",
+          "color": "N/A",
+          "country": "Cuba"
         }
       ]
     }
