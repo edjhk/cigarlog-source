@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8"><!-- V3 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CigarLog</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -117,26 +117,34 @@ window._supaReady = false;
     <div id="form-register" class="hidden">
       <h2 class="auth-title">Join the club.</h2>
       <p class="auth-sub">Start your personal smoke journal</p>
-      <div class="form-group"><label class="form-label">Username</label>
-        <input type="text" class="form-input" id="regUsername" placeholder="yourhandle"></div>
-      <div class="form-group"><label class="form-label">Display Name</label>
-        <input type="text" class="form-input" id="regDisplayName" placeholder="Your Name"></div>
-      <div class="form-group"><label class="form-label">Email</label>
-        <input type="email" class="form-input" id="regEmail" placeholder="your@email.com"></div>
-      <div class="form-group"><label class="form-label">Password</label>
-        <input type="password" class="form-input" id="regPassword" placeholder=""></div>
-      <div class="form-group"><label class="form-label">Invite Code (optional)</label>
-        <input type="text" class="form-input" id="regInviteCode" placeholder="Leave blank if first user"></div>
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input type="text" class="form-input" id="regUsername" placeholder="yourhandle">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Your Name</label>
+        <input type="text" class="form-input" id="regDisplayName" placeholder="e.g. Ed">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="regEmail" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="regPassword" placeholder="">
+      </div>
+      <input type="hidden" id="regInviteCode" value="">
       <button id="regBtn" class="btn btn-primary" onclick="doRegister()" style="width:100%">Create Account</button>
       <div id="regError" style="font-size:0.82rem;margin-top:10px;text-align:center;color:var(--band-red)"></div>
       <div class="auth-toggle">Already a member? <a onclick="showAuthForm('login')">Sign in &rarr;</a></div>
-    </div>
+    </div><!-- end form-register -->
 
-  </div>
-</div>
+  </div><!-- end auth-card -->
+</div><!-- end page-auth -->
 
 <!-- DASHBOARD -->
 <div id="page-dashboard" class="page">
+
   <div class="dash-layout">
     <div class="dash-main">
       <div style="background:white;border-radius:16px;box-shadow:0 4px 20px var(--shadow);padding:18px 20px;margin-bottom:24px;">
@@ -302,6 +310,7 @@ function initSupa() {
   return supa;
 }
 var _supa = initSupa();
+console.log("_supa initialized:", _supa ? "yes" : "FAILED");
 var currentUser = null;
 var caDatabase  = [];
 var logSelectedCigar = null;
@@ -309,22 +318,22 @@ var _feedChannel = null;
 
 // ── AUTH ──────────────────────────────────────────────────────────────────────
 async function doLogin() {
-  var u = document.getElementById('loginUsername').value.trim().toLowerCase();
-  var p = document.getElementById('loginPassword').value;
-  var err = document.getElementById('loginError');
-  err.textContent = '';
-  if (!u || !p) { err.textContent = 'Username and password required.'; return; }
-  var btn = document.getElementById('loginBtn');
-  btn.textContent = 'Signing in...'; btn.disabled = true;
-  var { data, error } = await _supa.auth.signInWithPassword({ email: u + '@cigarlog.app', password: p });
-  if (error) { err.textContent = error.message; btn.textContent = 'Sign In'; btn.disabled = false; return; }
-  var { data: profile } = await _supa.from('profiles').select('*').eq('username', u).single();
-  if (!profile) { err.textContent = 'Profile not found.'; btn.textContent = 'Sign In'; btn.disabled = false; return; }
-  currentUser = { supabaseId: profile.id, username: profile.username, displayName: profile.display_name, avatar: profile.avatar, isAdmin: profile.is_admin };
-  localStorage.setItem('cl_session', u);
-  btn.textContent = 'Sign In'; btn.disabled = false;
+  var u   = document.getElementById("loginUsername").value.trim().toLowerCase();
+  var p   = document.getElementById("loginPassword").value;
+  var err = document.getElementById("loginError");
+  err.textContent = "";
+  if (!u || !p) { err.textContent = "Username and password required."; return; }
+  var btn = document.getElementById("loginBtn");
+  btn.textContent = "Signing in..."; btn.disabled = true;
+  var { data, error } = await _supa.auth.signInWithPassword({ email: u + "@cigarlog.app", password: p });
+  if (error) { err.textContent = error.message; btn.textContent = "Sign In"; btn.disabled = false; return; }
+  var { data: profile } = await _supa.from("profiles").select().eq("username", u).single();
+  if (!profile) { err.textContent = "Profile not found."; btn.textContent = "Sign In"; btn.disabled = false; return; }
+  currentUser = { supabaseId: profile.id, username: profile.username, displayName: profile.displayname, avatar: profile.avatar, isAdmin: profile.is.admin };
+  localStorage.setItem("cl_session", u);
+  btn.textContent = "Sign In"; btn.disabled = false;
   updateNav();
-  showPage('dashboard');
+  showPage("dashboard");
 }
 
 function showAuthForm(which) {
@@ -334,17 +343,21 @@ function showAuthForm(which) {
 
 async function doRegister() {
   var u   = document.getElementById("regUsername").value.trim().toLowerCase();
-  var dn  = document.getElementById("regDisplayName").value.trim();
+  var dn  = document.getElementById("regDisplayName").value.trim() || u;
   var p   = document.getElementById("regPassword").value;
   var err = document.getElementById("regError");
   err.textContent = "";
-  if (!u || !p || !dn) { err.textContent = "All fields required."; return; }
-  if (p.length < 6)    { err.textContent = "Password must be 6+ characters."; return; }
+  const inviteCode = document.getElementById("regInviteCode").value.trim();
+  if (!inviteCode) { err.textContent = "A valid invite link is required to register."; return; }
+  if (!u || !p) { err.textContent = "All fields required."; return; }
+  if (p.length < 6) { err.textContent = "Password must be 6+ characters."; return; }
   var btn = document.getElementById("regBtn");
   btn.textContent = "Creating..."; btn.disabled = true;
-  var result = await _supa.auth.signUp({ email: u + "@cigarlog.app", password: p });
+  var email = document.getElementById("regEmail").value.trim();
+  var result = await _supa.auth.signUp({ email: email, password: p });
+  console.log("signUp result:", result.data, result.error);
   if (result.error) { err.textContent = result.error.message; btn.textContent = "Create Account"; btn.disabled = false; return; }
-  await _supa.from("profiles").insert({ user_id: result.data.user.id, username: u, display_name: dn, avatar: "", is_admin: false });
+  await _supa.from("profiles").insert({ user_id: result.data.user.id, username: u, displayname: dn, avatar: "", isadmin: false });
   // Mark invite as used if one was provided
   const usedToken = document.getElementById('regInviteCode').value.trim();
   if (usedToken) {
@@ -505,9 +518,11 @@ async function uploadPhoto(file, folder) {
 
 // ── DASHBOARD ─────────────────────────────────────────────────────────────────
 async function renderDashboard() {
+  console.log("renderDashboard called, currentUser:", currentUser);
   if (!currentUser || !currentUser.supabaseId) return;
-  var { data: mine } = await _supa.from("cigar_logs").select("*")
+  var { data: mine, error: dashError } = await _supa.from("cigar_logs").select("*")
     .eq("user_id", currentUser.supabaseId).order("date_smoked", { ascending: false });
+  console.log("cigar_logs result:", mine, "error:", dashError);
   mine = mine || [];
   var btn = document.getElementById("navReviewsBtn");
   if (btn) btn.textContent = mine.length + " " + (mine.length === 1 ? "Review" : "Reviews");
@@ -535,6 +550,7 @@ async function renderDashboard() {
       + "</div>";
   }).join("");
 }
+
 
 // ── LOG A SMOKE ───────────────────────────────────────────────────────────────
 function openLogSmoke() {
@@ -987,7 +1003,7 @@ async function generateInvite() {
     expires_at: expires_at
   });
   if (error) { showToast('Error: ' + error.message); return; }
-  var link = 'https://edjhk.gihub.io/cigarlog/#invite=' + token;
+  var link = 'https://edjhk.github.io/cigarlog-source/#invite=' + token;
   document.getElementById('inviteLinkText').textContent = link;
   document.getElementById('inviteResult').style.display = 'block';
   renderInviteList();
@@ -1003,7 +1019,7 @@ async function regenerateInvite(oldId, name) {
     accepted_by: null
   }).eq('id', oldId);
   if (error) { showToast('Error: ' + error.message); return; }
-  var link = window.location.origin + window.location.pathname + '?invite=' + token;
+  var link = 'https://edjhk.github.io/cigarlog-source/#invite=' + token;
   document.getElementById('inviteLinkText').textContent = link;
   document.getElementById('inviteResult').style.display = 'block';
   showToast('New link generated for ' + name + '!');
@@ -1176,18 +1192,21 @@ function showToast(msg) {
 // ── INIT ──────────────────────────────────────────────────────────────────────
 async function init() {
   await loadCA();
-
-  const hashParams = new URLSearchParams(window.location.hash.replace('#',''));
+  console.log("init started, caDatabase length:", caDatabase ? caDatabase.length : "null");
+  
+  const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
   const inviteToken = hashParams.get('invite');
   if (inviteToken) {
     const { data: inv } = await _supa.from('invites').select().eq('token', inviteToken).single();
     if (inv && !inv.used && new Date(inv.expires_at) > new Date()) {
       updateNav();
       showPage('auth');
-      document.getElementById('form-register').classList.remove('hidden');
-      document.getElementById('form-login').classList.add('hidden');
-      document.getElementById('regInviteCode').value = inviteToken;
-      showToast("You've been invited! Fill in your details below.");
+      setTimeout(() => {
+        document.getElementById('form-register').classList.remove('hidden');
+        document.getElementById('form-login').classList.add('hidden');
+        document.getElementById('regInviteCode').value = inviteToken;
+        showToast("🎉 You've been invited! Create your account below.");
+      }, 50);
     } else {
       updateNav();
       showPage('auth');
@@ -1195,33 +1214,18 @@ async function init() {
     }
     return;
   }
-
   // Check session
+  console.log("checking session...");
   var session = localStorage.getItem('cl_session');
+  console.log("session value:", session);
   if (!session) { updateNav(); showPage('auth'); return; }
   var { data: profile } = await _supa.from('profiles').select().eq('username', session).single();
   if (!profile) { updateNav(); showPage('auth'); return; }
   currentUser = { supabaseId: profile.id, username: profile.username, displayName: profile.display_name, avatar: profile.avatar, isAdmin: profile.is_admin };
   updateNav();
   showPage('dashboard');
-
-  var ff = document.getElementById("sidebarFeedFile");
-  var fc = document.getElementById("sidebarFeedCam");
-  var lp = document.getElementById("logPhoto");
-  var lc = document.getElementById("logPhotoCamera");
-  if (ff) ff.onchange = function() { postSidebarMedia(this); };
-  if (fc) fc.onchange = function() { postSidebarMedia(this); };
-  if (lp) lp.onchange = function() { previewLogPhoto(this); };
-  if (lc) lc.onchange = function() { previewLogPhoto(this); };
-
-  window.addEventListener('popstate', function(e) {
-    if (e.state && e.state.page) { showPage(e.state.page); }
-    else { showPage('dashboard'); }
-  });
 }
-
 init();
-
 </script>
 </body>
 </html>
