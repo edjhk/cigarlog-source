@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><!-- 10-->
+<meta charset="UTF-8"><!-- 11-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CigarLog</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -366,7 +366,7 @@ async function doRegister() {
   if (result.error) { err.textContent = result.error.message; btn.textContent = "Create Account"; btn.disabled = false; return; }
   const { data: profileData, error: profileError } = await 
   supa.from("profiles").insert({ 
-    id: result.data.user,id,
+    id: result.data.user.id,
     user_id: result.data.user.id, 
     username: u, 
     display_name: dn, 
