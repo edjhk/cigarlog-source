@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><!-- 5-->
+<meta charset="UTF-8"><!-- 6-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CigarLog</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -351,20 +351,28 @@ async function doRegister() {
   var u   = document.getElementById("regUsername").value.trim().toLowerCase();
   var dn  = document.getElementById("regDisplayName").value.trim() || u;
   var p   = document.getElementById("regPassword").value;
+  var email = document.getElementById("regEmail").value.trim();
   var err = document.getElementById("regError");
   err.textContent = "";
   const inviteCode = document.getElementById("regInviteCode").value.trim();
   if (!inviteCode) { err.textContent = "A valid invite link is required to register."; return; }
-  if (!u || !p) { err.textContent = "All fields required."; return; }
+  if (!u || !p || !email) { err.textContent = "All fields required."; return; }
   if (p.length < 6) { err.textContent = "Password must be 6+ characters."; return; }
   var btn = document.getElementById("regBtn");
   btn.textContent = "Creating..."; btn.disabled = true;
-  var email = document.getElementById("regEmail").value.trim();
   var result = await supa.auth.signUp({ email: email, password: p });
   console.log("signUp result:", result.data, result.error);
   if (result.error) { err.textContent = result.error.message; btn.textContent = "Create Account"; btn.disabled = false; return; }
-  await supa.from("profiles").insert({ user_id: result.data.user.id, username: u, displayname: dn, avatar: "", isadmin: false });
-  // Mark invite as used if one was provided
+  const { data: profileData, error: profileError } = await supa.from("profiles").insert({ 
+    user_id: result.data.user.id, 
+    username: u, 
+    displayname: dn, 
+    avatar: "", 
+    isadmin: false,
+    email: email
+  });
+  console.log("Profile insert:", profileData, profileError);
+  if (profileError) { err.textContent = "Account created but profile failed: " + profileError.message; btn.textContent = "Create Account"; btn.disabled = false; return; }
   const usedToken = document.getElementById('regInviteCode').value.trim();
   if (usedToken) {
     await supa.from('invites')
