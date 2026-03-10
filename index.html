@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><!-- 6-->
+<meta charset="UTF-8"><!-- 8-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CigarLog</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -334,7 +334,7 @@ async function doLogin() {
   var { data, error } = await supa.auth.signInWithPassword({ email: profile.email, password: p });
   if (error) { err.textContent = error.message; btn.textContent = "Sign In"; btn.disabled = false; return; }
 
-  currentUser = { supabaseId: profile.id, username: profile.username, displayName: profile.displayname, avatar: profile.avatar, isAdmin: profile.isadmin };
+  currentUser = { supabaseId: profile.id, username: profile.username, displayName: profile.display_name, avatar: profile.avatar, isAdmin: profile.is_admin };
   localStorage.setItem("cl_session", u);
   btn.textContent = "Sign In"; btn.disabled = false;
   updateNav();
@@ -366,7 +366,7 @@ async function doRegister() {
   const { data: profileData, error: profileError } = await supa.from("profiles").insert({ 
     user_id: result.data.user.id, 
     username: u, 
-    displayname: dn, 
+    display_name: dn, 
     avatar: "", 
     isadmin: false,
     email: email
@@ -1234,7 +1234,7 @@ var { data: { session: authSession } } = await supa.auth.getSession();
 if (!authSession) { updateNav(); showPage('auth'); return; }
 var { data: profile } = await supa.from('profiles').select().eq('username', localStorage.getItem('cl_session')).single();
 if (!profile) { updateNav(); showPage('auth'); return; }
-currentUser = { supabaseId: profile.id, username: profile.username, displayName: profile.displayname, avatar: profile.avatar, isAdmin: profile.isadmin };
+currentUser = { supabaseId: profile.id, username: profile.username, displayName: profile.display_name, avatar: profile.avatar, isAdmin: profile.is_admin };
 updateNav();
 showPage('dashboard');
 }
