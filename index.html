@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <meta charset="UTF-8"><!-- 73 -->
+ <meta charset="UTF-8"><!-- 75 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="data:,">
 <title>CigarLog</title>
@@ -608,7 +608,9 @@ function showPage(page) {
   if (page === 'reviews') renderReviews();
   if (page === 'profile') renderProfile();
   setBottomNav(page);
-  if (page === "dashboard")  { renderDashboard(); renderSidebarFeed(); if (!feedchannel) subscribeToFeed(); }
+  if (page === "dashboard")  { renderDashboard(); renderSidebarFeed(); }
+  if (page === "feed") { if (!feedchannel) subscribeToFeed(); }
+  if (!feedchannel) subscribeToFeed();
   if (page === "messages")   { /*nothing */ }
   if (page === "invite")     { renderInviteList(); }
   if (page === "settings" && currentUser && currentUser.isadmin) renderAdminPanel();
@@ -1026,6 +1028,7 @@ async function renderSidebarFeed() {
   div.innerHTML = "";
   if (!posts || !posts.length) { div.innerHTML = "<div style='color:var(--ash);text-align:center;padding:20px;font-size:0.85rem;'>No messages yet.</div>"; return; }
   posts.forEach(function(p) { appendSidebarPost(p); });
+  setTimeout(function() { div.scrollTop = div.scrollHeight; }, 150);
 }
 
 function previewFeedPhoto(input) {
@@ -1090,15 +1093,21 @@ async function appendSidebarPost(post) {
   meta.style.cssText = "font-size:0.65rem;color:var(--ash);margin-top:2px;";
   meta.textContent = (isMe ? "" : post.username + " · ") + new Date(post.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   wrap.appendChild(bubble); wrap.appendChild(meta); div.appendChild(wrap);
-  div.scrollTop = div.scrollHeight;
+  setTimeout(function() { div.scrollTop = div.scrollHeight; }, 100);
 }
 
 function subscribeToFeed() {
   if (feedchannel) supa.removeChannel(feedchannel);
-  feedchannel = supa.channel("feed_realtime")
-    .on("postgres_changes", { event: "INSERT", schema: "public", table: "feedposts" }, function(payload) {
+  feedchannel = supa.channel('feed-realtime')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'feed_posts' }, function(payload) {
       appendSidebarPost(payload.new);
-    }).subscribe();
+      // Also append to mobile feed page if it's active
+      var feedDiv = document.getElementById('feedPagePosts');
+      if (feedDiv && document.getElementById('page-feed').classList.contains('active')) {
+        renderFeedPage();
+      }
+    })
+    .subscribe();
 }
 
 async function postSidebarFeed() {
