@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <meta charset="UTF-8"><!-- 79 -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta charset="UTF-8"><!-- 84 -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="icon" href="data:,">
 <title>CigarLog</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -61,8 +61,18 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--charcoal)
 .search-result-cigar:hover{background:var(--cream);}
 .cigar-info-tile{background:white;border-radius:16px;box-shadow:0 4px 24px var(--shadow);overflow:hidden;max-width:480px;margin-top:8px;}
 .cigar-tile-header{background:linear-gradient(135deg,var(--dark-tobacco),var(--charcoal));padding:20px;color:white;}
-.cigar-tile-back{background:none;border:1px solid rgba(255,255,255,0.3);color:rgba(255,255,255,0.8);
-  padding:5px 12px;border-radius:20px;cursor:pointer;font-size:0.8rem;margin-bottom:10px;display:inline-block;font-family:'Lato',sans-serif;}
+.cigar-tile-back {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.8);
+  padding: 5px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  margin-bottom: 10px;
+  display: inline-block;
+  font-family: Lato, sans-serif;
+}
 .cigar-tile-back:hover{background:rgba(255,255,255,0.12);color:white;}
 .cigar-tile-title{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;color:var(--gold);margin-top:4px;}
 .cigar-tile-subtitle{font-size:0.8rem;color:rgba(255,255,255,0.55);margin-top:4px;}
@@ -303,9 +313,9 @@ window.supaReady = false;
       <div class="form-group"><label class="form-label">Photo</label>
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
           <label for="logPhoto" style="cursor:pointer;background:var(--cream);border:1.5px solid var(--light-ash);border-radius:12px;padding:10px 16px;font-size:0.88rem;color:var(--tobacco);font-weight:700;">&#128444; Gallery</label>
-          <input type="file" id="logPhoto" accept="image/*" style="display:none;">
+          <input type="file" id="logPhoto" accept="image/*" style="display:none" onchange="previewLogPhoto">
           <label for="logPhotoCamera" style="cursor:pointer;background:var(--cream);border:1.5px solid var(--light-ash);border-radius:12px;padding:10px 16px;font-size:0.88rem;color:var(--tobacco);font-weight:700;">&#128247; Camera</label>
-          <input type="file" id="logPhotoCamera" accept="image/*" capture="environment" style="display:none;">
+          <input type="file" id="logPhotoCamera" accept="image/*" capture="environment" style="display:none" onchange="previewLogPhoto">
           <span id="logPhotoName" style="font-size:0.8rem;color:var(--ash);"></span>
         </div>
         <img id="logPhotoPreview" src="" style="display:none;margin-top:8px;max-width:100%;border-radius:10px;max-height:200px;object-fit:contain;">
@@ -431,6 +441,28 @@ var currentUser = null;
 var caDatabase  = [];
 var logSelectedCigar = null;
 var feedchannel = null;
+var searchNavStack = []; // tracks where user is in the search drill-down
+
+window.addEventListener('popstate', function(e) {
+  // If we're in a cigar drill-down, go back one level
+  if (searchNavStack.length > 1) {
+    searchNavStack.pop();
+    var prev = searchNavStack[searchNavStack.length - 1];
+    if (prev.type === 'query') {
+      document.getElementById('mainSearch').value = prev.value;
+      handleSearchInput(prev.value);
+    } else if (prev.type === 'family') {
+      selectFamily(prev.brand, prev.family);
+    }
+    // Push a new state so the back button remains available
+    history.pushState(e.state, '', '');
+    return;
+  }
+  // Otherwise navigate between pages normally
+  if (e.state) {
+    showPage(e.state);
+  }
+});
 
 // ── AUTH ──────────────────────────────────────────────────────────────────────
 async function doLogin() {
@@ -770,6 +802,7 @@ function handleSearchInput(q) {
   if (!q || q.length < 2) { results.innerHTML = ""; return; }
   var query = q.toLowerCase().trim();
   results.innerHTML = "";
+  searchNavStack = [{ type: 'query', value: q }];
   var count = 0;
   for (var bi = 0; bi < caDatabase.length; bi++) {
     var b = caDatabase[bi];
@@ -800,20 +833,48 @@ function handleSearchInput(q) {
   }
 }
 
-
 function selectFamily(brandName, familyName) {
   var brand = null, family = null;
   for (var i = 0; i < caDatabase.length; i++) { if (caDatabase[i].name === brandName) { brand = caDatabase[i]; break; } }
   if (!brand) return;
   for (var i = 0; i < brand.families.length; i++) { if (brand.families[i].name === familyName) { family = brand.families[i]; break; } }
   if (!family) return;
+  searchNavStack.push({ type: 'family', brand: brandName, family: familyName });
   var results = document.getElementById("searchResults");
   results.innerHTML = "";
-  var hdr = document.createElement("div");
-  hdr.className = "search-brand-header"; hdr.style.cursor = "pointer";
-  hdr.textContent = "\u2190 " + brandName + " \u203a " + familyName;
-  hdr.onclick = function() { results.innerHTML = ""; document.getElementById("mainSearch").value = ""; };
-  results.appendChild(hdr);
+
+  // Dark header tile matching cigar view
+  var familyHeader = document.createElement("div");
+  familyHeader.style.cssText = "background:linear-gradient(135deg, var(--dark-tobacco), var(--charcoal)); border-radius:16px; padding:16px 20px; margin-bottom:4px;";
+
+  var backBtn = document.createElement("button");
+  backBtn.className = "cigar-tile-back";
+  backBtn.textContent = "\u2190 Back";
+  backBtn.onclick = function() {
+    searchNavStack.pop();
+    var prev = searchNavStack[searchNavStack.length - 1];
+    if (!prev) {
+      results.innerHTML = "";
+      document.getElementById("mainSearch").value = "";
+    } else if (prev.type === 'query') {
+      document.getElementById("mainSearch").value = prev.value;
+      handleSearchInput(prev.value);
+    }
+  };
+
+  var familyTitle = document.createElement("div");
+  familyTitle.style.cssText = "font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:var(--gold); margin-top:6px;";
+  familyTitle.textContent = familyName;
+
+  var familySubtitle = document.createElement("div");
+  familySubtitle.style.cssText = "font-size:0.78rem; color:rgba(255,255,255,0.55); margin-top:2px;";
+  familySubtitle.textContent = brandName;
+
+  familyHeader.appendChild(backBtn);
+  familyHeader.appendChild(familyTitle);
+  familyHeader.appendChild(familySubtitle);
+  results.appendChild(familyHeader);
+
   if (!family.cigars || !family.cigars.length) {
     var empty = document.createElement("div");
     empty.style.cssText = "color:var(--ash);padding:12px 28px;"; empty.textContent = "No cigars listed yet.";
@@ -840,6 +901,7 @@ async function selectCigar(brandName, familyName, cigar_name) {
   if (!family) return;
   for (var i = 0; i < family.cigars.length; i++) { if (family.cigars[i].name === cigar_name) { cigar = family.cigars[i]; break; } }
   if (!cigar) return;
+  searchNavStack.push({ type: 'cigar', brand: brandName, family: familyName, cigar: cigarname }); // ← ADD HERE
   document.getElementById("mainSearch").value = "";
 
   var v = function(a,b) { return (a && a!=="N/A" && a!=="--") ? a : (b && b!=="N/A" && b!=="--") ? b : null; };
@@ -882,8 +944,24 @@ async function selectCigar(brandName, familyName, cigar_name) {
 
   var backBtn = document.createElement("button");
   backBtn.className = "cigar-tile-back"; backBtn.textContent = "\u2190 Back";
-  backBtn.onclick = function() { results.innerHTML = ""; document.getElementById("mainSearch").value = ""; };
-
+  backBtn.onclick = function() {
+    searchNavStack.pop(); // remove current level
+    var prev = searchNavStack[searchNavStack.length - 1];
+    if (!prev) {
+      // back to empty search
+      document.getElementById('mainSearch').value = '';
+      document.getElementById('searchResults').innerHTML = '';
+      return;
+    }
+    if (prev.type === 'query') {
+      // re-run the original search query to show brand/family list
+      document.getElementById('mainSearch').value = prev.value;
+      handleSearchInput(prev.value);
+    } else if (prev.type === 'family') {
+      // go back to the cigar list for that family
+      selectFamily(prev.brand, prev.family);
+    }
+  };
   var title = document.createElement("div");
   title.style.cssText = "font-family:'Playfair Display',serif;font-size:0.85rem;font-weight:600;color:rgba(255,255,255,0.75);margin-top:4px;";
   title.innerHTML = subtitle;
