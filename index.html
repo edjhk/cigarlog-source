@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <meta charset="UTF-8"><!-- 93 -->
+ <meta charset="UTF-8"><!-- 98 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="icon" href="data:,">
 <title>CigarLog</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
+  
 /* Your CSS unchanged - kept as-is */
 :root {
   --app-height: 100vh;
@@ -141,7 +142,13 @@ body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--charcoal)
   .bottom-nav { display: none !important; }
 }
 
-</style>
+    /* TEMP DEBUG */
+    .bottom-nav {
+      display: flex !important;
+    }
+
+  </style>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // Ensure supabase library is available before any code runs
@@ -407,6 +414,7 @@ window.supaReady = false;
           <img id="inviteQR" src="" style="display:none;border-radius:12px;width:180px;height:180px;" alt="QR Code">
           <div style="font-size:0.75rem;color:var(--ash);margin-top:6px;">Scan to join CigarLog</div>
         </div>
+      </div>
       <div style="margin-top:28px;border-top:1px solid var(--light-ash);padding-top:20px;">
         <h3 style="font-family:'Playfair Display',serif;font-size:1rem;margin-bottom:12px;">Sent Invites</h3>
         <div id="inviteList"></div>
@@ -433,9 +441,36 @@ window.supaReady = false;
 </div>
 
 
-<div id="toast-el" class="toast"></div>
+  <div id="toast-el" class="toast"></div>
 
-<script>
+<!-- BOTTOM NAV (mobile only) -->
+<div class="bottom-nav" id="bottomNav">
+  <button class="bottom-nav-btn" id="bnFeed" onclick="showPage('feed')">
+    <span>&#127968;</span>
+    <span style="font-size:0.65rem;margin-top:2px">Feed</span>
+  </button>
+  <button class="bottom-nav-btn" id="bnLog" onclick="openLogSmoke()">
+    <span>&#128684;</span>
+    <span style="font-size:0.65rem;margin-top:2px">Log</span>
+  </button>
+  <button class="bottom-nav-btn" id="bnDiscover" onclick="showPage('dashboard')">
+    <span>&#128269;</span>
+    <span style="font-size:0.65rem;margin-top:2px">Discover</span>
+  </button>
+  <button class="bottom-nav-btn" id="bnReviews" onclick="showPage('reviews')">
+    <span>&#11088;</span>
+    <span style="font-size:0.65rem;margin-top:2px">Reviews</span>
+  </button>
+  <button class="bottom-nav-btn" id="bnProfile" onclick="handleProfileBtn()">
+    <span>&#128100;</span>
+    <span style="font-size:0.65rem;margin-top:2px">Profile</span>
+  </button>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+
+
 var supa;
 function initSupa() {
   if (supa) return supa;
@@ -1777,15 +1812,6 @@ showPage('dashboard');
 }
 init();
 </script>
-<!-- BOTTOM NAV (mobile only) -->
-<div class="bottom-nav" id="bottomNav">
-  <button class="bottom-nav-btn" id="bnFeed" onclick="showPage('feed')">🏠</button>
-  <button class="bottom-nav-btn" id="bnLog" onclick="openLogSmoke()" title="Log">🚬</button>
-  <button class="bottom-nav-btn" id="bnDiscover" onclick="showPage('dashboard')" title="Discover">🔍</button>
-  <button class="bottom-nav-btn" id="bnReviews" onclick="showPage('reviews')" title="Reviews">⭐</button>
-  <button class="bottom-nav-btn" id="bnProfile" onclick="handleProfileBtn()" title="Profile">👤</button>
-  
-</div>
 
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2C2418">
