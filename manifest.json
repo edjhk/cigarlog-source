@@ -2,7 +2,7 @@
   "name": "CigarLog",
   "short_name": "CigarLog",
   "start_url": "/cigarlog-source",
-  "scope": "/cigarlog-source/"
+  "scope": "/cigarlog-source/",
   "display": "standalone",
   "background_color": "#2C2418",
   "theme_color": "#2C2418",
