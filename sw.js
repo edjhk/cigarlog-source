@@ -1,5 +1,9 @@
 const CACHE = 'cigarlog-v1';
-const ASSETS = ['/', '/index.html', '/cigarbrands.json'];
+const ASSETS = [
+  '/cigarlog-source/',
+  '/cigarlog-source/index.html',
+  '/cigarlog-source/cigarbrands.json'
+];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
